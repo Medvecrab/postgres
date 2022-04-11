@@ -10,3 +10,29 @@
 2022-04-11 22:19:07.125 +07 [21910] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
 2022-04-11 22:19:07.142 +07 [21913] LOG:  database system was shut down at 2022-04-11 22:19:05 +07
 2022-04-11 22:19:07.157 +07 [21910] LOG:  database system is ready to accept connections
+2022-04-11 22:24:07.239 +07 [21911] LOG:  checkpoint starting: time
+2022-04-11 22:24:09.349 +07 [21911] LOG:  checkpoint complete: wrote 23 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.023 s, sync=0.074 s, total=2.111 s; sync files=10, longest=0.069 s, average=0.008 s; distance=57 kB, estimate=57 kB
+2022-04-11 22:28:54.208 +07 [22202] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-11 22:28:54.209 +07 [22202] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-11 22:28:54.209 +07 [22202] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-11 22:28:54.219 +07 [22202] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-11 22:28:54.232 +07 [22205] LOG:  database system was shut down at 2022-04-11 22:28:52 +07
+2022-04-11 22:28:54.269 +07 [22202] LOG:  database system is ready to accept connections
+2022-04-11 22:28:54.506 +07 [22210] ERROR:  syntax error at or near "ENCODING" at character 70
+2022-04-11 22:28:54.506 +07 [22210] STATEMENT:  CREATE TABLE t2 (
+					a	integer,
+					b	integer,
+					c	integer
+	) WITH ENCODING 'UTF8'
+2022-04-11 22:29:39.852 +07 [22263] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-11 22:29:39.854 +07 [22263] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-11 22:29:39.854 +07 [22263] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-11 22:29:39.861 +07 [22263] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-11 22:29:39.875 +07 [22266] LOG:  database system was shut down at 2022-04-11 22:29:38 +07
+2022-04-11 22:29:39.886 +07 [22263] LOG:  database system is ready to accept connections
+2022-04-11 22:32:29.599 +07 [22376] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-11 22:32:29.600 +07 [22376] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-11 22:32:29.600 +07 [22376] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-11 22:32:29.610 +07 [22376] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-11 22:32:29.622 +07 [22379] LOG:  database system was shut down at 2022-04-11 22:32:28 +07
+2022-04-11 22:32:29.686 +07 [22376] LOG:  database system is ready to accept connections
