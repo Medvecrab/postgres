@@ -36,7 +36,8 @@ psql postgres -c "CREATE TABLE t4 (
 psql postgres -c "CREATE TABLE t12 (
 				id	integer,
 				fio	varchar(40),
-				salary	integer
+				salary	integer,
+				adress	varchar(100)
 )"
 
 

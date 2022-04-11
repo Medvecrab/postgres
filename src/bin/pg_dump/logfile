@@ -36,3 +36,5 @@
 2022-04-11 22:32:29.610 +07 [22376] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
 2022-04-11 22:32:29.622 +07 [22379] LOG:  database system was shut down at 2022-04-11 22:32:28 +07
 2022-04-11 22:32:29.686 +07 [22376] LOG:  database system is ready to accept connections
+2022-04-11 22:37:29.720 +07 [22377] LOG:  checkpoint starting: time
+2022-04-11 22:37:32.831 +07 [22377] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.028 s, sync=0.068 s, total=3.111 s; sync files=21, longest=0.054 s, average=0.004 s; distance=122 kB, estimate=122 kB
