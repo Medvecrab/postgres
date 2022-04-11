@@ -125,6 +125,8 @@ static SimpleStringList foreign_servers_include_patterns = {NULL, NULL};
 static SimpleOidList foreign_servers_include_oids = {NULL, NULL};
 
 static SimpleStringList extension_include_patterns = {NULL, NULL};
+static SimpleStringList filter_table_list = {NULL, NULL};
+
 static SimpleOidList extension_include_oids = {NULL, NULL};
 
 static const CatalogId nilCatalogId = {0, 0};
@@ -409,6 +411,7 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
+		{"where", required_argument, NULL, 15},
 
 		{NULL, 0, NULL, 0}
 	};
@@ -617,6 +620,11 @@ main(int argc, char **argv)
 			case 11:			/* include foreign data */
 				simple_string_list_append(&foreign_servers_include_patterns,
 										  optarg);
+				break;
+			
+			case 15:			/* function for encryption - can be SQL function from .sql file,
+								   declared in CLI or declared in DB*/
+				simple_string_list_append(&filter_table_list,optarg);
 				break;
 
 			default:
