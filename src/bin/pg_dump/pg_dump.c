@@ -105,6 +105,14 @@ static Oid	g_last_builtin_oid; /* value of the last builtin oid */
 static int	strict_names = 0;
 
 /*
+* Lists of arguments for encryption functionality
+*
+*/
+
+static SimpleStringList encrypt_columns_list = {NULL, NULL};
+static SimpleStringList encrypt_func_list = {NULL, NULL};
+
+/*
  * Object inclusion/exclusion lists
  *
  * The string lists record the patterns given by command-line switches,
@@ -409,6 +417,8 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
+		{"encrypt_columns", required_argument, NULL, 12},
+		{"encrypt", required_argument, NULL, 13},
 
 		{NULL, 0, NULL, 0}
 	};
@@ -619,6 +629,14 @@ main(int argc, char **argv)
 										  optarg);
 				break;
 
+			case 12:			/* columns for encryption */
+				simple_string_list_append(&encrypt_columns_list,optarg);
+				break;
+
+			case 13:			/* function for encryption - can be SQL function from .sql file,
+								   declared in CLI or declared in DB*/
+				simple_string_list_append(&encrypt_func_list,optarg);
+				break;
 			default:
 				/* getopt_long already emitted a complaint */
 				pg_log_error_hint("Try \"%s --help\" for more information.", progname);

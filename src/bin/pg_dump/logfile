@@ -1,0 +1,12 @@
+2022-04-11 22:17:21.706 +07 [21681] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-11 22:17:21.707 +07 [21681] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-11 22:17:21.707 +07 [21681] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-11 22:17:21.713 +07 [21681] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-11 22:17:21.723 +07 [21685] LOG:  database system was shut down at 2022-04-11 22:17:19 +07
+2022-04-11 22:17:21.755 +07 [21681] LOG:  database system is ready to accept connections
+2022-04-11 22:19:07.110 +07 [21910] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-11 22:19:07.113 +07 [21910] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-11 22:19:07.113 +07 [21910] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-11 22:19:07.125 +07 [21910] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-11 22:19:07.142 +07 [21913] LOG:  database system was shut down at 2022-04-11 22:19:05 +07
+2022-04-11 22:19:07.157 +07 [21910] LOG:  database system is ready to accept connections
