@@ -570,3 +570,127 @@
 2022-04-12 19:55:11.893 +07 [2969] STATEMENT:  COPY (SELECT function(a), function(b), function(c) FROM public.t2 ) TO stdout;
 2022-04-12 19:55:12.203 +07 [2971] ERROR:  syntax error at or near "," at character 40
 2022-04-12 19:55:12.203 +07 [2971] STATEMENT:  COPY (SELECT function(a), function(b), , c, , id FROM public.t3 ) TO stdout;
+2022-04-12 20:01:08.113 +07 [3098] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-12 20:01:08.114 +07 [3098] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-12 20:01:08.114 +07 [3098] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-12 20:01:08.121 +07 [3098] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-12 20:01:08.131 +07 [3101] LOG:  database system was interrupted; last known up at 2022-04-12 19:55:11 +07
+2022-04-12 20:01:08.661 +07 [3101] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-12 20:01:08.669 +07 [3101] LOG:  redo starts at 0/1527318
+2022-04-12 20:01:08.669 +07 [3101] LOG:  invalid record length at 0/1527350: wanted 24, got 0
+2022-04-12 20:01:08.669 +07 [3101] LOG:  redo done at 0/1527318 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-12 20:01:08.677 +07 [3099] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-12 20:01:08.698 +07 [3099] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.024 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-12 20:01:08.704 +07 [3098] LOG:  database system is ready to accept connections
+2022-04-12 20:01:08.852 +07 [3106] ERROR:  relation "t2" already exists
+2022-04-12 20:01:08.852 +07 [3106] STATEMENT:  CREATE TABLE t2 (
+					a	integer,
+					b	integer,
+					c	integer
+	)
+2022-04-12 20:01:08.866 +07 [3108] ERROR:  relation "t3" already exists
+2022-04-12 20:01:08.866 +07 [3108] STATEMENT:  CREATE TABLE t3 (
+					a	integer,
+					b	integer,
+					c	integer,
+					id	integer
+	)
+2022-04-12 20:01:08.885 +07 [3110] ERROR:  relation "t4" already exists
+2022-04-12 20:01:08.885 +07 [3110] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-12 20:01:08.904 +07 [3112] ERROR:  relation "t12" already exists
+2022-04-12 20:01:08.904 +07 [3112] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-12 20:01:09.223 +07 [3114] ERROR:  function function(integer) does not exist at character 14
+2022-04-12 20:01:09.223 +07 [3114] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-12 20:01:09.223 +07 [3114] STATEMENT:  COPY (SELECT function(a), function(b), function(c) FROM public.t2 ) TO stdout;
+2022-04-12 20:01:09.532 +07 [3116] ERROR:  syntax error at or near "," at character 40
+2022-04-12 20:01:09.532 +07 [3116] STATEMENT:  COPY (SELECT function(a), function(b), , c, , id FROM public.t3 ) TO stdout;
+2022-04-12 20:03:06.107 +07 [3157] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-12 20:03:06.108 +07 [3157] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-12 20:03:06.108 +07 [3157] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-12 20:03:06.114 +07 [3157] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-12 20:03:06.122 +07 [3160] LOG:  database system was interrupted; last known up at 2022-04-12 20:01:08 +07
+2022-04-12 20:03:06.695 +07 [3160] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-12 20:03:06.701 +07 [3160] LOG:  redo starts at 0/15273C8
+2022-04-12 20:03:06.701 +07 [3160] LOG:  invalid record length at 0/1527400: wanted 24, got 0
+2022-04-12 20:03:06.701 +07 [3160] LOG:  redo done at 0/15273C8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-12 20:03:06.709 +07 [3158] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-12 20:03:06.770 +07 [3158] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.028 s, total=0.064 s; sync files=2, longest=0.017 s, average=0.014 s; distance=0 kB, estimate=0 kB
+2022-04-12 20:03:06.775 +07 [3157] LOG:  database system is ready to accept connections
+2022-04-12 20:03:06.877 +07 [3165] ERROR:  relation "t2" already exists
+2022-04-12 20:03:06.877 +07 [3165] STATEMENT:  CREATE TABLE t2 (
+					a	integer,
+					b	integer,
+					c	integer
+	)
+2022-04-12 20:03:06.895 +07 [3167] ERROR:  relation "t3" already exists
+2022-04-12 20:03:06.895 +07 [3167] STATEMENT:  CREATE TABLE t3 (
+					a	integer,
+					b	integer,
+					c	integer,
+					id	integer
+	)
+2022-04-12 20:03:06.916 +07 [3169] ERROR:  relation "t4" already exists
+2022-04-12 20:03:06.916 +07 [3169] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-12 20:03:06.940 +07 [3171] ERROR:  relation "t12" already exists
+2022-04-12 20:03:06.940 +07 [3171] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-12 20:03:07.370 +07 [3173] ERROR:  function function(integer) does not exist at character 14
+2022-04-12 20:03:07.370 +07 [3173] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-12 20:03:07.370 +07 [3173] STATEMENT:  COPY (SELECT function(a), function(b), function(c) FROM public.t2 ) TO stdout;
+2022-04-12 20:03:07.816 +07 [3175] ERROR:  syntax error at or near "," at character 40
+2022-04-12 20:03:07.816 +07 [3175] STATEMENT:  COPY (SELECT function(a), function(b), , c, , id FROM public.t3 ) TO stdout;
+2022-04-12 20:04:04.586 +07 [3211] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-12 20:04:04.587 +07 [3211] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-12 20:04:04.587 +07 [3211] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-12 20:04:04.596 +07 [3211] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-12 20:04:04.603 +07 [3214] LOG:  database system was interrupted; last known up at 2022-04-12 20:03:06 +07
+2022-04-12 20:04:05.147 +07 [3214] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-12 20:04:05.151 +07 [3214] LOG:  redo starts at 0/1527478
+2022-04-12 20:04:05.151 +07 [3214] LOG:  invalid record length at 0/15274B0: wanted 24, got 0
+2022-04-12 20:04:05.151 +07 [3214] LOG:  redo done at 0/1527478 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-12 20:04:05.159 +07 [3212] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-12 20:04:05.211 +07 [3212] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.055 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-12 20:04:05.217 +07 [3211] LOG:  database system is ready to accept connections
+2022-04-12 20:04:05.261 +07 [3219] ERROR:  relation "t2" already exists
+2022-04-12 20:04:05.261 +07 [3219] STATEMENT:  CREATE TABLE t2 (
+					a	integer,
+					b	integer,
+					c	integer
+	)
+2022-04-12 20:04:05.281 +07 [3221] ERROR:  relation "t3" already exists
+2022-04-12 20:04:05.281 +07 [3221] STATEMENT:  CREATE TABLE t3 (
+					a	integer,
+					b	integer,
+					c	integer,
+					id	integer
+	)
+2022-04-12 20:04:05.318 +07 [3223] ERROR:  relation "t4" already exists
+2022-04-12 20:04:05.318 +07 [3223] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-12 20:04:05.345 +07 [3225] ERROR:  relation "t12" already exists
+2022-04-12 20:04:05.345 +07 [3225] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-12 20:04:05.705 +07 [3227] ERROR:  function function(integer) does not exist at character 14
+2022-04-12 20:04:05.705 +07 [3227] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-12 20:04:05.705 +07 [3227] STATEMENT:  COPY (SELECT function(a), function(b), function(c) FROM public.t2 ) TO stdout;
+2022-04-12 20:04:06.019 +07 [3230] ERROR:  function function(integer) does not exist at character 14
+2022-04-12 20:04:06.019 +07 [3230] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-12 20:04:06.019 +07 [3230] STATEMENT:  COPY (SELECT function(a), function(b), c, id FROM public.t3 ) TO stdout;

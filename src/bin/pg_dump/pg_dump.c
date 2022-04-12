@@ -1991,25 +1991,22 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 				char* current_column_name = strtok(copy_column_list, " ,()");
 				while (current_column_name != NULL) 
 					{
+						char* temp_string;
 						if (simple_string_list_member(&encrypt_columns_list, current_column_name))
 						{
-							char* temp_string = strdup("function("); //TODO: remove placeholder "function"
+							temp_string = strdup("function("); //TODO: remove placeholder "function"
 							strcat(temp_string, current_column_name);
-							current_column_name = strtok(NULL, " ,()");
 							strcat(temp_string, ")");
-							if (current_column_name != NULL)
-								strcat(temp_string, ", ");
-							appendPQExpBufferStr(q, temp_string);
 						}
 						else
 						{
-							char* temp_string = strdup(", ");
+							temp_string = strdup("");
 							strcat(temp_string, current_column_name);
-							current_column_name = strtok(NULL, " ,()");
-							if (current_column_name != NULL)
-								strcat(temp_string, ", ");
-						    appendPQExpBufferStr(q, temp_string);
 						}
+						current_column_name = strtok(NULL, " ,()");
+						if (current_column_name != NULL)
+								strcat(temp_string, ", ");
+						appendPQExpBufferStr(q, temp_string);
 					}
 			}
 			else
