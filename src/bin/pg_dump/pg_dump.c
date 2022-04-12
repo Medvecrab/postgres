@@ -421,8 +421,8 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
-		{"encrypt-columns", required_argument, &dopt.encrypt_columns, 12},
-		{"encrypt", required_argument, &dopt.encrypt, 13},
+		{"encrypt-columns", required_argument, NULL, 12},
+		{"encrypt", required_argument, NULL, 13},
 
 		{NULL, 0, NULL, 0}
 	};
@@ -636,11 +636,11 @@ main(int argc, char **argv)
 			case 12:			/* columns for encryption */
 				/*TODO: check if changing optarg is good or bad */ 
 				/*works for columns of all chosen tables*/
-				pg_fatal("encrypt-columns");
+				//pg_fatal("encrypt-columns");
 				encryption_column_name = strtok(optarg, " ,");
 				while (encryption_column_name != NULL) 
 					{
-						pg_fatal("encrypt-columns");
+						//pg_fatal("encrypt-columns");
 						simple_string_list_append(&encrypt_columns_list, encryption_column_name);
 						encryption_column_name = strtok(NULL, " ,");
 					}
@@ -648,7 +648,7 @@ main(int argc, char **argv)
 
 			case 13:			/* function for encryption - can be SQL function from .sql file,
 								   declared in CLI or declared in DB*/
-				pg_fatal("encrypt");
+				//pg_fatal("encrypt");
 				simple_string_list_append(&encrypt_func_list,optarg);
 				break;
 			default:
@@ -687,10 +687,10 @@ main(int argc, char **argv)
 	if (dopt.binary_upgrade)
 		dopt.sequence_data = 1;
 
-	if (dopt.encrypt_columns && dopt.encrypt == 0)
+	if (encrypt_columns_list.head && encrypt_func_list.head == NULL)
 		pg_fatal("option --encrypt-columns can't be used without --encrypt");
 
-	if (dopt.encrypt && dopt.encrypt_columns == 0)	
+	if (encrypt_func_list.head && encrypt_columns_list.head == 0)	
 	{
 		/*TODO: add all columns to list of encryption*/
 	}
@@ -1977,7 +1977,8 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	 * a filter condition was specified. OR encryption of some columns is needed
 	 * For other cases a simple COPY suffices.
 	 */
-	if (tdinfo->filtercond || tbinfo->relkind == RELKIND_FOREIGN_TABLE) //TODO: add encrypt clause
+	if (tdinfo->filtercond || tbinfo->relkind == RELKIND_FOREIGN_TABLE 
+		|| encrypt_func_list.head) //TODO: add encrypt clause
 	{
 		appendPQExpBufferStr(q, "COPY (SELECT ");
 		/* klugery to get rid of parens in column list */
@@ -1987,22 +1988,28 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 			{ 
 				/*taking columns that should be encrypted */
 				char* copy_column_list = strdup(column_list);
-				char* current_column_name = strtok(copy_column_list, " ,");
+				char* current_column_name = strtok(copy_column_list, " ,()");
 				while (current_column_name != NULL) 
 					{
 						if (simple_string_list_member(&encrypt_columns_list, current_column_name))
 						{
-							char* temp_string = "function("; //TODO: remove placeholder "function"
+							char* temp_string = strdup("function("); //TODO: remove placeholder "function"
 							strcat(temp_string, current_column_name);
-							strcat(temp_string, "), ");
+							current_column_name = strtok(NULL, " ,()");
+							strcat(temp_string, ")");
+							if (current_column_name != NULL)
+								strcat(temp_string, ", ");
 							appendPQExpBufferStr(q, temp_string);
 						}
 						else
 						{
-							strcat(current_column_name, ", ");
-						    appendPQExpBufferStr(q, current_column_name);
+							char* temp_string = strdup(", ");
+							strcat(temp_string, current_column_name);
+							current_column_name = strtok(NULL, " ,()");
+							if (current_column_name != NULL)
+								strcat(temp_string, ", ");
+						    appendPQExpBufferStr(q, temp_string);
 						}
-						current_column_name = strtok(NULL, " ,");
 					}
 			}
 			else
@@ -2014,7 +2021,7 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 		else
 			appendPQExpBufferStr(q, "* ");
 
-		appendPQExpBuffer(q, "FROM %s %s) TO stdout;",
+		appendPQExpBuffer(q, " FROM %s %s) TO stdout;",
 						  fmtQualifiedDumpable(tbinfo),
 						  tdinfo->filtercond ? tdinfo->filtercond : "");
 	}

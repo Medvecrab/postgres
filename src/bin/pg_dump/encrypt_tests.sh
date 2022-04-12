@@ -5,10 +5,7 @@ export PATH=$INSTDIR/bin:$PATH
 
 DATADIR=/home/postgres/pgdata_folder
 
-rm -rf $DATADIR/*
-
-make -C ./home/postgres/desktop/postgresql/src/bin/pg_dump/clean
-make -C ./home/postgres/desktop/postgresql/src/bin/pg_dump/install
+rm -rf $DATADIR/*S
 
 pkill -9 -e postgres
 
@@ -43,6 +40,6 @@ psql postgres -c "CREATE TABLE t12 (
 
 pg_dump -t t2 --encrypt-columns "a,b,c" --encrypt "func_name" #хранимая функция везде учитывать передаваемые параметры + перегрузки функции
 pg_dump -t t3 --encrypt-columns "a,b" --encrypt "CREATE FUNCTION lorem ipsum" #фунцкия объявляется тут
-pg_dump -t t4 --encrypt-columns "id" --encrypt "sha256.sql"
+pg_dump -t t4 --encrypt-columns "id"
 pg_dump -t t12 --encrypt "star.sql" #--encrypt по отдельности шифрует ВСЕ столбцы, а --encrypt_columns - предупреждение - отдельно от encrypt ничего не делает
 
