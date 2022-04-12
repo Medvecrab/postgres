@@ -411,8 +411,7 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
-		{"where", required_argument, NULL, 15},
-
+		{"where", required_argument, NULL, 15},		
 		{NULL, 0, NULL, 0}
 	};
 
@@ -1024,6 +1023,7 @@ help(const char *progname)
 	printf(_("  -t, --table=PATTERN          dump the specified table(s) only\n"));
 	printf(_("  -T, --exclude-table=PATTERN  do NOT dump the specified table(s)\n"));
 	printf(_("  -x, --no-privileges          do not dump privileges (grant/revoke)\n"));
+	printf(_("  --where=FILTER               dump the specified strings only\n"));
 	printf(_("  --binary-upgrade             for use by upgrade utilities only\n"));
 	printf(_("  --column-inserts             dump data as INSERT commands with column names\n"));
 	printf(_("  --disable-dollar-quoting     disable dollar quoting, use SQL standard quoting\n"));
@@ -2071,6 +2071,7 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 static int
 dumpTableData_insert(Archive *fout, const void *dcontext)
 {
+	//TODO struct of
 	TableDataInfo *tdinfo = (TableDataInfo *) dcontext;
 	TableInfo  *tbinfo = tdinfo->tdtable;
 	DumpOptions *dopt = fout->dopt;
@@ -2565,7 +2566,8 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
 	tdinfo->dobj.name = tbinfo->dobj.name;
 	tdinfo->dobj.namespace = tbinfo->dobj.namespace;
 	tdinfo->tdtable = tbinfo;
-	tdinfo->filtercond = NULL;	/* might get set later */
+	//TODO: replace condition
+	tdinfo->filtercond = getTableDataCondition(tbinfo->dobj.name);
 	addObjectDependency(&tdinfo->dobj, tbinfo->dobj.dumpId);
 
 	/* A TableDataInfo contains data, of course */
@@ -2576,6 +2578,11 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
 	/* Make sure that we'll collect per-column info for this table. */
 	tbinfo->interesting = true;
 }
+
+char* getTableDataCondition(char* tablename){
+	return "where Cast(store_id as integer) = 1";
+}
+
 
 /*
  * The refresh for a materialized view must be dependent on the refresh for
@@ -5045,7 +5052,7 @@ findNamespace(Oid nsoid)
  *	  read all extensions in the system catalogs and return them in the
  * ExtensionInfo* structure
  *
- *	numExtensions is set to the number of extensions read in
+ * numExtensions is set to the number of extensions read in
  */
 ExtensionInfo *
 getExtensions(Archive *fout, int *numExtensions)
@@ -17509,6 +17516,7 @@ processExtensionTables(Archive *fout, ExtensionInfo extinfo[],
 					if (configtbl->dataObj != NULL)
 					{
 						if (strlen(extconditionarray[j]) > 0)
+							//TODO: chect corectly work with replaced condition
 							configtbl->dataObj->filtercond = pg_strdup(extconditionarray[j]);
 					}
 				}
