@@ -421,7 +421,7 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
-		{"encrypt_columns", required_argument, &dopt.encrypt_columns, 12},
+		{"encrypt-columns", required_argument, &dopt.encrypt_columns, 12},
 		{"encrypt", required_argument, &dopt.encrypt, 13},
 
 		{NULL, 0, NULL, 0}
@@ -635,10 +635,12 @@ main(int argc, char **argv)
 
 			case 12:			/* columns for encryption */
 				/*TODO: check if changing optarg is good or bad */ 
-				/*works for ALL columns of all chosen tables*/
+				/*works for columns of all chosen tables*/
+				pg_fatal("encrypt-columns");
 				encryption_column_name = strtok(optarg, " ,");
 				while (encryption_column_name != NULL) 
 					{
+						pg_fatal("encrypt-columns");
 						simple_string_list_append(&encrypt_columns_list, encryption_column_name);
 						encryption_column_name = strtok(NULL, " ,");
 					}
@@ -646,10 +648,12 @@ main(int argc, char **argv)
 
 			case 13:			/* function for encryption - can be SQL function from .sql file,
 								   declared in CLI or declared in DB*/
+				pg_fatal("encrypt");
 				simple_string_list_append(&encrypt_func_list,optarg);
 				break;
 			default:
 				/* getopt_long already emitted a complaint */
+				pg_fatal("encrypt-columns");
 				pg_log_error_hint("Try \"%s --help\" for more information.", progname);
 				exit_nicely(1);
 		}
@@ -1982,7 +1986,8 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 			if (encrypt_columns_list.head != NULL)
 			{ 
 				/*taking columns that should be encrypted */
-				char* current_column_name = strtok(column_list, " ,");
+				char* copy_column_list = strdup(column_list);
+				char* current_column_name = strtok(copy_column_list, " ,");
 				while (current_column_name != NULL) 
 					{
 						if (simple_string_list_member(&encrypt_columns_list, current_column_name))
