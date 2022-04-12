@@ -672,6 +672,12 @@ main(int argc, char **argv)
 	if (dopt.binary_upgrade)
 		dopt.sequence_data = 1;
 
+	/*
+	* TODO:
+	* Somewhere here include check for --encrypt if --encrypt-columns is used
+	* Also if --encrypt is present without --encrypt-columns - encrypt all columns
+	*/
+
 	if (dopt.dataOnly && dopt.schemaOnly)
 		pg_fatal("options -s/--schema-only and -a/--data-only cannot be used together");
 
@@ -1951,10 +1957,10 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 
 	/*
 	 * Use COPY (SELECT ...) TO when dumping a foreign table's data, and when
-	 * a filter condition was specified.  For other cases a simple COPY
-	 * suffices.
+	 * a filter condition was specified. OR encryption of some columns is needed
+	 * For other cases a simple COPY suffices.
 	 */
-	if (tdinfo->filtercond || tbinfo->relkind == RELKIND_FOREIGN_TABLE)
+	if (tdinfo->filtercond || tbinfo->relkind == RELKIND_FOREIGN_TABLE) //TODO: add encrypt clause
 	{
 		appendPQExpBufferStr(q, "COPY (SELECT ");
 		/* klugery to get rid of parens in column list */
