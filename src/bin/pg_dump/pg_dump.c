@@ -45,6 +45,7 @@
 #include "catalog/pg_am_d.h"
 #include "catalog/pg_attribute_d.h"
 #include "catalog/pg_authid_d.h"
+#include "catalog/pg_authid_d.h"
 #include "catalog/pg_cast_d.h"
 #include "catalog/pg_class_d.h"
 #include "catalog/pg_default_acl_d.h"
@@ -346,6 +347,9 @@ main(int argc, char **argv)
 	int			numWorkers = 1;
 	int			compressLevel = -1;
 	int			plainText = 0;
+
+	char* encryption_column_name;
+	
 	ArchiveFormat archiveFormat = archUnknown;
 	ArchiveMode archiveMode;
 
@@ -417,8 +421,8 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
-		{"encrypt_columns", required_argument, NULL, 12},
-		{"encrypt", required_argument, NULL, 13},
+		{"encrypt_columns", required_argument, &dopt.encrypt_columns, 12},
+		{"encrypt", required_argument, &dopt.encrypt, 13},
 
 		{NULL, 0, NULL, 0}
 	};
@@ -630,7 +634,14 @@ main(int argc, char **argv)
 				break;
 
 			case 12:			/* columns for encryption */
-				simple_string_list_append(&encrypt_columns_list,optarg);
+				/*TODO: check if changing optarg is good or bad */ 
+				/*works for ALL columns of all chosen tables*/
+				encryption_column_name = strtok(optarg, " ,");
+				while (encryption_column_name != NULL) 
+					{
+						simple_string_list_append(&encrypt_columns_list, encryption_column_name);
+						encryption_column_name = strtok(NULL, " ,");
+					}
 				break;
 
 			case 13:			/* function for encryption - can be SQL function from .sql file,
@@ -672,11 +683,13 @@ main(int argc, char **argv)
 	if (dopt.binary_upgrade)
 		dopt.sequence_data = 1;
 
-	/*
-	* TODO:
-	* Somewhere here include check for --encrypt if --encrypt-columns is used
-	* Also if --encrypt is present without --encrypt-columns - encrypt all columns
-	*/
+	if (dopt.encrypt_columns && dopt.encrypt == 0)
+		pg_fatal("option --encrypt-columns can't be used without --encrypt");
+
+	if (dopt.encrypt && dopt.encrypt_columns == 0)	
+	{
+		/*TODO: add all columns to list of encryption*/
+	}
 
 	if (dopt.dataOnly && dopt.schemaOnly)
 		pg_fatal("options -s/--schema-only and -a/--data-only cannot be used together");
@@ -1966,8 +1979,32 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 		/* klugery to get rid of parens in column list */
 		if (strlen(column_list) > 2)
 		{
-			appendPQExpBufferStr(q, column_list + 1);
-			q->data[q->len - 1] = ' ';
+			if (encrypt_columns_list.head != NULL)
+			{ 
+				/*taking columns that should be encrypted */
+				char* current_column_name = strtok(column_list, " ,");
+				while (current_column_name != NULL) 
+					{
+						if (simple_string_list_member(&encrypt_columns_list, current_column_name))
+						{
+							char* temp_string = "function("; //TODO: remove placeholder "function"
+							strcat(temp_string, current_column_name);
+							strcat(temp_string, "), ");
+							appendPQExpBufferStr(q, temp_string);
+						}
+						else
+						{
+							strcat(current_column_name, ", ");
+						    appendPQExpBufferStr(q, current_column_name);
+						}
+						current_column_name = strtok(NULL, " ,");
+					}
+			}
+			else
+			{
+				appendPQExpBufferStr(q, column_list + 1);
+				q->data[q->len - 1] = ' ';
+			}
 		}
 		else
 			appendPQExpBufferStr(q, "* ");

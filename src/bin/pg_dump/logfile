@@ -38,3 +38,17 @@
 2022-04-11 22:32:29.686 +07 [22376] LOG:  database system is ready to accept connections
 2022-04-11 22:37:29.720 +07 [22377] LOG:  checkpoint starting: time
 2022-04-11 22:37:32.831 +07 [22377] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.028 s, sync=0.068 s, total=3.111 s; sync files=21, longest=0.054 s, average=0.004 s; distance=122 kB, estimate=122 kB
+2022-04-12 16:16:11.962 +07 [29657] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-12 16:16:11.963 +07 [29657] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-12 16:16:11.964 +07 [29657] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-12 16:16:11.981 +07 [29657] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-12 16:16:11.992 +07 [29660] LOG:  database system was shut down at 2022-04-12 16:16:09 +07
+2022-04-12 16:16:12.003 +07 [29657] LOG:  database system is ready to accept connections
+2022-04-12 16:18:13.563 +07 [29776] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-12 16:18:13.565 +07 [29776] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-12 16:18:13.565 +07 [29776] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-12 16:18:13.572 +07 [29776] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-12 16:18:13.583 +07 [29779] LOG:  database system was shut down at 2022-04-12 16:18:11 +07
+2022-04-12 16:18:13.619 +07 [29776] LOG:  database system is ready to accept connections
+2022-04-12 16:23:13.670 +07 [29777] LOG:  checkpoint starting: time
+2022-04-12 16:23:18.682 +07 [29777] LOG:  checkpoint complete: wrote 51 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.871 s, sync=0.071 s, total=5.013 s; sync files=29, longest=0.040 s, average=0.003 s; distance=158 kB, estimate=158 kB
