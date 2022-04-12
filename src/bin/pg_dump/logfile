@@ -52,6 +52,7 @@
 2022-04-12 16:18:13.619 +07 [29776] LOG:  database system is ready to accept connections
 2022-04-12 16:23:13.670 +07 [29777] LOG:  checkpoint starting: time
 2022-04-12 16:23:18.682 +07 [29777] LOG:  checkpoint complete: wrote 51 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.871 s, sync=0.071 s, total=5.013 s; sync files=29, longest=0.040 s, average=0.003 s; distance=158 kB, estimate=158 kB
+<<<<<<< HEAD
 2022-04-12 16:30:56.017 +07 [31697] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
 2022-04-12 16:30:56.021 +07 [31697] LOG:  listening on IPv6 address "::1", port 5432
 2022-04-12 16:30:56.021 +07 [31697] LOG:  listening on IPv4 address "127.0.0.1", port 5432
@@ -174,3 +175,5 @@
 2022-04-12 17:04:19.748 +07 [34598] LOG:  database system is ready to accept connections
 2022-04-12 17:09:19.765 +07 [34599] LOG:  checkpoint starting: time
 2022-04-12 17:09:24.739 +07 [34599] LOG:  checkpoint complete: wrote 51 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.872 s, sync=0.081 s, total=4.975 s; sync files=29, longest=0.057 s, average=0.003 s; distance=158 kB, estimate=158 kB
+=======
+>>>>>>> c8d35cbabedf82ae554e64212c950e907ac00078
