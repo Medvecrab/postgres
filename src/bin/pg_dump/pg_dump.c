@@ -268,7 +268,7 @@ static void addBoundaryDependencies(DumpableObject **dobjs, int numObjs,
 static void addConstrChildIdxDeps(DumpableObject *dobj, const IndxInfo *refidx);
 static void getDomainConstraints(Archive *fout, TypeInfo *tyinfo);
 static void getTableData(DumpOptions *dopt, TableInfo *tblinfo, int numTables, char relkind);
-static void makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo);
+static void makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo, char* ilter);
 static void buildMatViewRefreshDependencies(Archive *fout);
 static void getTableDataFKConstraints(void);
 static char *format_function_arguments(const FuncInfo *finfo, const char *funcargs,
@@ -2501,7 +2501,7 @@ getTableData(DumpOptions *dopt, TableInfo *tblinfo, int numTables, char relkind)
 	{
 		if (tblinfo[i].dobj.dump & DUMP_COMPONENT_DATA &&
 			(!relkind || tblinfo[i].relkind == relkind))
-			makeTableDataInfo(dopt, &(tblinfo[i]));
+			makeTableDataInfo(dopt, &(tblinfo[i]), getTableDataCondition(i));
 	}
 }
 
@@ -2512,7 +2512,7 @@ getTableData(DumpOptions *dopt, TableInfo *tblinfo, int numTables, char relkind)
  * table data; the "dump" field in such objects isn't very interesting.
  */
 static void
-makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
+makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo,  char* filter)
 {
 	TableDataInfo *tdinfo;
 
@@ -2567,7 +2567,7 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
 	tdinfo->dobj.namespace = tbinfo->dobj.namespace;
 	tdinfo->tdtable = tbinfo;
 	//TODO: replace condition
-	tdinfo->filtercond = getTableDataCondition(tbinfo->dobj.name);
+	tdinfo->filtercond = filter;
 	addObjectDependency(&tdinfo->dobj, tbinfo->dobj.dumpId);
 
 	/* A TableDataInfo contains data, of course */
@@ -2579,8 +2579,29 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
 	tbinfo->interesting = true;
 }
 
-char* getTableDataCondition(char* tablename){
-	return "where Cast(store_id as integer) = 1";
+
+
+char* getTableDataCondition(int flter_index){
+	char *condition;
+	char *preambula = "where "; 
+	char *filter = NULL;
+
+	if (filter_table_list.head == NULL){
+		filter = NULL;
+	}else if (table_include_patterns.head == NULL){
+		filter = filter_table_list.head->val;
+	}else{
+		//TODO: add chousing of filter
+		filter = filter_table_list.head->val;
+	}
+	
+	if (filter == NULL)
+		return NULL;
+	
+	condition = pg_malloc(strlen(filter_table_list.head->val) + strlen(preambula));
+	strcpy(condition, preambula);
+	strcat(condition, filter_table_list.head->val);
+	return condition;
 }
 
 
@@ -17512,7 +17533,7 @@ processExtensionTables(Archive *fout, ExtensionInfo extinfo[],
 
 				if (dumpobj)
 				{
-					makeTableDataInfo(dopt, configtbl);
+					makeTableDataInfo(dopt, configtbl, NULL);
 					if (configtbl->dataObj != NULL)
 					{
 						if (strlen(extconditionarray[j]) > 0)
