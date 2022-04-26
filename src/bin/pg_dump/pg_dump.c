@@ -636,7 +636,6 @@ main(int argc, char **argv)
 			case 12:			/* columns for encryption */
 				/*TODO: check if changing optarg is good or bad */ 
 				/*works for columns of all chosen tables*/
-				//pg_fatal("encrypt-columns");
 				encryption_column_name = strtok(optarg, " ,");
 				while (encryption_column_name != NULL) 
 					{
@@ -648,7 +647,6 @@ main(int argc, char **argv)
 
 			case 13:			/* function for encryption - can be SQL function from .sql file,
 								   declared in CLI or declared in DB*/
-				//pg_fatal("encrypt");
 				simple_string_list_append(&encrypt_func_list,optarg);
 				break;
 			default:
@@ -1985,7 +1983,9 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 		if (strlen(column_list) > 2)
 		{
 			if (encrypt_columns_list.head != NULL)
-			{ 
+			{
+				//get name of schema with function
+				char* copy_from = strtok(strdup(fmtQualifiedDumpable(tbinfo)), ".");
 				/*taking columns that should be encrypted */
 				char* copy_column_list = strdup(column_list);
 				char* current_column_name = strtok(copy_column_list, " ,()");
@@ -1994,7 +1994,12 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 						char* temp_string;
 						if (simple_string_list_member(&encrypt_columns_list, current_column_name))
 						{
-							temp_string = strdup("function("); //TODO: remove placeholder "function"
+							//get name of current schema
+							temp_string = strdup(copy_from);
+							//probably want to use not head but current element
+							strcat(temp_string, ".");
+							strcat(temp_string, encrypt_func_list.head->val);
+							strcat(temp_string, "(");
 							strcat(temp_string, current_column_name);
 							strcat(temp_string, ")");
 						}

@@ -694,3 +694,1880 @@
 2022-04-12 20:04:06.019 +07 [3230] ERROR:  function function(integer) does not exist at character 14
 2022-04-12 20:04:06.019 +07 [3230] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
 2022-04-12 20:04:06.019 +07 [3230] STATEMENT:  COPY (SELECT function(a), function(b), c, id FROM public.t3 ) TO stdout;
+2022-04-12 20:05:51.948 +07 [3211] LOG:  received smart shutdown request
+2022-04-12 20:05:52.040 +07 [3211] LOG:  received SIGHUP, reloading configuration files
+2022-04-12 20:05:52.049 +07 [3211] LOG:  background worker "logical replication launcher" (PID 3217) exited with exit code 1
+2022-04-12 20:05:52.051 +07 [3212] LOG:  shutting down
+2022-04-12 20:05:52.067 +07 [3212] LOG:  checkpoint starting: shutdown immediate
+2022-04-12 20:05:52.365 +07 [3212] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.031 s, sync=0.052 s, total=0.314 s; sync files=4, longest=0.038 s, average=0.013 s; distance=0 kB, estimate=0 kB
+2022-04-12 20:05:52.374 +07 [3211] LOG:  database system is shut down
+2022-04-26 07:42:25.756 +07 [2500] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 07:42:25.776 +07 [2500] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 07:42:25.776 +07 [2500] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 07:42:25.785 +07 [2500] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 07:42:25.836 +07 [2503] LOG:  database system was shut down at 2022-04-12 20:05:52 +07
+2022-04-26 07:42:25.957 +07 [2500] LOG:  database system is ready to accept connections
+2022-04-26 07:42:26.271 +07 [2508] ERROR:  relation "t2" already exists
+2022-04-26 07:42:26.271 +07 [2508] STATEMENT:  CREATE TABLE t2 (
+					a	integer,
+					b	integer,
+					c	integer
+	)
+2022-04-26 07:42:26.352 +07 [2510] ERROR:  relation "t3" already exists
+2022-04-26 07:42:26.352 +07 [2510] STATEMENT:  CREATE TABLE t3 (
+					a	integer,
+					b	integer,
+					c	integer,
+					id	integer
+	)
+2022-04-26 07:42:26.371 +07 [2512] ERROR:  relation "t4" already exists
+2022-04-26 07:42:26.371 +07 [2512] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 07:42:26.386 +07 [2514] ERROR:  relation "t12" already exists
+2022-04-26 07:42:26.386 +07 [2514] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 07:42:27.286 +07 [2516] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 07:42:27.286 +07 [2516] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 07:42:27.286 +07 [2516] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 07:42:27.620 +07 [2518] ERROR:  syntax error at or near "CREATE" at character 14
+2022-04-26 07:42:27.620 +07 [2518] STATEMENT:  COPY (SELECT CREATE FUNCTION lorem ipsum(a), CREATE FUNCTION lorem ipsum(b), c, id FROM public.t3 ) TO stdout;
+2022-04-26 07:47:25.840 +07 [2501] LOG:  checkpoint starting: time
+2022-04-26 07:47:25.906 +07 [2501] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.018 s, sync=0.004 s, total=0.066 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:03:20.996 +07 [2856] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:03:21.005 +07 [2856] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:03:21.005 +07 [2856] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:03:21.059 +07 [2856] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:03:21.070 +07 [2859] LOG:  database system was interrupted; last known up at 2022-04-26 07:47:25 +07
+2022-04-26 08:03:21.669 +07 [2859] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:03:21.682 +07 [2859] LOG:  redo starts at 0/1527610
+2022-04-26 08:03:21.682 +07 [2859] LOG:  invalid record length at 0/15276F8: wanted 24, got 0
+2022-04-26 08:03:21.682 +07 [2859] LOG:  redo done at 0/15276C0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:03:21.689 +07 [2857] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:03:21.773 +07 [2857] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.042 s, total=0.087 s; sync files=2, longest=0.023 s, average=0.021 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:03:21.784 +07 [2856] LOG:  database system is ready to accept connections
+2022-04-26 08:03:21.919 +07 [2864] ERROR:  relation "t2" already exists
+2022-04-26 08:03:21.919 +07 [2864] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:03:21.937 +07 [2866] ERROR:  relation "t3" already exists
+2022-04-26 08:03:21.937 +07 [2866] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:03:21.958 +07 [2868] ERROR:  relation "t4" already exists
+2022-04-26 08:03:21.958 +07 [2868] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:03:21.972 +07 [2870] ERROR:  relation "t12" already exists
+2022-04-26 08:03:21.972 +07 [2870] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:03:21.994 +07 [2872] ERROR:  syntax error at or near "OF" at character 8
+2022-04-26 08:03:21.994 +07 [2872] STATEMENT:  CREATE OF REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar
+				BEGIN
+					RETURN *****;
+				END;
+2022-04-26 08:03:22.010 +07 [2874] ERROR:  syntax error at or near "OF" at character 8
+2022-04-26 08:03:22.010 +07 [2874] STATEMENT:  CREATE OF REPLACE FUNCTION jumble (elem VARCHAR) RETURNS varchar
+				DECLARE
+					res VARCHAR;			
+				BEGIN
+					FOREACH ch IN ARRAY regexp_split_to_array(elem, '')
+						LOOP
+	  						res = res || ch;	
+						END LOOP;;
+					RETURN res
+				END;
+2022-04-26 08:03:22.342 +07 [2876] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:03:22.342 +07 [2876] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:03:22.342 +07 [2876] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:03:22.668 +07 [2878] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:03:22.668 +07 [2878] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:03:22.668 +07 [2878] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:03:45.195 +07 [2902] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:03:45.206 +07 [2902] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:03:45.209 +07 [2902] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:03:45.252 +07 [2902] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:03:45.262 +07 [2905] LOG:  database system was interrupted; last known up at 2022-04-26 08:03:21 +07
+2022-04-26 08:03:46.117 +07 [2905] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:03:46.123 +07 [2905] LOG:  redo starts at 0/1527770
+2022-04-26 08:03:46.123 +07 [2905] LOG:  invalid record length at 0/15277A8: wanted 24, got 0
+2022-04-26 08:03:46.123 +07 [2905] LOG:  redo done at 0/1527770 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:03:46.134 +07 [2903] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:03:46.157 +07 [2903] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.004 s, total=0.027 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:03:46.164 +07 [2902] LOG:  database system is ready to accept connections
+2022-04-26 08:03:46.262 +07 [2910] ERROR:  relation "t2" already exists
+2022-04-26 08:03:46.262 +07 [2910] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:03:46.290 +07 [2912] ERROR:  relation "t3" already exists
+2022-04-26 08:03:46.290 +07 [2912] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:03:46.314 +07 [2914] ERROR:  relation "t4" already exists
+2022-04-26 08:03:46.314 +07 [2914] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:03:46.350 +07 [2916] ERROR:  relation "t12" already exists
+2022-04-26 08:03:46.350 +07 [2916] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:03:46.372 +07 [2918] ERROR:  syntax error at or near "RETURN" at character 82
+2022-04-26 08:03:46.372 +07 [2918] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar
+				BEGIN
+					RETURN *****;
+				END;
+2022-04-26 08:03:46.415 +07 [2920] ERROR:  syntax error at or near "DECLARE" at character 69
+2022-04-26 08:03:46.415 +07 [2920] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (elem VARCHAR) RETURNS varchar
+				DECLARE
+					res VARCHAR;			
+				BEGIN
+					FOREACH ch IN ARRAY regexp_split_to_array(elem, '')
+						LOOP
+	  						res = res || ch;	
+						END LOOP;;
+					RETURN res
+				END;
+2022-04-26 08:03:46.820 +07 [2922] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:03:46.820 +07 [2922] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:03:46.820 +07 [2922] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:03:47.136 +07 [2924] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:03:47.136 +07 [2924] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:03:47.136 +07 [2924] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:06:27.724 +07 [2975] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:06:27.725 +07 [2975] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:06:27.725 +07 [2975] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:06:27.737 +07 [2975] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:06:27.751 +07 [2978] LOG:  database system was interrupted; last known up at 2022-04-26 08:03:46 +07
+2022-04-26 08:06:28.353 +07 [2978] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:06:28.358 +07 [2978] LOG:  redo starts at 0/1527820
+2022-04-26 08:06:28.358 +07 [2978] LOG:  invalid record length at 0/1527858: wanted 24, got 0
+2022-04-26 08:06:28.358 +07 [2978] LOG:  redo done at 0/1527820 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:06:28.367 +07 [2976] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:06:28.385 +07 [2976] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.023 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:06:28.391 +07 [2975] LOG:  database system is ready to accept connections
+2022-04-26 08:06:28.548 +07 [2983] ERROR:  relation "t2" already exists
+2022-04-26 08:06:28.548 +07 [2983] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:06:28.569 +07 [2985] ERROR:  relation "t3" already exists
+2022-04-26 08:06:28.569 +07 [2985] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:06:28.593 +07 [2987] ERROR:  relation "t4" already exists
+2022-04-26 08:06:28.593 +07 [2987] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:06:28.617 +07 [2989] ERROR:  relation "t12" already exists
+2022-04-26 08:06:28.617 +07 [2989] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:06:28.644 +07 [2991] ERROR:  syntax error at or near "RETURN" at character 82
+2022-04-26 08:06:28.644 +07 [2991] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar
+				BEGIN
+					RETURN *****;
+				END;
+2022-04-26 08:06:28.662 +07 [2993] ERROR:  syntax error at or near "VARCHAR" at character 106
+2022-04-26 08:06:28.662 +07 [2993] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (elem VARCHAR) RETURNS varchar
+				LANGUAGE plpgsql;
+				DECLARE
+					res VARCHAR;			
+				BEGIN
+					FOREACH ch IN ARRAY regexp_split_to_array(elem, '')
+						LOOP
+	  						res = res || ch;	
+						END LOOP;;
+					RETURN res
+				END;
+2022-04-26 08:06:29.003 +07 [2995] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:06:29.003 +07 [2995] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:06:29.003 +07 [2995] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:06:29.400 +07 [2997] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:06:29.400 +07 [2997] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:06:29.400 +07 [2997] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:12:27.344 +07 [3148] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:12:27.345 +07 [3148] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:12:27.345 +07 [3148] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:12:27.355 +07 [3148] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:12:27.371 +07 [3151] LOG:  database system was interrupted; last known up at 2022-04-26 08:06:28 +07
+2022-04-26 08:12:28.247 +07 [3151] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:12:28.252 +07 [3151] LOG:  redo starts at 0/15278D0
+2022-04-26 08:12:28.252 +07 [3151] LOG:  invalid record length at 0/1527908: wanted 24, got 0
+2022-04-26 08:12:28.252 +07 [3151] LOG:  redo done at 0/15278D0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:12:28.261 +07 [3149] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:12:28.280 +07 [3149] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.003 s, total=0.023 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:12:28.286 +07 [3148] LOG:  database system is ready to accept connections
+2022-04-26 08:12:28.335 +07 [3157] ERROR:  relation "t2" already exists
+2022-04-26 08:12:28.335 +07 [3157] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:12:28.367 +07 [3159] ERROR:  relation "t3" already exists
+2022-04-26 08:12:28.367 +07 [3159] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:12:28.395 +07 [3161] ERROR:  relation "t4" already exists
+2022-04-26 08:12:28.395 +07 [3161] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:12:28.426 +07 [3163] ERROR:  relation "t12" already exists
+2022-04-26 08:12:28.426 +07 [3163] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:12:28.443 +07 [3165] ERROR:  syntax error at or near "3139" at character 72
+2022-04-26 08:12:28.443 +07 [3165] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar AS 3139
+				BEGIN
+					RETURN *****;
+				END;
+2022-04-26 08:12:28.477 +07 [3167] ERROR:  syntax error at or near "RETURN" at character 81
+2022-04-26 08:12:28.477 +07 [3167] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (elem VARCHAR) RETURNS varchar		
+				BEGIN
+					RETURN SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25)) :: integer) FROM generate_series(1,char_length(elem))), '');
+				END;
+2022-04-26 08:12:28.870 +07 [3169] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:12:28.870 +07 [3169] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:12:28.870 +07 [3169] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:12:29.196 +07 [3171] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:12:29.196 +07 [3171] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:12:29.196 +07 [3171] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:14:40.240 +07 [3225] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:14:40.241 +07 [3225] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:14:40.241 +07 [3225] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:14:40.247 +07 [3225] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:14:40.259 +07 [3228] LOG:  database system was interrupted; last known up at 2022-04-26 08:12:28 +07
+2022-04-26 08:14:40.851 +07 [3228] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:14:40.855 +07 [3228] LOG:  redo starts at 0/1527980
+2022-04-26 08:14:40.856 +07 [3228] LOG:  invalid record length at 0/15279B8: wanted 24, got 0
+2022-04-26 08:14:40.857 +07 [3228] LOG:  redo done at 0/1527980 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:14:40.870 +07 [3226] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:14:40.894 +07 [3226] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.003 s, total=0.027 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:14:40.900 +07 [3225] LOG:  database system is ready to accept connections
+2022-04-26 08:14:41.019 +07 [3233] ERROR:  relation "t2" already exists
+2022-04-26 08:14:41.019 +07 [3233] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:14:41.041 +07 [3235] ERROR:  relation "t3" already exists
+2022-04-26 08:14:41.041 +07 [3235] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:14:41.072 +07 [3237] ERROR:  relation "t4" already exists
+2022-04-26 08:14:41.072 +07 [3237] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:14:41.098 +07 [3239] ERROR:  relation "t12" already exists
+2022-04-26 08:14:41.098 +07 [3239] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:14:41.121 +07 [3241] ERROR:  syntax error at or near "RETURN" at character 103
+2022-04-26 08:14:41.121 +07 [3241] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar
+				LANGUAGE plpgsql;
+				BEGIN
+					RETURN *****;
+				END;
+2022-04-26 08:14:41.140 +07 [3243] ERROR:  syntax error at or near "RETURN" at character 102
+2022-04-26 08:14:41.140 +07 [3243] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (elem VARCHAR) RETURNS varchar	
+				LANGUAGE plpgsql;	
+				BEGIN
+					RETURN SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25)) :: integer) FROM generate_series(1,char_length(elem))), '');
+				END;
+2022-04-26 08:14:41.602 +07 [3245] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:14:41.602 +07 [3245] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:14:41.602 +07 [3245] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:14:41.945 +07 [3247] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:14:41.945 +07 [3247] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:14:41.945 +07 [3247] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:17:38.790 +07 [3311] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:17:38.792 +07 [3311] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:17:38.792 +07 [3311] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:17:38.801 +07 [3311] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:17:38.813 +07 [3314] LOG:  database system was interrupted; last known up at 2022-04-26 08:14:40 +07
+2022-04-26 08:17:39.322 +07 [3314] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:17:39.327 +07 [3314] LOG:  redo starts at 0/1527A30
+2022-04-26 08:17:39.327 +07 [3314] LOG:  invalid record length at 0/1527A68: wanted 24, got 0
+2022-04-26 08:17:39.327 +07 [3314] LOG:  redo done at 0/1527A30 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:17:39.334 +07 [3312] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:17:39.353 +07 [3312] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.022 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:17:39.357 +07 [3311] LOG:  database system is ready to accept connections
+2022-04-26 08:17:39.528 +07 [3319] ERROR:  relation "t2" already exists
+2022-04-26 08:17:39.528 +07 [3319] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:17:39.543 +07 [3321] ERROR:  relation "t3" already exists
+2022-04-26 08:17:39.543 +07 [3321] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:17:39.564 +07 [3323] ERROR:  relation "t4" already exists
+2022-04-26 08:17:39.564 +07 [3323] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:17:39.583 +07 [3325] ERROR:  relation "t12" already exists
+2022-04-26 08:17:39.583 +07 [3325] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:17:39.601 +07 [3327] ERROR:  syntax error at or near "res" at character 123
+2022-04-26 08:17:39.601 +07 [3327] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR, OUT res VARCHAR) RETURNS varchar
+				LANGUAGE plpgsql;
+				BEGIN
+					res = *****;
+					RETURN res;
+				END;
+2022-04-26 08:17:39.626 +07 [3329] ERROR:  syntax error at or near "res" at character 122
+2022-04-26 08:17:39.626 +07 [3329] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (IN elem VARCHAR, OUT res VARCHAR) RETURNS varchar	
+				LANGUAGE plpgsql;	
+				BEGIN
+					res = SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25)) :: integer) FROM generate_series(1,char_length(elem))), '');
+					RETURN res;
+				END;
+2022-04-26 08:17:39.980 +07 [3331] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:17:39.980 +07 [3331] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:17:39.980 +07 [3331] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:17:40.329 +07 [3333] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:17:40.329 +07 [3333] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:17:40.329 +07 [3333] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:19:03.375 +07 [3349] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:19:03.376 +07 [3349] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:19:03.376 +07 [3349] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:19:03.388 +07 [3349] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:19:03.399 +07 [3352] LOG:  database system was interrupted; last known up at 2022-04-26 08:17:39 +07
+2022-04-26 08:19:04.106 +07 [3352] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:19:04.110 +07 [3352] LOG:  redo starts at 0/1527AE0
+2022-04-26 08:19:04.110 +07 [3352] LOG:  invalid record length at 0/1527B18: wanted 24, got 0
+2022-04-26 08:19:04.110 +07 [3352] LOG:  redo done at 0/1527AE0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:19:04.119 +07 [3350] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:19:04.137 +07 [3350] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.023 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:19:04.150 +07 [3349] LOG:  database system is ready to accept connections
+2022-04-26 08:19:04.323 +07 [3357] ERROR:  relation "t2" already exists
+2022-04-26 08:19:04.323 +07 [3357] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:19:04.353 +07 [3359] ERROR:  relation "t3" already exists
+2022-04-26 08:19:04.353 +07 [3359] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:19:04.377 +07 [3361] ERROR:  relation "t4" already exists
+2022-04-26 08:19:04.377 +07 [3361] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:19:04.399 +07 [3364] ERROR:  relation "t12" already exists
+2022-04-26 08:19:04.399 +07 [3364] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:19:04.418 +07 [3374] ERROR:  syntax error at or near "res" at character 123
+2022-04-26 08:19:04.418 +07 [3374] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR, OUT res VARCHAR) RETURNS varchar
+				LANGUAGE plpgsql;
+				BEGIN
+					res := *****;
+					RETURN res;
+				END;
+2022-04-26 08:19:04.437 +07 [3376] ERROR:  syntax error at or near "res" at character 122
+2022-04-26 08:19:04.437 +07 [3376] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (IN elem VARCHAR, OUT res VARCHAR) RETURNS varchar	
+				LANGUAGE plpgsql;	
+				BEGIN
+					res := SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25)) :: integer) FROM generate_series(1,char_length(elem))), '');
+					RETURN res;
+				END;
+2022-04-26 08:19:04.853 +07 [3378] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:19:04.853 +07 [3378] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:19:04.853 +07 [3378] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:19:05.294 +07 [3381] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:19:05.294 +07 [3381] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:19:05.294 +07 [3381] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:20:50.580 +07 [3399] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:20:50.581 +07 [3399] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:20:50.582 +07 [3399] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:20:50.596 +07 [3399] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:20:50.609 +07 [3402] LOG:  database system was interrupted; last known up at 2022-04-26 08:19:04 +07
+2022-04-26 08:20:51.196 +07 [3402] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:20:51.201 +07 [3402] LOG:  redo starts at 0/1527B90
+2022-04-26 08:20:51.201 +07 [3402] LOG:  invalid record length at 0/1527BC8: wanted 24, got 0
+2022-04-26 08:20:51.201 +07 [3402] LOG:  redo done at 0/1527B90 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:20:51.209 +07 [3400] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:20:51.228 +07 [3400] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.021 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:20:51.233 +07 [3399] LOG:  database system is ready to accept connections
+2022-04-26 08:20:51.272 +07 [3407] ERROR:  relation "t2" already exists
+2022-04-26 08:20:51.272 +07 [3407] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:20:51.288 +07 [3409] ERROR:  relation "t3" already exists
+2022-04-26 08:20:51.288 +07 [3409] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:20:51.306 +07 [3411] ERROR:  relation "t4" already exists
+2022-04-26 08:20:51.306 +07 [3411] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:20:51.326 +07 [3413] ERROR:  relation "t12" already exists
+2022-04-26 08:20:51.326 +07 [3413] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:20:51.348 +07 [3415] ERROR:  syntax error at or near "res" at character 123
+2022-04-26 08:20:51.348 +07 [3415] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR, OUT res VARCHAR) RETURNS varchar
+				LANGUAGE plpgsql;
+				BEGIN
+					res := '*****';
+					RETURN res;
+				END;
+2022-04-26 08:20:51.364 +07 [3417] ERROR:  syntax error at or near "res" at character 122
+2022-04-26 08:20:51.364 +07 [3417] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (IN elem VARCHAR, OUT res VARCHAR) RETURNS varchar	
+				LANGUAGE plpgsql;	
+				BEGIN
+					res := SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25)) :: integer) FROM generate_series(1,char_length(elem))), '');
+					RETURN res;
+				END;
+2022-04-26 08:20:51.712 +07 [3419] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:20:51.712 +07 [3419] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:20:51.712 +07 [3419] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:20:52.029 +07 [3421] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:20:52.029 +07 [3421] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:20:52.029 +07 [3421] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:21:35.440 +07 [3444] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:21:35.441 +07 [3444] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:21:35.441 +07 [3444] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:21:35.448 +07 [3444] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:21:35.459 +07 [3447] LOG:  database system was interrupted; last known up at 2022-04-26 08:20:51 +07
+2022-04-26 08:21:36.059 +07 [3447] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:21:36.064 +07 [3447] LOG:  redo starts at 0/1527C40
+2022-04-26 08:21:36.064 +07 [3447] LOG:  invalid record length at 0/1527C78: wanted 24, got 0
+2022-04-26 08:21:36.064 +07 [3447] LOG:  redo done at 0/1527C40 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:21:36.072 +07 [3445] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:21:36.093 +07 [3445] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.003 s, total=0.024 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:21:36.102 +07 [3444] LOG:  database system is ready to accept connections
+2022-04-26 08:21:36.198 +07 [3452] ERROR:  relation "t2" already exists
+2022-04-26 08:21:36.198 +07 [3452] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:21:36.232 +07 [3454] ERROR:  relation "t3" already exists
+2022-04-26 08:21:36.232 +07 [3454] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:21:36.261 +07 [3456] ERROR:  relation "t4" already exists
+2022-04-26 08:21:36.261 +07 [3456] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:21:36.298 +07 [3458] ERROR:  relation "t12" already exists
+2022-04-26 08:21:36.298 +07 [3458] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:21:36.321 +07 [3460] ERROR:  syntax error at or near "res" at character 123
+2022-04-26 08:21:36.321 +07 [3460] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR, OUT res VARCHAR) RETURNS varchar
+				LANGUAGE plpgsql;
+				BEGIN
+					res := '*****'::varchar;
+					RETURN res;
+				END;
+2022-04-26 08:21:36.354 +07 [3462] ERROR:  syntax error at or near "res" at character 122
+2022-04-26 08:21:36.354 +07 [3462] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (IN elem VARCHAR, OUT res VARCHAR) RETURNS varchar	
+				LANGUAGE plpgsql;	
+				BEGIN
+					res := SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25)) :: integer) FROM generate_series(1,char_length(elem))), '');
+					RETURN res;
+				END;
+2022-04-26 08:21:36.801 +07 [3464] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:21:36.801 +07 [3464] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:21:36.801 +07 [3464] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:21:37.170 +07 [3475] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:21:37.170 +07 [3475] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:21:37.170 +07 [3475] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:26:25.925 +07 [3579] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:26:25.927 +07 [3579] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:26:25.927 +07 [3579] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:26:25.935 +07 [3579] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:26:25.947 +07 [3582] LOG:  database system was interrupted; last known up at 2022-04-26 08:21:36 +07
+2022-04-26 08:26:26.576 +07 [3582] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:26:26.581 +07 [3582] LOG:  redo starts at 0/1527CF0
+2022-04-26 08:26:26.581 +07 [3582] LOG:  invalid record length at 0/1527D28: wanted 24, got 0
+2022-04-26 08:26:26.581 +07 [3582] LOG:  redo done at 0/1527CF0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:26:26.593 +07 [3580] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:26:26.625 +07 [3580] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.009 s, total=0.038 s; sync files=2, longest=0.006 s, average=0.005 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:26:26.632 +07 [3579] LOG:  database system is ready to accept connections
+2022-04-26 08:26:26.706 +07 [3587] ERROR:  relation "t2" already exists
+2022-04-26 08:26:26.706 +07 [3587] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:26:26.753 +07 [3591] ERROR:  relation "t3" already exists
+2022-04-26 08:26:26.753 +07 [3591] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:26:26.808 +07 [3594] ERROR:  relation "t4" already exists
+2022-04-26 08:26:26.808 +07 [3594] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:26:26.838 +07 [3604] ERROR:  relation "t12" already exists
+2022-04-26 08:26:26.838 +07 [3604] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:26:26.857 +07 [3606] ERROR:  syntax error at or near "RETURN" at character 106
+2022-04-26 08:26:26.857 +07 [3606] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR) RETURNS varchar
+				LANGUAGE plpgsql;
+				BEGIN
+					RETURN '*****';
+				END;
+2022-04-26 08:26:26.879 +07 [3608] ERROR:  syntax error at or near "3570" at character 72
+2022-04-26 08:26:26.879 +07 [3608] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (IN elem VARCHAR) RETURNS varchar AS 3570
+				SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25)) :: integer) FROM generate_series(1,char_length(elem))), '');
+				3570
+				LANGUAGE plpgsql;
+2022-04-26 08:26:27.252 +07 [3610] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:26:27.252 +07 [3610] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:26:27.252 +07 [3610] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:26:27.619 +07 [3613] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:26:27.619 +07 [3613] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:26:27.619 +07 [3613] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:27:17.950 +07 [3637] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:27:17.951 +07 [3637] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:27:17.952 +07 [3637] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:27:17.963 +07 [3637] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:27:17.977 +07 [3640] LOG:  database system was interrupted; last known up at 2022-04-26 08:26:26 +07
+2022-04-26 08:27:18.569 +07 [3640] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:27:18.573 +07 [3640] LOG:  redo starts at 0/1527DA0
+2022-04-26 08:27:18.574 +07 [3640] LOG:  invalid record length at 0/1527DD8: wanted 24, got 0
+2022-04-26 08:27:18.574 +07 [3640] LOG:  redo done at 0/1527DA0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:27:18.585 +07 [3638] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:27:18.607 +07 [3638] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.027 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:27:18.612 +07 [3637] LOG:  database system is ready to accept connections
+2022-04-26 08:27:18.718 +07 [3645] ERROR:  relation "t2" already exists
+2022-04-26 08:27:18.718 +07 [3645] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:27:18.734 +07 [3647] ERROR:  relation "t3" already exists
+2022-04-26 08:27:18.734 +07 [3647] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:27:18.757 +07 [3649] ERROR:  relation "t4" already exists
+2022-04-26 08:27:18.757 +07 [3649] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:27:18.783 +07 [3651] ERROR:  relation "t12" already exists
+2022-04-26 08:27:18.783 +07 [3651] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:27:18.808 +07 [3653] ERROR:  syntax error at or near "RETURN" at character 106
+2022-04-26 08:27:18.808 +07 [3653] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR) RETURNS varchar
+				LANGUAGE plpgsql;
+				BEGIN
+					RETURN '*****';
+				END;
+2022-04-26 08:27:18.832 +07 [3655] ERROR:  syntax error at or near "3628" at character 72
+2022-04-26 08:27:18.832 +07 [3655] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (IN elem VARCHAR) RETURNS varchar AS 3628
+				SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25))) FROM generate_series(1,char_length(elem))), '');
+				3628
+				LANGUAGE plpgsql;
+2022-04-26 08:27:19.176 +07 [3657] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:27:19.176 +07 [3657] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:27:19.176 +07 [3657] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:27:19.482 +07 [3659] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:27:19.482 +07 [3659] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:27:19.482 +07 [3659] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:32:05.363 +07 [3746] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:32:05.364 +07 [3746] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:32:05.364 +07 [3746] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:32:05.377 +07 [3746] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:32:05.394 +07 [3749] LOG:  database system was interrupted; last known up at 2022-04-26 08:27:18 +07
+2022-04-26 08:32:06.015 +07 [3749] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:32:06.019 +07 [3749] LOG:  redo starts at 0/1527E50
+2022-04-26 08:32:06.019 +07 [3749] LOG:  invalid record length at 0/1527E88: wanted 24, got 0
+2022-04-26 08:32:06.019 +07 [3749] LOG:  redo done at 0/1527E50 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:32:06.031 +07 [3747] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:32:06.057 +07 [3747] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.003 s, total=0.031 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:32:06.068 +07 [3746] LOG:  database system is ready to accept connections
+2022-04-26 08:32:06.189 +07 [3755] ERROR:  relation "t2" already exists
+2022-04-26 08:32:06.189 +07 [3755] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:32:06.211 +07 [3757] ERROR:  relation "t3" already exists
+2022-04-26 08:32:06.211 +07 [3757] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:32:06.235 +07 [3759] ERROR:  relation "t4" already exists
+2022-04-26 08:32:06.235 +07 [3759] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:32:06.253 +07 [3761] ERROR:  relation "t12" already exists
+2022-04-26 08:32:06.253 +07 [3761] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:32:06.277 +07 [3763] ERROR:  syntax error at or near "$" at character 78
+2022-04-26 08:32:06.277 +07 [3763] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR) RETURNS VARCHAR AS
+				$
+				BEGIN
+					RETURN '*****';
+				END;
+2022-04-26 08:32:06.297 +07 [3765] ERROR:  syntax error at or near "$" at character 76
+2022-04-26 08:32:06.297 +07 [3765] STATEMENT:  CREATE OR REPLACE FUNCTION jumble (IN elem VARCHAR) RETURNS VARCHAR AS 
+				$
+				SELECT array_to_string(ARRAY(SELECT chr((65 + round(random() * 25))) FROM generate_series(1,char_length(elem))), '');
+				$
+				LANGUAGE plpgsql;
+2022-04-26 08:32:06.669 +07 [3767] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:32:06.669 +07 [3767] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:32:06.669 +07 [3767] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:32:07.000 +07 [3769] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:32:07.000 +07 [3769] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:32:07.000 +07 [3769] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:32:37.681 +07 [3782] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:32:37.687 +07 [3782] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:32:37.687 +07 [3782] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:32:37.695 +07 [3782] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:32:37.711 +07 [3785] LOG:  database system was interrupted; last known up at 2022-04-26 08:32:06 +07
+2022-04-26 08:32:38.424 +07 [3785] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:32:38.430 +07 [3785] LOG:  redo starts at 0/1527F00
+2022-04-26 08:32:38.430 +07 [3785] LOG:  invalid record length at 0/1527F38: wanted 24, got 0
+2022-04-26 08:32:38.430 +07 [3785] LOG:  redo done at 0/1527F00 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:32:38.440 +07 [3783] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:32:38.471 +07 [3783] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.004 s, total=0.034 s; sync files=2, longest=0.003 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:32:38.479 +07 [3782] LOG:  database system is ready to accept connections
+2022-04-26 08:32:38.611 +07 [3800] ERROR:  relation "t2" already exists
+2022-04-26 08:32:38.611 +07 [3800] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:32:38.639 +07 [3802] ERROR:  relation "t3" already exists
+2022-04-26 08:32:38.639 +07 [3802] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:32:38.690 +07 [3804] ERROR:  relation "t4" already exists
+2022-04-26 08:32:38.690 +07 [3804] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:32:38.741 +07 [3806] ERROR:  relation "t12" already exists
+2022-04-26 08:32:38.741 +07 [3806] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:32:38.777 +07 [3808] ERROR:  syntax error at or near "BEGIN" at character 78
+2022-04-26 08:32:38.777 +07 [3808] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR) RETURNS VARCHAR AS
+				BEGIN
+					RETURN '*****';
+				END;
+2022-04-26 08:33:04.569 +07 [3830] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:33:04.570 +07 [3830] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:33:04.570 +07 [3830] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:33:04.579 +07 [3830] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:33:04.597 +07 [3833] LOG:  database system was interrupted; last known up at 2022-04-26 08:32:38 +07
+2022-04-26 08:33:05.207 +07 [3833] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:33:05.214 +07 [3833] LOG:  redo starts at 0/1527FB0
+2022-04-26 08:33:05.214 +07 [3833] LOG:  invalid record length at 0/1527FE8: wanted 24, got 0
+2022-04-26 08:33:05.214 +07 [3833] LOG:  redo done at 0/1527FB0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:33:05.225 +07 [3831] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:33:05.254 +07 [3831] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.004 s, total=0.032 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:33:05.262 +07 [3830] LOG:  database system is ready to accept connections
+2022-04-26 08:33:05.355 +07 [3838] ERROR:  relation "t2" already exists
+2022-04-26 08:33:05.355 +07 [3838] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:33:05.385 +07 [3840] ERROR:  relation "t3" already exists
+2022-04-26 08:33:05.385 +07 [3840] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:33:05.412 +07 [3842] ERROR:  relation "t4" already exists
+2022-04-26 08:33:05.412 +07 [3842] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:33:05.439 +07 [3844] ERROR:  relation "t12" already exists
+2022-04-26 08:33:05.439 +07 [3844] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:33:05.464 +07 [3846] ERROR:  syntax error at or near "BEGIN" at character 78
+2022-04-26 08:33:05.464 +07 [3846] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR) RETURNS VARCHAR AS
+				BEGIN
+					RETURN '*****';
+				END;
+2022-04-26 08:33:05.889 +07 [3848] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:33:05.889 +07 [3848] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:33:05.889 +07 [3848] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:33:06.286 +07 [3850] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:33:06.286 +07 [3850] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:33:06.286 +07 [3850] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:33:29.521 +07 [3862] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:33:29.522 +07 [3862] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:33:29.522 +07 [3862] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:33:29.529 +07 [3862] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:33:29.539 +07 [3865] LOG:  database system was interrupted; last known up at 2022-04-26 08:33:05 +07
+2022-04-26 08:33:30.094 +07 [3865] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:33:30.101 +07 [3865] LOG:  redo starts at 0/1528078
+2022-04-26 08:33:30.101 +07 [3865] LOG:  invalid record length at 0/15280B0: wanted 24, got 0
+2022-04-26 08:33:30.101 +07 [3865] LOG:  redo done at 0/1528078 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:33:30.109 +07 [3863] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:33:30.135 +07 [3863] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.003 s, total=0.030 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:33:30.142 +07 [3862] LOG:  database system is ready to accept connections
+2022-04-26 08:33:30.308 +07 [3870] ERROR:  relation "t2" already exists
+2022-04-26 08:33:30.308 +07 [3870] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:33:30.335 +07 [3872] ERROR:  relation "t3" already exists
+2022-04-26 08:33:30.335 +07 [3872] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:33:30.374 +07 [3874] ERROR:  relation "t4" already exists
+2022-04-26 08:33:30.374 +07 [3874] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:33:30.415 +07 [3876] ERROR:  relation "t12" already exists
+2022-04-26 08:33:30.415 +07 [3876] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:33:30.454 +07 [3878] ERROR:  syntax error at or near "LANGUAGE" at character 78
+2022-04-26 08:33:30.454 +07 [3878] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR) RETURNS VARCHAR AS
+				LANGUAGE plpgsql;
+				BEGIN
+					RETURN '*****';
+				END;
+2022-04-26 08:33:30.972 +07 [3880] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:33:30.972 +07 [3880] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:33:30.972 +07 [3880] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:33:31.391 +07 [3892] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:33:31.391 +07 [3892] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:33:31.391 +07 [3892] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:35:47.881 +07 [3947] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:35:47.882 +07 [3947] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:35:47.882 +07 [3947] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:35:47.892 +07 [3947] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:35:47.906 +07 [3950] LOG:  database system was interrupted; last known up at 2022-04-26 08:33:30 +07
+2022-04-26 08:35:48.438 +07 [3950] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:35:48.443 +07 [3950] LOG:  redo starts at 0/1528128
+2022-04-26 08:35:48.443 +07 [3950] LOG:  invalid record length at 0/1528160: wanted 24, got 0
+2022-04-26 08:35:48.443 +07 [3950] LOG:  redo done at 0/1528128 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:35:48.454 +07 [3948] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:35:48.479 +07 [3948] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.003 s, total=0.028 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:35:48.486 +07 [3947] LOG:  database system is ready to accept connections
+2022-04-26 08:35:48.586 +07 [3955] ERROR:  relation "t2" already exists
+2022-04-26 08:35:48.586 +07 [3955] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:35:48.607 +07 [3957] ERROR:  relation "t3" already exists
+2022-04-26 08:35:48.607 +07 [3957] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:35:48.627 +07 [3959] ERROR:  relation "t4" already exists
+2022-04-26 08:35:48.627 +07 [3959] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:35:48.651 +07 [3961] ERROR:  relation "t12" already exists
+2022-04-26 08:35:48.651 +07 [3961] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:35:48.674 +07 [3963] ERROR:  syntax error at or near "res" at character 120
+2022-04-26 08:35:48.674 +07 [3963] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem VARCHAR, OUT res TEXT) RETURNS VARCHAR
+				LANGUAGE plpgsql;
+				BEGIN
+					res := '*****';
+					RETURN res::varchar;
+				END;
+2022-04-26 08:35:49.070 +07 [3965] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:35:49.070 +07 [3965] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:35:49.070 +07 [3965] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:35:49.439 +07 [3967] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:35:49.439 +07 [3967] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:35:49.439 +07 [3967] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:41:47.446 +07 [4026] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:41:47.447 +07 [4026] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:41:47.447 +07 [4026] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:41:47.456 +07 [4026] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:41:47.469 +07 [4029] LOG:  database system was interrupted; last known up at 2022-04-26 08:35:48 +07
+2022-04-26 08:41:48.070 +07 [4029] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:41:48.075 +07 [4029] LOG:  redo starts at 0/15281D8
+2022-04-26 08:41:48.075 +07 [4029] LOG:  invalid record length at 0/1528210: wanted 24, got 0
+2022-04-26 08:41:48.075 +07 [4029] LOG:  redo done at 0/15281D8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:41:48.082 +07 [4027] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:41:48.104 +07 [4027] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.006 s, total=0.025 s; sync files=2, longest=0.005 s, average=0.003 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:41:48.108 +07 [4026] LOG:  database system is ready to accept connections
+2022-04-26 08:41:48.187 +07 [4034] ERROR:  relation "t2" already exists
+2022-04-26 08:41:48.187 +07 [4034] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:41:48.202 +07 [4036] ERROR:  relation "t3" already exists
+2022-04-26 08:41:48.202 +07 [4036] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:41:48.221 +07 [4038] ERROR:  relation "t4" already exists
+2022-04-26 08:41:48.221 +07 [4038] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:41:48.240 +07 [4040] ERROR:  relation "t12" already exists
+2022-04-26 08:41:48.240 +07 [4040] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:41:48.263 +07 [4042] ERROR:  syntax error at or near "4017" at character 75
+2022-04-26 08:41:48.263 +07 [4042] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar AS
+				4017
+				BEGIN
+				RETURN '*****';
+				END;
+				4017
+	
+2022-04-26 08:41:48.614 +07 [4044] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:41:48.614 +07 [4044] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:41:48.614 +07 [4044] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:41:48.927 +07 [4046] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:41:48.927 +07 [4046] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:41:48.927 +07 [4046] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:42:24.809 +07 [4070] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:42:24.824 +07 [4070] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:42:24.825 +07 [4070] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:42:24.834 +07 [4070] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:42:24.850 +07 [4073] LOG:  database system was interrupted; last known up at 2022-04-26 08:41:48 +07
+2022-04-26 08:42:25.584 +07 [4073] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:42:25.588 +07 [4073] LOG:  redo starts at 0/1528288
+2022-04-26 08:42:25.589 +07 [4073] LOG:  invalid record length at 0/15282C0: wanted 24, got 0
+2022-04-26 08:42:25.589 +07 [4073] LOG:  redo done at 0/1528288 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:42:25.597 +07 [4071] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:42:25.628 +07 [4071] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.010 s, total=0.034 s; sync files=2, longest=0.008 s, average=0.005 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:42:25.637 +07 [4070] LOG:  database system is ready to accept connections
+2022-04-26 08:42:25.780 +07 [4078] ERROR:  relation "t2" already exists
+2022-04-26 08:42:25.780 +07 [4078] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:42:25.795 +07 [4080] ERROR:  relation "t3" already exists
+2022-04-26 08:42:25.795 +07 [4080] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:42:25.821 +07 [4082] ERROR:  relation "t4" already exists
+2022-04-26 08:42:25.821 +07 [4082] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:42:25.837 +07 [4084] ERROR:  relation "t12" already exists
+2022-04-26 08:42:25.837 +07 [4084] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:42:25.857 +07 [4086] ERROR:  syntax error at or near "4061" at character 75
+2022-04-26 08:42:25.857 +07 [4086] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar AS
+				4061
+				BEGIN
+				RETURN '******';
+				END;
+				4061
+	
+2022-04-26 08:42:26.212 +07 [4088] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:42:26.212 +07 [4088] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:42:26.212 +07 [4088] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:42:26.542 +07 [4090] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:42:26.542 +07 [4090] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:42:26.542 +07 [4090] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:42:31.476 +07 [4100] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:42:31.478 +07 [4100] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:42:31.478 +07 [4100] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:42:31.485 +07 [4100] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:42:31.497 +07 [4103] LOG:  database system was interrupted; last known up at 2022-04-26 08:42:25 +07
+2022-04-26 08:42:32.057 +07 [4103] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:42:32.062 +07 [4103] LOG:  invalid record length at 0/1528338: wanted 24, got 0
+2022-04-26 08:42:32.062 +07 [4103] LOG:  redo is not required
+2022-04-26 08:42:32.072 +07 [4101] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:42:32.117 +07 [4101] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.015 s, total=0.048 s; sync files=2, longest=0.011 s, average=0.007 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:42:32.122 +07 [4100] LOG:  database system is ready to accept connections
+2022-04-26 08:42:32.176 +07 [4108] ERROR:  relation "t2" already exists
+2022-04-26 08:42:32.176 +07 [4108] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:42:32.196 +07 [4110] ERROR:  relation "t3" already exists
+2022-04-26 08:42:32.196 +07 [4110] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:42:32.218 +07 [4112] ERROR:  relation "t4" already exists
+2022-04-26 08:42:32.218 +07 [4112] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:42:32.238 +07 [4114] ERROR:  relation "t12" already exists
+2022-04-26 08:42:32.238 +07 [4114] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:42:32.256 +07 [4116] ERROR:  syntax error at or near "4091" at character 75
+2022-04-26 08:42:32.256 +07 [4116] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar AS
+				4091
+				BEGIN
+				RETURN '******';
+				END;
+				4091
+	
+2022-04-26 08:42:32.626 +07 [4118] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:42:32.626 +07 [4118] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:42:32.626 +07 [4118] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:42:33.001 +07 [4120] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:42:33.001 +07 [4120] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:42:33.001 +07 [4120] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:42:59.936 +07 [4143] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:42:59.937 +07 [4143] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:42:59.937 +07 [4143] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:42:59.947 +07 [4143] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:42:59.959 +07 [4146] LOG:  database system was interrupted; last known up at 2022-04-26 08:42:32 +07
+2022-04-26 08:43:00.498 +07 [4146] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:43:00.504 +07 [4146] LOG:  redo starts at 0/15283B0
+2022-04-26 08:43:00.504 +07 [4146] LOG:  invalid record length at 0/15283E8: wanted 24, got 0
+2022-04-26 08:43:00.505 +07 [4146] LOG:  redo done at 0/15283B0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:43:00.518 +07 [4144] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:43:00.547 +07 [4144] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.005 s, total=0.037 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:43:00.556 +07 [4143] LOG:  database system is ready to accept connections
+2022-04-26 08:43:00.634 +07 [4151] ERROR:  relation "t2" already exists
+2022-04-26 08:43:00.634 +07 [4151] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:43:00.656 +07 [4153] ERROR:  relation "t3" already exists
+2022-04-26 08:43:00.656 +07 [4153] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:43:00.715 +07 [4155] ERROR:  relation "t4" already exists
+2022-04-26 08:43:00.715 +07 [4155] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:43:00.738 +07 [4157] ERROR:  relation "t12" already exists
+2022-04-26 08:43:00.738 +07 [4157] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:43:00.762 +07 [4159] ERROR:  syntax error at or near "4134" at character 75
+2022-04-26 08:43:00.762 +07 [4159] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar AS
+				4134
+				BEGIN
+					RETURN '******';
+				END;
+				4134
+				LANGUAGE plpgsql;
+	
+2022-04-26 08:43:01.215 +07 [4161] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:43:01.215 +07 [4161] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:43:01.215 +07 [4161] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:43:01.647 +07 [4172] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:43:01.647 +07 [4172] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:43:01.647 +07 [4172] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:43:48.165 +07 [4185] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:43:48.166 +07 [4185] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:43:48.166 +07 [4185] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:43:48.172 +07 [4185] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:43:48.188 +07 [4188] LOG:  database system was interrupted; last known up at 2022-04-26 08:43:00 +07
+2022-04-26 08:43:48.716 +07 [4188] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:43:48.721 +07 [4188] LOG:  redo starts at 0/1528460
+2022-04-26 08:43:48.721 +07 [4188] LOG:  invalid record length at 0/1528498: wanted 24, got 0
+2022-04-26 08:43:48.721 +07 [4188] LOG:  redo done at 0/1528460 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:43:48.735 +07 [4186] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:43:48.772 +07 [4186] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.005 s, total=0.041 s; sync files=2, longest=0.003 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:43:48.782 +07 [4185] LOG:  database system is ready to accept connections
+2022-04-26 08:43:48.871 +07 [4193] ERROR:  relation "t2" already exists
+2022-04-26 08:43:48.871 +07 [4193] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:43:48.894 +07 [4195] ERROR:  relation "t3" already exists
+2022-04-26 08:43:48.894 +07 [4195] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:43:48.931 +07 [4197] ERROR:  relation "t4" already exists
+2022-04-26 08:43:48.931 +07 [4197] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:43:48.962 +07 [4199] ERROR:  relation "t12" already exists
+2022-04-26 08:43:48.962 +07 [4199] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:43:49.005 +07 [4201] ERROR:  syntax error at or near "4176" at character 75
+2022-04-26 08:43:49.005 +07 [4201] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar AS
+				4176
+				BEGIN
+					SELECT '*****';
+				END;
+				4176
+				LANGUAGE plpgsql;
+	
+2022-04-26 08:43:49.359 +07 [4203] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:43:49.359 +07 [4203] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:43:49.359 +07 [4203] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:43:49.704 +07 [4216] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:43:49.704 +07 [4216] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:43:49.704 +07 [4216] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:44:16.396 +07 [4239] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:44:16.397 +07 [4239] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:44:16.397 +07 [4239] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:44:16.403 +07 [4239] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:44:16.415 +07 [4242] LOG:  database system was interrupted; last known up at 2022-04-26 08:43:48 +07
+2022-04-26 08:44:17.064 +07 [4242] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:44:17.069 +07 [4242] LOG:  redo starts at 0/1528510
+2022-04-26 08:44:17.069 +07 [4242] LOG:  invalid record length at 0/1528548: wanted 24, got 0
+2022-04-26 08:44:17.069 +07 [4242] LOG:  redo done at 0/1528510 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:44:17.104 +07 [4240] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:44:17.145 +07 [4240] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.005 s, total=0.064 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:44:17.153 +07 [4239] LOG:  database system is ready to accept connections
+2022-04-26 08:44:17.314 +07 [4247] ERROR:  relation "t2" already exists
+2022-04-26 08:44:17.314 +07 [4247] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:44:17.352 +07 [4249] ERROR:  relation "t3" already exists
+2022-04-26 08:44:17.352 +07 [4249] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:44:17.391 +07 [4252] ERROR:  relation "t4" already exists
+2022-04-26 08:44:17.391 +07 [4252] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:44:17.428 +07 [4262] ERROR:  relation "t12" already exists
+2022-04-26 08:44:17.428 +07 [4262] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:44:17.449 +07 [4264] ERROR:  syntax error at or near "BEGIN" at character 75
+2022-04-26 08:44:17.449 +07 [4264] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar AS
+				BEGIN
+					RETURN SELECT '*****';
+				END;
+				LANGUAGE plpgsql;
+	
+2022-04-26 08:44:17.855 +07 [4266] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:44:17.855 +07 [4266] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:44:17.855 +07 [4266] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:44:18.294 +07 [4269] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:44:18.294 +07 [4269] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:44:18.294 +07 [4269] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:44:26.102 +07 [4282] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:44:26.103 +07 [4282] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:44:26.103 +07 [4282] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:44:26.110 +07 [4282] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:44:26.121 +07 [4285] LOG:  database system was interrupted; last known up at 2022-04-26 08:44:17 +07
+2022-04-26 08:44:26.642 +07 [4285] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:44:26.647 +07 [4285] LOG:  invalid record length at 0/15285C0: wanted 24, got 0
+2022-04-26 08:44:26.647 +07 [4285] LOG:  redo is not required
+2022-04-26 08:44:26.654 +07 [4283] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:44:26.675 +07 [4283] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.003 s, total=0.024 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:44:26.689 +07 [4282] LOG:  database system is ready to accept connections
+2022-04-26 08:44:26.798 +07 [4290] ERROR:  relation "t2" already exists
+2022-04-26 08:44:26.798 +07 [4290] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:44:26.826 +07 [4292] ERROR:  relation "t3" already exists
+2022-04-26 08:44:26.826 +07 [4292] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:44:26.851 +07 [4294] ERROR:  relation "t4" already exists
+2022-04-26 08:44:26.851 +07 [4294] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:44:26.878 +07 [4296] ERROR:  relation "t12" already exists
+2022-04-26 08:44:26.878 +07 [4296] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:44:26.915 +07 [4298] ERROR:  syntax error at or near "RETURN" at character 82
+2022-04-26 08:44:26.915 +07 [4298] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS varchar
+				BEGIN
+					RETURN SELECT '*****';
+				END;
+				LANGUAGE plpgsql;
+	
+2022-04-26 08:44:27.381 +07 [4300] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:44:27.381 +07 [4300] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:44:27.381 +07 [4300] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:44:27.804 +07 [4311] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:44:27.804 +07 [4311] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:44:27.804 +07 [4311] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:46:16.704 +07 [4349] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:46:16.705 +07 [4349] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:46:16.706 +07 [4349] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:46:16.716 +07 [4349] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:46:16.728 +07 [4352] LOG:  database system was interrupted; last known up at 2022-04-26 08:44:26 +07
+2022-04-26 08:46:17.290 +07 [4352] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:46:17.295 +07 [4352] LOG:  redo starts at 0/1528638
+2022-04-26 08:46:17.295 +07 [4352] LOG:  invalid record length at 0/1528670: wanted 24, got 0
+2022-04-26 08:46:17.295 +07 [4352] LOG:  redo done at 0/1528638 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:46:17.305 +07 [4350] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:46:17.334 +07 [4350] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.005 s, total=0.032 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:46:17.342 +07 [4349] LOG:  database system is ready to accept connections
+2022-04-26 08:46:17.416 +07 [4357] ERROR:  relation "t2" already exists
+2022-04-26 08:46:17.416 +07 [4357] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:46:17.448 +07 [4359] ERROR:  relation "t3" already exists
+2022-04-26 08:46:17.448 +07 [4359] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:46:17.477 +07 [4361] ERROR:  relation "t4" already exists
+2022-04-26 08:46:17.477 +07 [4361] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:46:17.503 +07 [4363] ERROR:  relation "t12" already exists
+2022-04-26 08:46:17.503 +07 [4363] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:46:17.528 +07 [4365] ERROR:  syntax error at or near "4340" at character 72
+2022-04-26 08:46:17.528 +07 [4365] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem VARCHAR) RETURNS VARCHAR AS 4340
+	  				SELECT VARCHAR '*****' AS result;
+				4340 LANGUAGE SQL;
+	
+2022-04-26 08:46:18.053 +07 [4367] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:46:18.053 +07 [4367] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:46:18.053 +07 [4367] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:46:18.413 +07 [4378] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:46:18.413 +07 [4378] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:46:18.413 +07 [4378] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:47:17.051 +07 [4456] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:47:17.052 +07 [4456] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:47:17.052 +07 [4456] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:47:17.062 +07 [4456] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:47:17.074 +07 [4459] LOG:  database system was interrupted; last known up at 2022-04-26 08:46:17 +07
+2022-04-26 08:47:17.711 +07 [4459] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:47:17.717 +07 [4459] LOG:  redo starts at 0/15286E8
+2022-04-26 08:47:17.718 +07 [4459] LOG:  invalid record length at 0/1528720: wanted 24, got 0
+2022-04-26 08:47:17.718 +07 [4459] LOG:  redo done at 0/15286E8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:47:17.729 +07 [4457] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:47:17.758 +07 [4457] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.004 s, total=0.033 s; sync files=2, longest=0.003 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:47:17.766 +07 [4456] LOG:  database system is ready to accept connections
+2022-04-26 08:47:17.842 +07 [4464] ERROR:  relation "t2" already exists
+2022-04-26 08:47:17.842 +07 [4464] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:47:17.877 +07 [4466] ERROR:  relation "t3" already exists
+2022-04-26 08:47:17.877 +07 [4466] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:47:17.904 +07 [4468] ERROR:  relation "t4" already exists
+2022-04-26 08:47:17.904 +07 [4468] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:47:17.926 +07 [4470] ERROR:  relation "t12" already exists
+2022-04-26 08:47:17.926 +07 [4470] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:47:17.950 +07 [4472] ERROR:  could not find a function named "func_name"
+2022-04-26 08:47:17.950 +07 [4472] STATEMENT:  DROP FUNCTION func_name
+2022-04-26 08:47:17.975 +07 [4474] ERROR:  syntax error at or near "4447" at character 61
+2022-04-26 08:47:17.975 +07 [4474] STATEMENT:  CREATE FUNCTION func_name (elem VARCHAR) RETURNS VARCHAR AS 4447
+	  				SELECT VARCHAR '*****' AS result;
+				4447 LANGUAGE SQL;
+	
+2022-04-26 08:47:18.337 +07 [4476] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:47:18.337 +07 [4476] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:47:18.337 +07 [4476] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:47:18.650 +07 [4478] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:47:18.650 +07 [4478] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:47:18.650 +07 [4478] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:50:50.166 +07 [4534] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:50:50.170 +07 [4534] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:50:50.171 +07 [4534] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:50:50.179 +07 [4534] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:50:50.194 +07 [4537] LOG:  database system was interrupted; last known up at 2022-04-26 08:47:17 +07
+2022-04-26 08:50:51.197 +07 [4537] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:50:51.202 +07 [4537] LOG:  redo starts at 0/1528798
+2022-04-26 08:50:51.203 +07 [4537] LOG:  invalid record length at 0/1532858: wanted 24, got 0
+2022-04-26 08:50:51.203 +07 [4537] LOG:  redo done at 0/1532820 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:50:51.216 +07 [4535] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:50:51.254 +07 [4535] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.014 s, total=0.041 s; sync files=9, longest=0.004 s, average=0.002 s; distance=40 kB, estimate=40 kB
+2022-04-26 08:50:51.262 +07 [4534] LOG:  database system is ready to accept connections
+2022-04-26 08:50:51.331 +07 [4542] ERROR:  relation "t2" already exists
+2022-04-26 08:50:51.331 +07 [4542] STATEMENT:  CREATE TABLE t2 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40)
+	)
+2022-04-26 08:50:51.356 +07 [4544] ERROR:  relation "t3" already exists
+2022-04-26 08:50:51.356 +07 [4544] STATEMENT:  CREATE TABLE t3 (
+					a	varchar(40),
+					b	varchar(40),
+					c	varchar(40),
+					id	varchar(40)
+	)
+2022-04-26 08:50:51.379 +07 [4546] ERROR:  relation "t4" already exists
+2022-04-26 08:50:51.379 +07 [4546] STATEMENT:  CREATE TABLE t4 (
+					id	integer
+	)
+2022-04-26 08:50:51.404 +07 [4548] ERROR:  relation "t12" already exists
+2022-04-26 08:50:51.404 +07 [4548] STATEMENT:  CREATE TABLE t12 (
+					id	integer,
+					fio	varchar(40),
+					salary	integer,
+					adress	varchar(100)
+	)
+2022-04-26 08:50:51.878 +07 [4550] ERROR:  function func_name(integer) does not exist at character 14
+2022-04-26 08:50:51.878 +07 [4550] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:50:51.878 +07 [4550] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:50:52.274 +07 [4552] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:50:52.274 +07 [4552] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:50:52.274 +07 [4552] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:51:56.590 +07 [4586] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:51:56.591 +07 [4586] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:51:56.591 +07 [4586] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:51:56.598 +07 [4586] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:51:56.607 +07 [4589] LOG:  database system was interrupted; last known up at 2022-04-26 08:50:51 +07
+2022-04-26 08:51:57.127 +07 [4589] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:51:57.131 +07 [4589] LOG:  redo starts at 0/15328D0
+2022-04-26 08:51:57.131 +07 [4589] LOG:  invalid record length at 0/1532908: wanted 24, got 0
+2022-04-26 08:51:57.131 +07 [4589] LOG:  redo done at 0/15328D0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:51:57.139 +07 [4587] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:51:57.160 +07 [4587] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.005 s, total=0.024 s; sync files=2, longest=0.004 s, average=0.003 s; distance=0 kB, estimate=0 kB
+2022-04-26 08:51:57.165 +07 [4586] LOG:  database system is ready to accept connections
+2022-04-26 08:51:57.953 +07 [4611] ERROR:  function func_name(character varying) does not exist at character 14
+2022-04-26 08:51:57.953 +07 [4611] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:51:57.953 +07 [4611] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:51:58.282 +07 [4613] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:51:58.282 +07 [4613] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:51:58.282 +07 [4613] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:52:45.139 +07 [4639] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 08:52:45.140 +07 [4639] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 08:52:45.140 +07 [4639] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 08:52:45.148 +07 [4639] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 08:52:45.163 +07 [4642] LOG:  database system was interrupted; last known up at 2022-04-26 08:51:57 +07
+2022-04-26 08:52:45.817 +07 [4642] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 08:52:45.825 +07 [4642] LOG:  redo starts at 0/1532980
+2022-04-26 08:52:45.833 +07 [4642] LOG:  invalid record length at 0/1555640: wanted 24, got 0
+2022-04-26 08:52:45.833 +07 [4642] LOG:  redo done at 0/1555608 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 08:52:45.848 +07 [4640] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 08:52:45.939 +07 [4640] LOG:  checkpoint complete: wrote 27 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.021 s, sync=0.022 s, total=0.094 s; sync files=17, longest=0.007 s, average=0.002 s; distance=139 kB, estimate=139 kB
+2022-04-26 08:52:45.951 +07 [4639] LOG:  database system is ready to accept connections
+2022-04-26 08:52:46.816 +07 [4673] ERROR:  function func_name(character varying) does not exist at character 14
+2022-04-26 08:52:46.816 +07 [4673] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:52:46.816 +07 [4673] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:52:47.172 +07 [4675] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 08:52:47.172 +07 [4675] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:52:47.172 +07 [4675] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 08:55:12.810 +07 [4764] ERROR:  function func_name(character varying) does not exist at character 14
+2022-04-26 08:55:12.810 +07 [4764] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 08:55:12.810 +07 [4764] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 08:57:46.966 +07 [4640] LOG:  checkpoint starting: time
+2022-04-26 08:57:51.491 +07 [4640] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.118 s, sync=0.088 s, total=4.525 s; sync files=21, longest=0.054 s, average=0.005 s; distance=178 kB, estimate=178 kB
+2022-04-26 09:00:12.611 +07 [4843] ERROR:  function func_name(character varying) does not exist at character 14
+2022-04-26 09:00:12.611 +07 [4843] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:00:12.611 +07 [4843] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 09:00:26.666 +07 [4867] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:00:26.667 +07 [4867] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:00:26.667 +07 [4867] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:00:26.675 +07 [4867] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:00:26.687 +07 [4870] LOG:  database system was interrupted; last known up at 2022-04-26 08:57:51 +07
+2022-04-26 09:00:27.217 +07 [4870] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:00:27.221 +07 [4870] LOG:  redo starts at 0/1582228
+2022-04-26 09:00:27.222 +07 [4870] LOG:  invalid record length at 0/158CD68: wanted 24, got 0
+2022-04-26 09:00:27.222 +07 [4870] LOG:  redo done at 0/158CD30 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:00:27.231 +07 [4868] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:00:27.328 +07 [4868] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.079 s, total=0.100 s; sync files=9, longest=0.074 s, average=0.009 s; distance=42 kB, estimate=42 kB
+2022-04-26 09:00:27.334 +07 [4867] LOG:  database system is ready to accept connections
+2022-04-26 09:00:28.026 +07 [4891] ERROR:  function func_name(text) does not exist at character 14
+2022-04-26 09:00:28.026 +07 [4891] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:00:28.026 +07 [4891] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 09:00:28.349 +07 [4895] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 09:00:28.349 +07 [4895] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:00:28.349 +07 [4895] STATEMENT:  COPY (SELECT jumble(id) FROM public.t4 ) TO stdout;
+2022-04-26 09:00:31.377 +07 [4897] ERROR:  function func_name(text) does not exist at character 14
+2022-04-26 09:00:31.377 +07 [4897] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:00:31.377 +07 [4897] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c) FROM public.t2 ) TO stdout;
+2022-04-26 09:05:27.497 +07 [4868] LOG:  checkpoint starting: time
+2022-04-26 09:05:31.779 +07 [4868] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.860 s, sync=0.048 s, total=4.283 s; sync files=19, longest=0.025 s, average=0.003 s; distance=171 kB, estimate=171 kB
+2022-04-26 09:05:54.639 +07 [5112] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:05:54.640 +07 [5112] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:05:54.641 +07 [5112] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:05:54.651 +07 [5112] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:05:54.663 +07 [5115] LOG:  database system was interrupted; last known up at 2022-04-26 09:05:31 +07
+2022-04-26 09:05:55.191 +07 [5115] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:05:55.196 +07 [5115] LOG:  redo starts at 0/15B7CA8
+2022-04-26 09:05:55.196 +07 [5115] LOG:  invalid record length at 0/15B7D90: wanted 24, got 0
+2022-04-26 09:05:55.196 +07 [5115] LOG:  redo done at 0/15B7D58 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:05:55.205 +07 [5113] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:05:55.227 +07 [5113] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.004 s, total=0.026 s; sync files=2, longest=0.003 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 09:05:55.233 +07 [5112] LOG:  database system is ready to accept connections
+2022-04-26 09:05:55.924 +07 [5136] ERROR:  function func_name(text) does not exist at character 14
+2022-04-26 09:05:55.924 +07 [5136] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:05:55.924 +07 [5136] STATEMENT:  COPY (SELECT "func_name"(a), "func_name"(b), "func_name"(c) FROM public.t2 ) TO stdout;
+2022-04-26 09:05:56.300 +07 [5138] ERROR:  function jumble(integer) does not exist at character 14
+2022-04-26 09:05:56.300 +07 [5138] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:05:56.300 +07 [5138] STATEMENT:  COPY (SELECT "jumble"(id) FROM public.t4 ) TO stdout;
+2022-04-26 09:10:55.389 +07 [5113] LOG:  checkpoint starting: time
+2022-04-26 09:10:58.426 +07 [5113] LOG:  checkpoint complete: wrote 24 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.568 s, sync=0.079 s, total=3.037 s; sync files=17, longest=0.057 s, average=0.005 s; distance=145 kB, estimate=145 kB
+2022-04-26 09:11:21.012 +07 [5245] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:11:21.014 +07 [5245] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:11:21.014 +07 [5245] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:11:21.023 +07 [5245] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:11:21.047 +07 [5248] LOG:  database system was interrupted; last known up at 2022-04-26 09:10:58 +07
+2022-04-26 09:11:21.828 +07 [5248] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:11:21.870 +07 [5248] LOG:  redo starts at 0/15DC1B8
+2022-04-26 09:11:21.871 +07 [5248] LOG:  invalid record length at 0/15DC2A0: wanted 24, got 0
+2022-04-26 09:11:21.871 +07 [5248] LOG:  redo done at 0/15DC268 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:11:21.881 +07 [5246] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:11:21.907 +07 [5246] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.004 s, total=0.030 s; sync files=2, longest=0.003 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 09:11:21.913 +07 [5245] LOG:  database system is ready to accept connections
+2022-04-26 09:11:22.409 +07 [5273] ERROR:  syntax error at or near ")" at character 159
+2022-04-26 09:11:22.409 +07 [5273] STATEMENT:  INSERT INTO t2 (a, b, c, id) VALUES
+	('test_a_1', 'test_b_1', 'test_c_1', 1),
+	('test_a_2', 'test_b_2', 'test_c_2', 2),
+	('test_a_3', 'test_b_3', 'test_c_3', 3)
+	)
+2022-04-26 09:11:23.067 +07 [5281] ERROR:  function func_name(text) does not exist at character 14
+2022-04-26 09:11:23.067 +07 [5281] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:11:23.067 +07 [5281] STATEMENT:  COPY (SELECT "func_name"(a), "func_name"(b), "func_name"(c), id FROM public.t2 ) TO stdout;
+2022-04-26 09:12:08.339 +07 [5295] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:12:08.340 +07 [5295] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:12:08.340 +07 [5295] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:12:08.353 +07 [5295] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:12:08.365 +07 [5298] LOG:  database system was interrupted; last known up at 2022-04-26 09:11:21 +07
+2022-04-26 09:12:08.954 +07 [5298] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:12:08.962 +07 [5298] LOG:  redo starts at 0/15DC318
+2022-04-26 09:12:08.969 +07 [5298] LOG:  invalid record length at 0/16019A8: wanted 24, got 0
+2022-04-26 09:12:08.969 +07 [5298] LOG:  redo done at 0/1601970 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:12:08.980 +07 [5296] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:12:09.034 +07 [5296] LOG:  checkpoint complete: wrote 30 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.011 s, sync=0.030 s, total=0.058 s; sync files=22, longest=0.007 s, average=0.002 s; distance=149 kB, estimate=149 kB
+2022-04-26 09:12:09.046 +07 [5295] LOG:  database system is ready to accept connections
+2022-04-26 09:12:09.624 +07 [5322] ERROR:  syntax error at or near ")" at character 146
+2022-04-26 09:12:09.624 +07 [5322] STATEMENT:  INSERT INTO t2 VALUES
+	('test_a_1', 'test_b_1', 'test_c_1', 1),
+	('test_a_2', 'test_b_2', 'test_c_2', 2),
+	('test_a_3', 'test_b_3', 'test_c_3', 3);
+	)
+2022-04-26 09:12:10.131 +07 [5331] ERROR:  function func_name(text) does not exist at character 14
+2022-04-26 09:12:10.131 +07 [5331] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:12:10.131 +07 [5331] STATEMENT:  COPY (SELECT "func_name"(a), "func_name"(b), "func_name"(c), id FROM public.t2 ) TO stdout;
+2022-04-26 09:16:57.253 +07 [5388] ERROR:  language "pgplsql" does not exist
+2022-04-26 09:16:57.253 +07 [5388] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem TEXT) RETURNS TEXT AS $$
+	  				SELECT TEXT '*****' AS result;
+				$$ LANGUAGE pgplsql;
+2022-04-26 09:17:08.139 +07 [5296] LOG:  checkpoint starting: time
+2022-04-26 09:17:12.099 +07 [5296] LOG:  checkpoint complete: wrote 26 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.890 s, sync=0.019 s, total=3.961 s; sync files=17, longest=0.006 s, average=0.002 s; distance=158 kB, estimate=158 kB
+2022-04-26 09:17:38.189 +07 [5388] ERROR:  syntax error at or near "SELECT" at character 75
+2022-04-26 09:17:38.189 +07 [5388] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (elem TEXT) RETURNS TEXT AS $$
+	  				SELECT TEXT '*****' AS result;
+				$$ LANGUAGE plpgsql;
+2022-04-26 09:20:54.065 +07 [5388] ERROR:  RETURN cannot have a parameter in function with OUT parameters at character 136
+2022-04-26 09:20:54.065 +07 [5388] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem TEXT, OUT res TEXT) RETURNS TEXT AS $BODY$
+				BEGIN  				
+					res := '*****';
+					RETURN res;
+				END
+				$BODY$ LANGUAGE plpgsql;
+2022-04-26 09:22:08.200 +07 [5296] LOG:  checkpoint starting: time
+2022-04-26 09:22:09.430 +07 [5296] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.093 s, sync=0.026 s, total=1.231 s; sync files=9, longest=0.015 s, average=0.003 s; distance=51 kB, estimate=147 kB
+2022-04-26 09:25:09.051 +07 [5525] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:25:09.052 +07 [5525] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:25:09.053 +07 [5525] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:25:09.058 +07 [5525] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:25:09.067 +07 [5528] LOG:  database system was interrupted; last known up at 2022-04-26 09:22:09 +07
+2022-04-26 09:25:09.616 +07 [5528] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:25:09.629 +07 [5528] LOG:  redo starts at 0/1636158
+2022-04-26 09:25:09.630 +07 [5528] LOG:  invalid record length at 0/1638288: wanted 24, got 0
+2022-04-26 09:25:09.630 +07 [5528] LOG:  redo done at 0/1638250 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:25:09.646 +07 [5526] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:25:09.682 +07 [5526] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.010 s, total=0.044 s; sync files=5, longest=0.005 s, average=0.002 s; distance=8 kB, estimate=8 kB
+2022-04-26 09:25:09.690 +07 [5525] LOG:  database system is ready to accept connections
+2022-04-26 09:25:10.423 +07 [5553] ERROR:  function func_name(text) does not exist at character 14
+2022-04-26 09:25:10.423 +07 [5553] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:25:10.423 +07 [5553] STATEMENT:  COPY (SELECT "func_name"(a), "func_name"(b), "func_name"(c), id FROM public.t2 ) TO stdout;
+2022-04-26 09:25:55.776 +07 [5665] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:25:55.777 +07 [5665] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:25:55.777 +07 [5665] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:25:55.786 +07 [5665] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:25:55.798 +07 [5668] LOG:  database system was interrupted; last known up at 2022-04-26 09:25:09 +07
+2022-04-26 09:25:56.319 +07 [5668] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:25:56.323 +07 [5668] LOG:  redo starts at 0/1638300
+2022-04-26 09:25:56.329 +07 [5668] LOG:  invalid record length at 0/165F040: wanted 24, got 0
+2022-04-26 09:25:56.330 +07 [5668] LOG:  redo done at 0/165F008 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:25:56.338 +07 [5666] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:25:56.407 +07 [5666] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.049 s, total=0.072 s; sync files=24, longest=0.026 s, average=0.002 s; distance=155 kB, estimate=155 kB
+2022-04-26 09:25:56.413 +07 [5665] LOG:  database system is ready to accept connections
+2022-04-26 09:25:57.128 +07 [5691] ERROR:  function func_name(text) does not exist at character 14
+2022-04-26 09:25:57.128 +07 [5691] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 09:25:57.128 +07 [5691] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c), id FROM public.t2 ) TO stdout;
+2022-04-26 09:30:26.398 +07 [5857] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:30:26.399 +07 [5857] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:30:26.399 +07 [5857] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:30:26.407 +07 [5857] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:30:26.416 +07 [5860] LOG:  database system was interrupted; last known up at 2022-04-26 09:25:56 +07
+2022-04-26 09:30:26.935 +07 [5860] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:30:26.940 +07 [5860] LOG:  redo starts at 0/165F0B8
+2022-04-26 09:30:26.946 +07 [5860] LOG:  invalid record length at 0/16874C0: wanted 24, got 0
+2022-04-26 09:30:26.946 +07 [5860] LOG:  redo done at 0/1687488 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:30:26.956 +07 [5858] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:30:27.006 +07 [5858] LOG:  checkpoint complete: wrote 34 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.011 s, sync=0.027 s, total=0.053 s; sync files=23, longest=0.016 s, average=0.002 s; distance=161 kB, estimate=161 kB
+2022-04-26 09:30:27.012 +07 [5857] LOG:  database system is ready to accept connections
+2022-04-26 09:33:56.500 +07 [5921] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:33:56.502 +07 [5921] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:33:56.502 +07 [5921] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:33:56.508 +07 [5921] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:33:56.542 +07 [5924] LOG:  database system was interrupted; last known up at 2022-04-26 09:30:27 +07
+2022-04-26 09:33:57.046 +07 [5924] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:33:57.053 +07 [5924] LOG:  redo starts at 0/1687538
+2022-04-26 09:33:57.059 +07 [5924] LOG:  invalid record length at 0/16AEA10: wanted 24, got 0
+2022-04-26 09:33:57.059 +07 [5924] LOG:  redo done at 0/16AE9D8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:33:57.068 +07 [5922] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:33:57.327 +07 [5922] LOG:  checkpoint complete: wrote 32 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.120 s, sync=0.090 s, total=0.263 s; sync files=25, longest=0.063 s, average=0.004 s; distance=157 kB, estimate=157 kB
+2022-04-26 09:33:57.339 +07 [5921] LOG:  database system is ready to accept connections
+2022-04-26 09:33:57.668 +07 [5947] ERROR:  syntax error at or near "$" at character 83
+2022-04-26 09:33:57.668 +07 [5947] STATEMENT:  CREATE OR REPLACE FUNCTION func_name (IN elem TEXT, OUT res TEXT) RETURNS TEXT AS $
+				BEGIN  				
+					res := '*****';
+					RETURN;
+				END
+				$ LANGUAGE plpgsql;
+	
+2022-04-26 09:37:37.098 +07 [6084] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:37:37.099 +07 [6084] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:37:37.099 +07 [6084] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:37:37.105 +07 [6084] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:37:37.114 +07 [6087] LOG:  database system was interrupted; last known up at 2022-04-26 09:33:57 +07
+2022-04-26 09:37:37.810 +07 [6087] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:37:37.814 +07 [6087] LOG:  redo starts at 0/16AEA88
+2022-04-26 09:37:37.820 +07 [6087] LOG:  invalid record length at 0/16DAF30: wanted 24, got 0
+2022-04-26 09:37:37.820 +07 [6087] LOG:  redo done at 0/16DAEF8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:37:37.830 +07 [6085] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:37:38.043 +07 [6085] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.134 s, total=0.215 s; sync files=24, longest=0.105 s, average=0.006 s; distance=177 kB, estimate=177 kB
+2022-04-26 09:37:38.052 +07 [6084] LOG:  database system is ready to accept connections
+2022-04-26 09:42:37.138 +07 [6085] LOG:  checkpoint starting: time
+2022-04-26 09:42:40.604 +07 [6085] LOG:  checkpoint complete: wrote 31 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.339 s, sync=0.083 s, total=3.467 s; sync files=22, longest=0.039 s, average=0.004 s; distance=170 kB, estimate=176 kB
+2022-04-26 09:55:34.475 +07 [6469] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:55:34.476 +07 [6469] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:55:34.476 +07 [6469] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:55:34.481 +07 [6469] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:55:34.489 +07 [6472] LOG:  database system was interrupted; last known up at 2022-04-26 09:42:40 +07
+2022-04-26 09:55:35.004 +07 [6472] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:55:35.011 +07 [6472] LOG:  redo starts at 0/1705AB8
+2022-04-26 09:55:35.011 +07 [6472] LOG:  invalid record length at 0/1705BA0: wanted 24, got 0
+2022-04-26 09:55:35.011 +07 [6472] LOG:  redo done at 0/1705B68 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:55:35.018 +07 [6470] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:55:35.039 +07 [6470] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.005 s, total=0.024 s; sync files=2, longest=0.004 s, average=0.003 s; distance=0 kB, estimate=0 kB
+2022-04-26 09:55:35.048 +07 [6469] LOG:  database system is ready to accept connections
+2022-04-26 09:55:35.839 +07 [6495] ERROR:  syntax error at or near "." at character 14
+2022-04-26 09:55:35.839 +07 [6495] STATEMENT:  COPY (SELECT .func_name(a), .func_name(b), .func_name(c), id FROM public.t2 ) TO stdout;
+2022-04-26 09:56:41.584 +07 [6594] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 09:56:41.585 +07 [6594] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 09:56:41.585 +07 [6594] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 09:56:41.590 +07 [6594] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 09:56:41.599 +07 [6597] LOG:  database system was interrupted; last known up at 2022-04-26 09:55:35 +07
+2022-04-26 09:56:42.117 +07 [6597] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 09:56:42.122 +07 [6597] LOG:  redo starts at 0/1705C18
+2022-04-26 09:56:42.128 +07 [6597] LOG:  invalid record length at 0/1730E10: wanted 24, got 0
+2022-04-26 09:56:42.128 +07 [6597] LOG:  redo done at 0/1730DD8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 09:56:42.137 +07 [6595] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 09:56:42.186 +07 [6595] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.029 s, total=0.052 s; sync files=25, longest=0.015 s, average=0.002 s; distance=172 kB, estimate=172 kB
+2022-04-26 09:56:42.191 +07 [6594] LOG:  database system is ready to accept connections
+2022-04-26 10:01:42.287 +07 [6595] LOG:  checkpoint starting: time
+2022-04-26 10:01:45.026 +07 [6595] LOG:  checkpoint complete: wrote 27 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.649 s, sync=0.072 s, total=2.739 s; sync files=18, longest=0.052 s, average=0.004 s; distance=168 kB, estimate=172 kB
+2022-04-26 10:29:59.588 +07 [6924] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:29:59.591 +07 [6924] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:29:59.592 +07 [6924] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:29:59.600 +07 [6924] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:29:59.613 +07 [6927] LOG:  database system was interrupted; last known up at 2022-04-26 10:01:45 +07
+2022-04-26 10:30:00.270 +07 [6927] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:30:00.274 +07 [6927] LOG:  redo starts at 0/175AFB0
+2022-04-26 10:30:00.275 +07 [6927] LOG:  invalid record length at 0/175B098: wanted 24, got 0
+2022-04-26 10:30:00.275 +07 [6927] LOG:  redo done at 0/175B060 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:30:00.282 +07 [6925] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:30:00.299 +07 [6925] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.002 s, total=0.021 s; sync files=2, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=0 kB
+2022-04-26 10:30:00.304 +07 [6924] LOG:  database system is ready to accept connections
+2022-04-26 10:30:01.192 +07 [6950] ERROR:  function func_name(text) does not exist at character 14
+2022-04-26 10:30:01.192 +07 [6950] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-04-26 10:30:01.192 +07 [6950] STATEMENT:  COPY (SELECT func_name(a), func_name(b), func_name(c), id FROM public.t2 ) TO stdout;
+2022-04-26 10:35:00.398 +07 [6925] LOG:  checkpoint starting: time
+2022-04-26 10:35:03.507 +07 [6925] LOG:  checkpoint complete: wrote 30 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.980 s, sync=0.104 s, total=3.110 s; sync files=18, longest=0.087 s, average=0.006 s; distance=176 kB, estimate=176 kB
+2022-04-26 10:35:08.387 +07 [7129] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:35:08.390 +07 [7129] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:35:08.390 +07 [7129] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:35:08.398 +07 [7129] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:35:08.406 +07 [7132] LOG:  database system was interrupted; last known up at 2022-04-26 10:35:03 +07
+2022-04-26 10:35:08.968 +07 [7132] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:35:08.972 +07 [7132] LOG:  redo starts at 0/17870B0
+2022-04-26 10:35:08.973 +07 [7132] LOG:  invalid record length at 0/1787160: wanted 24, got 0
+2022-04-26 10:35:08.973 +07 [7132] LOG:  redo done at 0/17870E8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:35:08.980 +07 [7130] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:35:08.999 +07 [7130] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.022 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2022-04-26 10:35:09.005 +07 [7129] LOG:  database system is ready to accept connections
+2022-04-26 10:37:39.839 +07 [7511] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:37:39.840 +07 [7511] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:37:39.840 +07 [7511] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:37:39.847 +07 [7511] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:37:39.855 +07 [7514] LOG:  database system was interrupted; last known up at 2022-04-26 10:35:08 +07
+2022-04-26 10:37:40.358 +07 [7514] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:37:40.362 +07 [7514] LOG:  redo starts at 0/17871D8
+2022-04-26 10:37:40.368 +07 [7514] LOG:  invalid record length at 0/17B1828: wanted 24, got 0
+2022-04-26 10:37:40.369 +07 [7514] LOG:  redo done at 0/17B17F0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:37:40.378 +07 [7512] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:37:40.425 +07 [7512] LOG:  checkpoint complete: wrote 38 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.026 s, total=0.050 s; sync files=25, longest=0.010 s, average=0.002 s; distance=169 kB, estimate=169 kB
+2022-04-26 10:37:40.431 +07 [7511] LOG:  database system is ready to accept connections
+2022-04-26 10:38:20.020 +07 [7630] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:38:20.021 +07 [7630] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:38:20.021 +07 [7630] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:38:20.026 +07 [7630] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:38:20.034 +07 [7633] LOG:  database system was interrupted; last known up at 2022-04-26 10:37:40 +07
+2022-04-26 10:38:20.560 +07 [7633] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:38:20.564 +07 [7633] LOG:  redo starts at 0/17B18A0
+2022-04-26 10:38:20.570 +07 [7633] LOG:  invalid record length at 0/17DBB98: wanted 24, got 0
+2022-04-26 10:38:20.571 +07 [7633] LOG:  redo done at 0/17DBB60 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:38:20.580 +07 [7631] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:38:20.625 +07 [7631] LOG:  checkpoint complete: wrote 34 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.011 s, sync=0.022 s, total=0.048 s; sync files=24, longest=0.006 s, average=0.001 s; distance=168 kB, estimate=168 kB
+2022-04-26 10:38:20.631 +07 [7630] LOG:  database system is ready to accept connections
+2022-04-26 10:38:30.562 +07 [7725] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:38:30.563 +07 [7725] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:38:30.564 +07 [7725] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:38:30.571 +07 [7725] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:38:30.579 +07 [7728] LOG:  database system was interrupted; last known up at 2022-04-26 10:38:20 +07
+2022-04-26 10:38:31.134 +07 [7728] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:38:31.141 +07 [7728] LOG:  redo starts at 0/17DBC10
+2022-04-26 10:38:31.147 +07 [7728] LOG:  invalid record length at 0/1806420: wanted 24, got 0
+2022-04-26 10:38:31.147 +07 [7728] LOG:  redo done at 0/1806228 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:38:31.192 +07 [7726] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:38:31.230 +07 [7726] LOG:  checkpoint complete: wrote 32 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.017 s, total=0.041 s; sync files=23, longest=0.006 s, average=0.001 s; distance=170 kB, estimate=170 kB
+2022-04-26 10:38:31.237 +07 [7725] LOG:  database system is ready to accept connections
+2022-04-26 10:38:58.782 +07 [7824] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:38:58.785 +07 [7824] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:38:58.785 +07 [7824] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:38:58.791 +07 [7824] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:38:58.802 +07 [7827] LOG:  database system was interrupted; last known up at 2022-04-26 10:38:31 +07
+2022-04-26 10:38:59.359 +07 [7827] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:38:59.403 +07 [7827] LOG:  redo starts at 0/1806498
+2022-04-26 10:38:59.409 +07 [7827] LOG:  invalid record length at 0/1831C38: wanted 24, got 0
+2022-04-26 10:38:59.410 +07 [7827] LOG:  redo done at 0/1831C00 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:38:59.420 +07 [7825] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:38:59.658 +07 [7825] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.127 s, sync=0.051 s, total=0.241 s; sync files=24, longest=0.022 s, average=0.003 s; distance=174 kB, estimate=174 kB
+2022-04-26 10:38:59.669 +07 [7824] LOG:  database system is ready to accept connections
+2022-04-26 10:40:35.914 +07 [8023] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:40:35.915 +07 [8023] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:40:35.915 +07 [8023] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:40:35.920 +07 [8023] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:40:35.929 +07 [8026] LOG:  database system was interrupted; last known up at 2022-04-26 10:38:59 +07
+2022-04-26 10:40:36.450 +07 [8026] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:40:36.454 +07 [8026] LOG:  redo starts at 0/1831CB0
+2022-04-26 10:40:36.460 +07 [8026] LOG:  invalid record length at 0/185FD28: wanted 24, got 0
+2022-04-26 10:40:36.460 +07 [8026] LOG:  redo done at 0/185FCF0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:40:36.469 +07 [8024] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:40:36.549 +07 [8024] LOG:  checkpoint complete: wrote 34 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.062 s, total=0.083 s; sync files=23, longest=0.050 s, average=0.003 s; distance=184 kB, estimate=184 kB
+2022-04-26 10:40:36.555 +07 [8023] LOG:  database system is ready to accept connections
+2022-04-26 10:41:06.197 +07 [8119] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:41:06.200 +07 [8119] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:41:06.201 +07 [8119] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:41:06.207 +07 [8119] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:41:06.217 +07 [8122] LOG:  database system was interrupted; last known up at 2022-04-26 10:40:36 +07
+2022-04-26 10:41:06.738 +07 [8122] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:41:06.743 +07 [8122] LOG:  redo starts at 0/185FDA0
+2022-04-26 10:41:06.749 +07 [8122] LOG:  invalid record length at 0/188F250: wanted 24, got 0
+2022-04-26 10:41:06.749 +07 [8122] LOG:  redo done at 0/188F218 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:41:06.758 +07 [8120] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:41:06.833 +07 [8120] LOG:  checkpoint complete: wrote 37 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.023 s, total=0.077 s; sync files=23, longest=0.007 s, average=0.001 s; distance=189 kB, estimate=189 kB
+2022-04-26 10:41:06.842 +07 [8119] LOG:  database system is ready to accept connections
+2022-04-26 10:41:13.663 +07 [8178] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:41:13.665 +07 [8178] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:41:13.666 +07 [8178] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:41:13.672 +07 [8178] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:41:13.681 +07 [8181] LOG:  database system was interrupted; last known up at 2022-04-26 10:41:06 +07
+2022-04-26 10:41:14.201 +07 [8181] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:41:14.208 +07 [8181] LOG:  redo starts at 0/188F2C8
+2022-04-26 10:41:14.214 +07 [8181] LOG:  invalid record length at 0/18B9278: wanted 24, got 0
+2022-04-26 10:41:14.214 +07 [8181] LOG:  redo done at 0/18B9080 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:41:14.223 +07 [8179] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:41:14.306 +07 [8179] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.051 s, sync=0.022 s, total=0.086 s; sync files=24, longest=0.008 s, average=0.001 s; distance=168 kB, estimate=168 kB
+2022-04-26 10:41:14.312 +07 [8178] LOG:  database system is ready to accept connections
+2022-04-26 10:41:31.539 +07 [8270] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:41:31.540 +07 [8270] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:41:31.540 +07 [8270] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:41:31.549 +07 [8270] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:41:31.562 +07 [8273] LOG:  database system was interrupted; last known up at 2022-04-26 10:41:14 +07
+2022-04-26 10:41:32.259 +07 [8273] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:41:32.265 +07 [8273] LOG:  redo starts at 0/18B92F0
+2022-04-26 10:41:32.271 +07 [8273] LOG:  invalid record length at 0/18E4AF0: wanted 24, got 0
+2022-04-26 10:41:32.272 +07 [8273] LOG:  redo done at 0/18E4AB8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:41:32.282 +07 [8271] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:41:32.333 +07 [8271] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.012 s, sync=0.025 s, total=0.054 s; sync files=24, longest=0.008 s, average=0.002 s; distance=174 kB, estimate=174 kB
+2022-04-26 10:41:32.339 +07 [8270] LOG:  database system is ready to accept connections
+2022-04-26 10:41:52.990 +07 [8345] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:41:52.991 +07 [8345] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:41:52.991 +07 [8345] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:41:52.997 +07 [8345] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:41:53.006 +07 [8348] LOG:  database system was interrupted; last known up at 2022-04-26 10:41:32 +07
+2022-04-26 10:41:53.549 +07 [8348] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:41:53.555 +07 [8348] LOG:  redo starts at 0/18E4B68
+2022-04-26 10:41:53.562 +07 [8348] LOG:  invalid record length at 0/190FC90: wanted 24, got 0
+2022-04-26 10:41:53.562 +07 [8348] LOG:  redo done at 0/190FC58 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:41:53.686 +07 [8346] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:41:53.750 +07 [8346] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.011 s, sync=0.039 s, total=0.070 s; sync files=24, longest=0.020 s, average=0.002 s; distance=172 kB, estimate=172 kB
+2022-04-26 10:41:53.756 +07 [8345] LOG:  database system is ready to accept connections
+2022-04-26 10:42:07.204 +07 [8443] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:42:07.205 +07 [8443] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:42:07.205 +07 [8443] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:42:07.213 +07 [8443] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:42:07.221 +07 [8446] LOG:  database system was interrupted; last known up at 2022-04-26 10:41:53 +07
+2022-04-26 10:42:07.926 +07 [8446] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:42:07.930 +07 [8446] LOG:  redo starts at 0/190FD08
+2022-04-26 10:42:07.937 +07 [8446] LOG:  invalid record length at 0/1938BD8: wanted 24, got 0
+2022-04-26 10:42:07.937 +07 [8446] LOG:  redo done at 0/19389E0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:42:07.947 +07 [8444] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:42:07.984 +07 [8444] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.019 s, total=0.040 s; sync files=24, longest=0.007 s, average=0.001 s; distance=163 kB, estimate=163 kB
+2022-04-26 10:42:07.988 +07 [8443] LOG:  database system is ready to accept connections
+2022-04-26 10:42:55.512 +07 [8587] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:42:55.514 +07 [8587] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:42:55.514 +07 [8587] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:42:55.536 +07 [8587] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:42:55.545 +07 [8590] LOG:  database system was interrupted; last known up at 2022-04-26 10:42:07 +07
+2022-04-26 10:42:56.068 +07 [8590] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:42:56.073 +07 [8590] LOG:  redo starts at 0/1938C50
+2022-04-26 10:42:56.079 +07 [8590] LOG:  invalid record length at 0/1963360: wanted 24, got 0
+2022-04-26 10:42:56.079 +07 [8590] LOG:  redo done at 0/1963328 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:42:56.088 +07 [8588] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:42:56.199 +07 [8588] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.075 s, total=0.114 s; sync files=23, longest=0.063 s, average=0.004 s; distance=169 kB, estimate=169 kB
+2022-04-26 10:42:56.205 +07 [8587] LOG:  database system is ready to accept connections
+2022-04-26 10:43:22.165 +07 [8707] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:43:22.166 +07 [8707] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:43:22.166 +07 [8707] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:43:22.178 +07 [8707] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:43:22.188 +07 [8710] LOG:  database system was interrupted; last known up at 2022-04-26 10:42:56 +07
+2022-04-26 10:43:22.766 +07 [8710] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:43:22.790 +07 [8710] LOG:  redo starts at 0/19633D8
+2022-04-26 10:43:22.798 +07 [8710] LOG:  invalid record length at 0/198E118: wanted 24, got 0
+2022-04-26 10:43:22.798 +07 [8710] LOG:  redo done at 0/198E0E0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:43:22.808 +07 [8708] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:43:22.859 +07 [8708] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.023 s, total=0.054 s; sync files=23, longest=0.009 s, average=0.001 s; distance=171 kB, estimate=171 kB
+2022-04-26 10:43:22.864 +07 [8707] LOG:  database system is ready to accept connections
+2022-04-26 10:43:52.772 +07 [8804] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:43:52.773 +07 [8804] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:43:52.774 +07 [8804] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:43:52.781 +07 [8804] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:43:52.790 +07 [8807] LOG:  database system was interrupted; last known up at 2022-04-26 10:43:22 +07
+2022-04-26 10:43:53.321 +07 [8807] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:43:53.326 +07 [8807] LOG:  redo starts at 0/198E190
+2022-04-26 10:43:53.332 +07 [8807] LOG:  invalid record length at 0/19B4D00: wanted 24, got 0
+2022-04-26 10:43:53.332 +07 [8807] LOG:  redo done at 0/19B4CC8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:43:53.341 +07 [8805] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:43:53.872 +07 [8805] LOG:  checkpoint complete: wrote 32 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.172 s, sync=0.329 s, total=0.534 s; sync files=24, longest=0.284 s, average=0.014 s; distance=154 kB, estimate=154 kB
+2022-04-26 10:43:53.883 +07 [8804] LOG:  database system is ready to accept connections
+2022-04-26 10:44:57.233 +07 [9011] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:44:57.234 +07 [9011] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:44:57.234 +07 [9011] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:44:57.239 +07 [9011] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:44:57.249 +07 [9014] LOG:  database system was interrupted; last known up at 2022-04-26 10:43:53 +07
+2022-04-26 10:44:57.780 +07 [9014] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:44:57.785 +07 [9014] LOG:  redo starts at 0/19B4D78
+2022-04-26 10:44:57.791 +07 [9014] LOG:  invalid record length at 0/19DE630: wanted 24, got 0
+2022-04-26 10:44:57.792 +07 [9014] LOG:  redo done at 0/19DE5F8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:44:57.810 +07 [9012] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:44:57.853 +07 [9012] LOG:  checkpoint complete: wrote 32 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.024 s, total=0.046 s; sync files=23, longest=0.008 s, average=0.002 s; distance=166 kB, estimate=166 kB
+2022-04-26 10:44:57.859 +07 [9011] LOG:  database system is ready to accept connections
+2022-04-26 10:45:33.453 +07 [9168] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:45:33.454 +07 [9168] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:45:33.454 +07 [9168] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:45:33.459 +07 [9168] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:45:33.467 +07 [9171] LOG:  database system was interrupted; last known up at 2022-04-26 10:44:57 +07
+2022-04-26 10:45:34.138 +07 [9171] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:45:34.152 +07 [9171] LOG:  redo starts at 0/19DE6A8
+2022-04-26 10:45:34.159 +07 [9171] LOG:  invalid record length at 0/1A09BE0: wanted 24, got 0
+2022-04-26 10:45:34.159 +07 [9171] LOG:  redo done at 0/1A09BA8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:45:34.170 +07 [9169] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:45:34.243 +07 [9169] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.041 s, total=0.076 s; sync files=24, longest=0.027 s, average=0.002 s; distance=173 kB, estimate=173 kB
+2022-04-26 10:45:34.249 +07 [9168] LOG:  database system is ready to accept connections
+2022-04-26 10:46:29.043 +07 [9293] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:46:29.044 +07 [9293] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:46:29.044 +07 [9293] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:46:29.050 +07 [9293] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:46:29.059 +07 [9296] LOG:  database system was interrupted; last known up at 2022-04-26 10:45:34 +07
+2022-04-26 10:46:29.575 +07 [9296] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:46:29.579 +07 [9296] LOG:  redo starts at 0/1A09C58
+2022-04-26 10:46:29.586 +07 [9296] LOG:  invalid record length at 0/1A31290: wanted 24, got 0
+2022-04-26 10:46:29.586 +07 [9296] LOG:  redo done at 0/1A31258 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:46:29.595 +07 [9294] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:46:29.637 +07 [9294] LOG:  checkpoint complete: wrote 32 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.023 s, total=0.045 s; sync files=25, longest=0.008 s, average=0.001 s; distance=157 kB, estimate=157 kB
+2022-04-26 10:46:29.677 +07 [9293] LOG:  database system is ready to accept connections
+2022-04-26 10:47:55.134 +07 [9416] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:47:55.135 +07 [9416] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:47:55.136 +07 [9416] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:47:55.143 +07 [9416] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:47:55.152 +07 [9419] LOG:  database system was interrupted; last known up at 2022-04-26 10:46:29 +07
+2022-04-26 10:47:55.675 +07 [9419] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:47:55.679 +07 [9419] LOG:  redo starts at 0/1A31308
+2022-04-26 10:47:55.686 +07 [9419] LOG:  invalid record length at 0/1A5AA58: wanted 24, got 0
+2022-04-26 10:47:55.686 +07 [9419] LOG:  redo done at 0/1A5AA20 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:47:55.752 +07 [9417] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:47:55.819 +07 [9417] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.010 s, sync=0.047 s, total=0.070 s; sync files=23, longest=0.030 s, average=0.003 s; distance=165 kB, estimate=165 kB
+2022-04-26 10:47:55.824 +07 [9416] LOG:  database system is ready to accept connections
+2022-04-26 10:52:00.470 +07 [9734] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-04-26 10:52:00.471 +07 [9734] LOG:  listening on IPv6 address "::1", port 5432
+2022-04-26 10:52:00.471 +07 [9734] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-04-26 10:52:00.479 +07 [9734] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-04-26 10:52:00.488 +07 [9737] LOG:  database system was interrupted; last known up at 2022-04-26 10:47:55 +07
+2022-04-26 10:52:01.003 +07 [9737] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-04-26 10:52:01.009 +07 [9737] LOG:  redo starts at 0/1A5AAD0
+2022-04-26 10:52:01.016 +07 [9737] LOG:  invalid record length at 0/1A84BE0: wanted 24, got 0
+2022-04-26 10:52:01.016 +07 [9737] LOG:  redo done at 0/1A84BA8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-04-26 10:52:01.025 +07 [9735] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-04-26 10:52:01.073 +07 [9735] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.028 s, total=0.050 s; sync files=24, longest=0.010 s, average=0.002 s; distance=168 kB, estimate=168 kB
+2022-04-26 10:52:01.079 +07 [9734] LOG:  database system is ready to accept connections
