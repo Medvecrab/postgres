@@ -129,6 +129,23 @@ typedef uint32 DumpComponents;
 		DUMP_COMPONENT_DATA |\
 		DUMP_COMPONENT_POLICY)
 
+/*
+* Struct to map columns for encryption with corresponding encryption functions
+*/
+
+typedef struct _columnFuncList
+{
+	ColumnFunc *head;
+	ColumnFunc *tail;
+} ColumnFuncList;
+
+typedef struct _columnFunc 
+{
+	char		column[FLEXIBLE_ARRAY_MEMBER]; /* null-terminated name of a column */
+	char		func[FLEXIBLE_ARRAY_MEMBER]; /* null-terminated name of encryption function */
+	ColumnFuncMap *next;
+} ColumnFunc;
+
 typedef struct _dumpableObject
 {
 	DumpableObjectType objType;

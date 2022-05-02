@@ -106,12 +106,14 @@ static Oid	g_last_builtin_oid; /* value of the last builtin oid */
 static int	strict_names = 0;
 
 /*
-* Lists of arguments for encryption functionality
+* Lists of arguments for encryption functionality and a map
 *
 */
 
 static SimpleStringList encrypt_columns_list = {NULL, NULL};
 static SimpleStringList encrypt_func_list = {NULL, NULL};
+static ColumnFuncList encrypt_map = {NULL, NULL};
+static bool encrypt_all_columns = false;
 
 /*
  * Object inclusion/exclusion lists
@@ -324,6 +326,37 @@ static char *get_synchronized_snapshot(Archive *fout);
 static void setupDumpWorker(Archive *AHX);
 static TableInfo *getRootTableInfo(const TableInfo *tbinfo);
 
+/*
+* Quick Hash-function for ColumnFuncMap lookup
+*/
+
+uint64_t inline MurmurOAAT64 ( const char * key)
+{
+  uint64_t h = 525201411107845655ull;
+  for (;*key;++key) {
+    h ^= *key;
+    h *= 0x5bd1e9955bd1e995;
+    h ^= h >> 47;
+  }
+  return h;
+}
+
+/*
+* Lookup time will be O(n), so not exactly a "map"
+*/
+
+ColumnFunc* getMapMember (ColumnFuncList map, const char* key)
+{
+	ColumnFunc* current_element = map.head;
+	while (current_element)
+	{
+		if (MurmurOAAT64(current_element->column) == MurmurOAAT64(key))
+		{
+			return current_element;
+		}
+		current_element = current_element->next;
+	}
+}
 
 int
 main(int argc, char **argv)
@@ -685,12 +718,43 @@ main(int argc, char **argv)
 	if (dopt.binary_upgrade)
 		dopt.sequence_data = 1;
 
-	if (encrypt_columns_list.head && encrypt_func_list.head == NULL)
+	SimpleStringListCell* encrypt_func_cell = encrypt_func_list.head;
+
+	SimpleStringListCell* encrypt_columns_cell = encrypt_columns_list.head;
+
+	if (encrypt_columns_cell && encrypt_func_cell == NULL)
 		pg_fatal("option --encrypt-columns can't be used without --encrypt");
 
-	if (encrypt_func_list.head && encrypt_columns_list.head == 0)	
+	if (encrypt_func_cell && encrypt_columns_cell == NULL)	
 	{
-		/*TODO: add all columns to list of encryption*/
+		encrypt_all_columns = true;
+	}
+
+	/* 
+	* add all columns and funcions to map 
+	* all elements in encrypt_func should be just function names by now
+	*/
+
+	while (encrypt_columns_cell && encrypt_func_cell) 
+	{
+		char* column = encrypt_columns_cell->val; //TODO
+		char* func = encrypt_func_cell->val; //TODO
+		ColumnFunc* element;
+		element = (ColumnFunc*)
+		pg_malloc(offsetof(ColumnFunc, column) + offsetof(ColumnFunc, func)
+		+ strlen(column) + strlen(func)
+		+ offsetof(ColumnFunc, next));
+
+		element->next = NULL;
+		strcpy(element->column, column);
+		strcpy(element->func, func);
+		if (encrypt_map.tail)
+			encrypt_map.tail->next = element;
+		else
+			encrypt_map.head = element;
+		encrypt_map.tail = element; 	
+		encrypt_columns_cell = encrypt_columns_cell->next;
+		encrypt_func_cell = encrypt_func_cell->next;
 	}
 
 	if (dopt.dataOnly && dopt.schemaOnly)
@@ -1976,15 +2040,15 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	 * For other cases a simple COPY suffices.
 	 */
 	if (tdinfo->filtercond || tbinfo->relkind == RELKIND_FOREIGN_TABLE 
-		|| encrypt_func_list.head) //TODO: add encrypt clause
+		|| encrypt_func_list.head)
 	{
 		appendPQExpBufferStr(q, "COPY (SELECT ");
 		/* klugery to get rid of parens in column list */
 		if (strlen(column_list) > 2)
 		{
-			if (encrypt_columns_list.head != NULL)
+			if (encrypt_columns_list.head != NULL) //TODO remake lists to map:key-column_name, value - func_name
 			{
-				//get name of schema with function
+				/*get name of schema with function*/
 				char* copy_from = strtok(strdup(fmtQualifiedDumpable(tbinfo)), ".");
 				/*taking columns that should be encrypted */
 				char* copy_column_list = strdup(column_list);
@@ -1994,7 +2058,7 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 						char* temp_string;
 						if (simple_string_list_member(&encrypt_columns_list, current_column_name))
 						{
-							//get name of current schema
+							/*get name of current schema*/
 							temp_string = strdup(copy_from);
 							//probably want to use not head but current element
 							strcat(temp_string, ".");
