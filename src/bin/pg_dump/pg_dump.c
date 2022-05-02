@@ -112,7 +112,8 @@ static int	strict_names = 0;
 
 static SimpleStringList encrypt_columns_list = {NULL, NULL};
 static SimpleStringList encrypt_func_list = {NULL, NULL};
-static ColumnFuncList encrypt_map = {NULL, NULL};
+static SimpleStringList encrypt_map_columns = {NULL, NULL};
+static SimpleStringList encrypt_map_func = {NULL, NULL};
 static bool encrypt_all_columns = false;
 
 /*
@@ -326,38 +327,6 @@ static char *get_synchronized_snapshot(Archive *fout);
 static void setupDumpWorker(Archive *AHX);
 static TableInfo *getRootTableInfo(const TableInfo *tbinfo);
 
-/*
-* Quick Hash-function for ColumnFuncMap lookup
-*/
-
-uint64_t inline MurmurOAAT64 ( const char * key)
-{
-  uint64_t h = 525201411107845655ull;
-  for (;*key;++key) {
-    h ^= *key;
-    h *= 0x5bd1e9955bd1e995;
-    h ^= h >> 47;
-  }
-  return h;
-}
-
-/*
-* Lookup time will be O(n), so not exactly a "map"
-*/
-
-ColumnFunc* getMapMember (ColumnFuncList map, const char* key)
-{
-	ColumnFunc* current_element = map.head;
-	while (current_element)
-	{
-		if (MurmurOAAT64(current_element->column) == MurmurOAAT64(key))
-		{
-			return current_element;
-		}
-		current_element = current_element->next;
-	}
-}
-
 int
 main(int argc, char **argv)
 {
@@ -381,7 +350,11 @@ main(int argc, char **argv)
 	int			compressLevel = -1;
 	int			plainText = 0;
 
-	char* encryption_column_name;
+	SimpleStringListCell* encrypt_func_cell;
+
+	SimpleStringListCell* encrypt_columns_cell;
+
+	//char* encryption_column_name;
 	
 	ArchiveFormat archiveFormat = archUnknown;
 	ArchiveMode archiveMode;
@@ -669,18 +642,19 @@ main(int argc, char **argv)
 			case 12:			/* columns for encryption */
 				/*TODO: check if changing optarg is good or bad */ 
 				/*works for columns of all chosen tables*/
-				encryption_column_name = strtok(optarg, " ,");
+				/*encryption_column_name = strtok(optarg, " ,");
 				while (encryption_column_name != NULL) 
 					{
 						//pg_fatal("encrypt-columns");
 						simple_string_list_append(&encrypt_columns_list, encryption_column_name);
 						encryption_column_name = strtok(NULL, " ,");
-					}
+					}*/
+				simple_string_list_append(&encrypt_columns_list, optarg);
 				break;
 
 			case 13:			/* function for encryption - can be SQL function from .sql file,
 								   declared in CLI or declared in DB*/
-				simple_string_list_append(&encrypt_func_list,optarg);
+				simple_string_list_append(&encrypt_func_list, optarg);
 				break;
 			default:
 				/* getopt_long already emitted a complaint */
@@ -718,9 +692,9 @@ main(int argc, char **argv)
 	if (dopt.binary_upgrade)
 		dopt.sequence_data = 1;
 
-	SimpleStringListCell* encrypt_func_cell = encrypt_func_list.head;
+	encrypt_func_cell = encrypt_func_list.head;
 
-	SimpleStringListCell* encrypt_columns_cell = encrypt_columns_list.head;
+	encrypt_columns_cell = encrypt_columns_list.head;
 
 	if (encrypt_columns_cell && encrypt_func_cell == NULL)
 		pg_fatal("option --encrypt-columns can't be used without --encrypt");
@@ -737,22 +711,14 @@ main(int argc, char **argv)
 
 	while (encrypt_columns_cell && encrypt_func_cell) 
 	{
-		char* column = encrypt_columns_cell->val; //TODO
-		char* func = encrypt_func_cell->val; //TODO
-		ColumnFunc* element;
-		element = (ColumnFunc*)
-		pg_malloc(offsetof(ColumnFunc, column) + offsetof(ColumnFunc, func)
-		+ strlen(column) + strlen(func)
-		+ offsetof(ColumnFunc, next));
-
-		element->next = NULL;
-		strcpy(element->column, column);
-		strcpy(element->func, func);
-		if (encrypt_map.tail)
-			encrypt_map.tail->next = element;
-		else
-			encrypt_map.head = element;
-		encrypt_map.tail = element; 	
+		char* func = encrypt_func_cell->val;
+		char* column = strtok(encrypt_columns_cell->val, " ,()");
+		while (column != NULL)
+		{
+			simple_string_list_append(&encrypt_map_columns, column);
+			simple_string_list_append(&encrypt_map_func, func);
+			column = strtok(NULL, " ,()");
+		} 	
 		encrypt_columns_cell = encrypt_columns_cell->next;
 		encrypt_func_cell = encrypt_func_cell->next;
 	}
@@ -2032,6 +1998,7 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	 * ordering of COPY will not be what we want in certain corner cases
 	 * involving ADD COLUMN and inheritance.)
 	 */
+
 	column_list = fmtCopyColumnList(tbinfo, clistBuf);
 
 	/*
@@ -2040,13 +2007,13 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	 * For other cases a simple COPY suffices.
 	 */
 	if (tdinfo->filtercond || tbinfo->relkind == RELKIND_FOREIGN_TABLE 
-		|| encrypt_func_list.head)
+		|| encrypt_map_columns.head)
 	{
 		appendPQExpBufferStr(q, "COPY (SELECT ");
 		/* klugery to get rid of parens in column list */
 		if (strlen(column_list) > 2)
 		{
-			if (encrypt_columns_list.head != NULL) //TODO remake lists to map:key-column_name, value - func_name
+			if (encrypt_map_columns.head != NULL)
 			{
 				/*get name of schema with function*/
 				char* copy_from = strtok(strdup(fmtQualifiedDumpable(tbinfo)), ".");
@@ -2056,13 +2023,20 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 				while (current_column_name != NULL) 
 					{
 						char* temp_string;
-						if (simple_string_list_member(&encrypt_columns_list, current_column_name))
+						if (simple_string_list_member(&encrypt_map_columns, current_column_name))
 						{
 							/*get name of current schema*/
+							SimpleStringListCell* current_column_cell = encrypt_map_columns.head;
+							SimpleStringListCell* current_func_cell = encrypt_map_func.head;
+							while (!current_column_cell->touched)
+							{
+								current_column_cell = current_column_cell->next;
+								current_func_cell = current_func_cell->next;
+							}
+							current_column_cell->touched = false;
 							temp_string = strdup(copy_from);
-							//probably want to use not head but current element
 							strcat(temp_string, ".");
-							strcat(temp_string, encrypt_func_list.head->val);
+							strcat(temp_string, current_func_cell->val);
 							strcat(temp_string, "(");
 							strcat(temp_string, current_column_name);
 							strcat(temp_string, ")");
