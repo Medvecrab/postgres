@@ -147,6 +147,10 @@ static int	ncomments = 0;
 static SecLabelItem *seclabels = NULL;
 static int	nseclabels = 0;
 
+static char *main_filter_where_condition = NULL; 
+
+
+
 /*
  * The default number of rows per INSERT when
  * --inserts is specified without --rows-per-insert
@@ -621,9 +625,27 @@ main(int argc, char **argv)
 										  optarg);
 				break;
 			
-			case 15:			/* function for encryption - can be SQL function from .sql file,
-								   declared in CLI or declared in DB*/
-				simple_string_list_append(&filter_table_list,optarg);
+			case 15:
+
+				if(table_include_patterns.head == NULL){
+					main_filter_where_condition = optarg;
+				}else{
+					
+					SimpleStringListCell* filter_pattern = filter_table_list.head;
+
+
+					for(SimpleStringListCell* table_pattern = table_include_patterns.head;
+						table_pattern->next != NULL; table_pattern = table_pattern->next){
+						if(filter_pattern == NULL){
+							simple_string_list_append(&filter_table_list,"");
+						}else{
+							filter_pattern = filter_pattern->next;
+						}
+					}
+
+					
+					simple_string_list_append(&filter_table_list,optarg);
+				}
 				break;
 
 			default:
@@ -2495,13 +2517,15 @@ refreshMatViewData(Archive *fout, const TableDataInfo *tdinfo)
 static void
 getTableData(DumpOptions *dopt, TableInfo *tblinfo, int numTables, char relkind)
 {
-	int			i;
+	int	i;
 
 	for (i = 0; i < numTables; i++)
 	{
 		if (tblinfo[i].dobj.dump & DUMP_COMPONENT_DATA &&
-			(!relkind || tblinfo[i].relkind == relkind))
-			makeTableDataInfo(dopt, &(tblinfo[i]), getTableDataCondition(i));
+			(!relkind || tblinfo[i].relkind == relkind)){
+			makeTableDataInfo(dopt, &(tblinfo[i]), getTableDataCondition(tblinfo[i].dobj.name));
+
+		}
 	}
 }
 
@@ -2581,26 +2605,44 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo,  char* filter)
 
 
 
-char* getTableDataCondition(int flter_index){
-	char *condition;
-	char *preambula = "where "; 
-	char *filter = NULL;
 
-	if (filter_table_list.head == NULL){
-		filter = NULL;
-	}else if (table_include_patterns.head == NULL){
-		filter = filter_table_list.head->val;
-	}else{
-		//TODO: add chousing of filter
-		filter = filter_table_list.head->val;
+char* getTableDataCondition(char* table_name){
+	char *condition;
+	const char *preambula = "where "; 
+	char *filter = NULL;
+	SimpleStringListCell* table_pattern = table_include_patterns.head;
+	SimpleStringListCell* filter_pattern = filter_table_list.head;
+
+	
+	if (filter_pattern != NULL){
+		if (table_pattern == NULL){
+			filter = filter_table_list.head->val;
+		}else{
+			for(; table_pattern != NULL; table_pattern = table_pattern->next){
+				if(strcmp(table_pattern->val, table_name) == 0){
+					filter = filter_pattern->val;
+					break;
+				}
+				filter_pattern = filter_pattern->next;
+				if(filter_pattern == NULL){
+					break;
+				}
+			}
+		}
 	}
 	
-	if (filter == NULL)
-		return NULL;
 	
-	condition = pg_malloc(strlen(filter_table_list.head->val) + strlen(preambula));
+	if (filter == NULL || strcmp(filter,"") == 0){
+		if( main_filter_where_condition == NULL){
+			return filter;
+		}else{
+			filter = main_filter_where_condition;
+		}
+	}
+	
+	condition = pg_malloc(strlen(filter) + strlen(preambula));
 	strcpy(condition, preambula);
-	strcat(condition, filter_table_list.head->val);
+	strcat(condition, filter);
 	return condition;
 }
 
