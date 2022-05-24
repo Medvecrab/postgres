@@ -106,15 +106,19 @@ static Oid	g_last_builtin_oid; /* value of the last builtin oid */
 static int	strict_names = 0;
 
 /*
-* Lists of arguments for encryption functionality and a map
-*
+* Lists of arguments for masking functionality and
+* for one-to-one correspondance of columns and functions to mask them.
+* mask_corresponding_columns contains both names like "col_name" AND "table_name.col_name".
+* If an element of mask_corresponding_tables is an empty string, then mask 
+* columns with corresponding name in ALL tables (where it is found)
 */
 
-static SimpleStringList encrypt_columns_list = {NULL, NULL};
-static SimpleStringList encrypt_func_list = {NULL, NULL};
-static SimpleStringList encrypt_map_columns = {NULL, NULL};
-static SimpleStringList encrypt_map_func = {NULL, NULL};
-static bool encrypt_all_columns = false;
+static SimpleStringList mask_columns_list = {NULL, NULL};
+static SimpleStringList mask_func_list = {NULL, NULL};
+static SimpleStringList mask_corresponding_columns = {NULL, NULL};
+static SimpleStringList mask_corresponding_func = {NULL, NULL};
+static SimpleStringList mask_corresponding_tables = {NULL, NULL};
+static bool mask_all_columns = false;
 
 /*
  * Object inclusion/exclusion lists
@@ -350,11 +354,12 @@ main(int argc, char **argv)
 	int			compressLevel = -1;
 	int			plainText = 0;
 
-	SimpleStringListCell* encrypt_func_cell;
+	SimpleStringListCell* mask_func_cell;
 
-	SimpleStringListCell* encrypt_columns_cell;
+	SimpleStringListCell* mask_columns_cell;
 
-	//char* encryption_column_name;
+	char* table_name_buffer; /* needed for masking */
+	char* column_name_buffer;
 	
 	ArchiveFormat archiveFormat = archUnknown;
 	ArchiveMode archiveMode;
@@ -427,8 +432,8 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
-		{"encrypt-columns", required_argument, NULL, 12},
-		{"encrypt", required_argument, NULL, 13},
+		{"mask-columns", required_argument, NULL, 12},
+		{"mask", required_argument, NULL, 13},
 
 		{NULL, 0, NULL, 0}
 	};
@@ -639,26 +644,26 @@ main(int argc, char **argv)
 										  optarg);
 				break;
 
-			case 12:			/* columns for encryption */
+			case 12:			/* columns for masking */
 				/*TODO: check if changing optarg is good or bad */ 
 				/*works for columns of all chosen tables*/
-				/*encryption_column_name = strtok(optarg, " ,");
-				while (encryption_column_name != NULL) 
+				/*mask_column_name = strtok(optarg, " ,");
+				while (mask_column_name != NULL) 
 					{
-						//pg_fatal("encrypt-columns");
-						simple_string_list_append(&encrypt_columns_list, encryption_column_name);
-						encryption_column_name = strtok(NULL, " ,");
+						//pg_fatal("mask-columns");
+						simple_string_list_append(&mask_columns_list, mask_column_name);
+						mask_column_name = strtok(NULL, " ,");
 					}*/
-				simple_string_list_append(&encrypt_columns_list, optarg);
+				simple_string_list_append(&mask_columns_list, optarg);
 				break;
 
-			case 13:			/* function for encryption - can be SQL function from .sql file,
+			case 13:			/* function for mask - can be SQL function from .sql file,
 								   declared in CLI or declared in DB*/
-				simple_string_list_append(&encrypt_func_list, optarg);
+				simple_string_list_append(&mask_func_list, optarg);
 				break;
 			default:
 				/* getopt_long already emitted a complaint */
-				pg_fatal("encrypt-columns");
+				pg_fatal("mask-columns");
 				pg_log_error_hint("Try \"%s --help\" for more information.", progname);
 				exit_nicely(1);
 		}
@@ -692,36 +697,61 @@ main(int argc, char **argv)
 	if (dopt.binary_upgrade)
 		dopt.sequence_data = 1;
 
-	encrypt_func_cell = encrypt_func_list.head;
+	mask_func_cell = mask_func_list.head;
 
-	encrypt_columns_cell = encrypt_columns_list.head;
+	mask_columns_cell = mask_columns_list.head;
 
-	if (encrypt_columns_cell && encrypt_func_cell == NULL)
-		pg_fatal("option --encrypt-columns can't be used without --encrypt");
+	if (mask_columns_cell && mask_func_cell == NULL)
+		pg_fatal("option --mask-columns can't be used without --mask");
 
-	if (encrypt_func_cell && encrypt_columns_cell == NULL)	
+	if (mask_func_cell && mask_columns_cell == NULL)	
 	{
-		encrypt_all_columns = true;
+		mask_all_columns = true;
 	}
 
 	/* 
 	* add all columns and funcions to map 
-	* all elements in encrypt_func should be just function names by now
+	* all elements in mask_func should be just function names by now
 	*/
 
-	while (encrypt_columns_cell && encrypt_func_cell) 
+	while (mask_columns_cell && mask_func_cell) 
 	{
-		char* func = encrypt_func_cell->val;
-		char* column = strtok(encrypt_columns_cell->val, " ,()");
+		char* func = mask_func_cell->val;
+		char* column = strtok(mask_columns_cell->val, " ,()");
 		while (column != NULL)
 		{
-			simple_string_list_append(&encrypt_map_columns, column);
-			simple_string_list_append(&encrypt_map_func, func);
+			simple_string_list_append(&mask_corresponding_columns, column);
+			simple_string_list_append(&mask_corresponding_func, func);
 			column = strtok(NULL, " ,()");
 		} 	
-		encrypt_columns_cell = encrypt_columns_cell->next;
-		encrypt_func_cell = encrypt_func_cell->next;
+		mask_columns_cell = mask_columns_cell->next;
+		mask_func_cell = mask_func_cell->next;
 	}
+
+	/*
+	* now we extract tablenames from list of columns - done here so that strtok isn't
+	* disturbed in previous cycle
+	*/
+
+	mask_columns_cell = mask_corresponding_columns.head;
+
+	do
+	{
+		table_name_buffer = strtok(mask_columns_cell->val, ".");
+		column_name_buffer = strtok(NULL, ".");
+		if (column_name_buffer == NULL) /* found column without tablename */
+		{
+			simple_string_list_append(&mask_corresponding_tables, "");
+			strcpy(mask_columns_cell->val, table_name_buffer);
+		}
+		else
+		{
+			simple_string_list_append(&mask_corresponding_tables, table_name_buffer);
+			strcpy(mask_columns_cell->val, column_name_buffer);
+		}
+		mask_columns_cell = mask_columns_cell->next;
+	}while(mask_columns_cell != NULL);
+
 
 	if (dopt.dataOnly && dopt.schemaOnly)
 		pg_fatal("options -s/--schema-only and -a/--data-only cannot be used together");
@@ -2003,43 +2033,54 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 
 	/*
 	 * Use COPY (SELECT ...) TO when dumping a foreign table's data, and when
-	 * a filter condition was specified. OR encryption of some columns is needed
+	 * a filter condition was specified. OR masking of some columns is needed
 	 * For other cases a simple COPY suffices.
 	 */
 	if (tdinfo->filtercond || tbinfo->relkind == RELKIND_FOREIGN_TABLE 
-		|| encrypt_map_columns.head)
+		|| mask_corresponding_columns.head)
 	{
 		appendPQExpBufferStr(q, "COPY (SELECT ");
 		/* klugery to get rid of parens in column list */
 		if (strlen(column_list) > 2)
 		{
-			if (encrypt_map_columns.head != NULL)
+			if (mask_corresponding_columns.head != NULL)
 			{
 				/*get name of schema with function*/
 				char* copy_from = strtok(strdup(fmtQualifiedDumpable(tbinfo)), ".");
-				/*taking columns that should be encrypted */
+				/*taking columns that should be masked */
 				char* copy_column_list = strdup(column_list);
 				char* current_column_name = strtok(copy_column_list, " ,()");
 				while (current_column_name != NULL) 
 					{
 						char* temp_string;
-						if (simple_string_list_member(&encrypt_map_columns, current_column_name))
+						if (simple_string_list_member(&mask_corresponding_columns, current_column_name))
 						{
-							/*get name of current schema*/
-							SimpleStringListCell* current_column_cell = encrypt_map_columns.head;
-							SimpleStringListCell* current_func_cell = encrypt_map_func.head;
+							SimpleStringListCell* current_column_cell = mask_corresponding_columns.head;
+							SimpleStringListCell* current_func_cell = mask_corresponding_func.head;
+							SimpleStringListCell* current_table_cell = mask_corresponding_tables.head;
 							while (!current_column_cell->touched)
 							{
 								current_column_cell = current_column_cell->next;
 								current_func_cell = current_func_cell->next;
+								current_table_cell = current_table_cell->next;
 							}
+							/*current table name is stored in classname for some reason*/
 							current_column_cell->touched = false;
-							temp_string = strdup(copy_from);
-							strcat(temp_string, ".");
-							strcat(temp_string, current_func_cell->val);
-							strcat(temp_string, "(");
-							strcat(temp_string, current_column_name);
-							strcat(temp_string, ")");
+							if (!strcmp(current_table_cell->val, "") || 
+								!strcmp(current_table_cell->val, classname))
+							{
+								temp_string = strdup(copy_from);
+								strcat(temp_string, ".");
+								strcat(temp_string, current_func_cell->val);
+								strcat(temp_string, "(");
+								strcat(temp_string, current_column_name);
+								strcat(temp_string, ")");
+							}
+							else
+							{
+								temp_string = strdup("");
+								strcat(temp_string, current_column_name);
+							}
 						}
 						else
 						{
