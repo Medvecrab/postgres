@@ -747,5 +747,5 @@ extern void getPublicationNamespaces(Archive *fout);
 extern void getPublicationTables(Archive *fout, TableInfo tblinfo[],
 								 int numTables);
 extern void getSubscriptions(Archive *fout);
-extern char* getTableDataCondition(char *table_name);
+extern char* getTableDataCondition(Oid table_oid);
 #endif							/* PG_DUMP_H */

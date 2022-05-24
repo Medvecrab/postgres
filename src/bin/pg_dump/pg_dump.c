@@ -96,6 +96,14 @@ typedef enum OidOptions
 	zeroAsNone = 4
 } OidOptions;
 
+
+typedef struct
+{
+	char* filter_ptr;	/* filter where condition */
+	Oid	table_oid;			/* table OID */
+}FilterBinding;
+
+
 /* global decls */
 static bool dosync = true;		/* Issue fsync() to make dump durable on disk. */
 
@@ -129,6 +137,8 @@ static SimpleStringList filter_table_list = {NULL, NULL};
 
 static SimpleOidList extension_include_oids = {NULL, NULL};
 
+static SimplePtrList filter_bindigs = {NULL, NULL};
+
 static const CatalogId nilCatalogId = {0, 0};
 
 /* override for standard extra_float_digits setting */
@@ -148,7 +158,6 @@ static SecLabelItem *seclabels = NULL;
 static int	nseclabels = 0;
 
 static char *main_filter_where_condition = NULL; 
-
 
 
 /*
@@ -786,9 +795,13 @@ main(int argc, char **argv)
 
 	pg_log_info("last built-in OID is %u", g_last_builtin_oid);
 
+
+
+
 	/* Expand schema selection patterns into OID lists */
 	if (schema_include_patterns.head != NULL)
 	{
+
 		expand_schema_name_patterns(fout, &schema_include_patterns,
 									&schema_include_oids,
 									strict_names);
@@ -1338,6 +1351,7 @@ expand_schema_name_patterns(Archive *fout,
 
 	query = createPQExpBuffer();
 
+
 	/*
 	 * The loop below runs multiple SELECTs might sometimes result in
 	 * duplicate entries in the OID list, but we don't care.
@@ -1357,6 +1371,7 @@ expand_schema_name_patterns(Archive *fout,
 		for (i = 0; i < PQntuples(res); i++)
 		{
 			simple_oid_list_append(oids, atooid(PQgetvalue(res, i, 0)));
+			//TODO: combain table_name and mask
 		}
 
 		PQclear(res);
@@ -1465,12 +1480,16 @@ expand_foreign_server_name_patterns(Archive *fout,
  */
 static void
 expand_table_name_patterns(Archive *fout,
-						   SimpleStringList *patterns, SimpleOidList *oids,
-						   bool strict_names)
+						   SimpleStringList *patterns,
+						   SimpleOidList *oids,
+						   bool strict_names
+						   )
 {
 	PQExpBuffer query;
 	PGresult   *res;
 	SimpleStringListCell *cell;
+	SimpleStringListCell *filter_cell;
+	FilterBinding *filter_bind;
 	int			i;
 
 	if (patterns->head == NULL)
@@ -1483,6 +1502,7 @@ expand_table_name_patterns(Archive *fout,
 	 * we don't care.
 	 */
 
+	filter_cell = filter_table_list.head;
 	for (cell = patterns->head; cell; cell = cell->next)
 	{
 		/*
@@ -1513,7 +1533,18 @@ expand_table_name_patterns(Archive *fout,
 
 		for (i = 0; i < PQntuples(res); i++)
 		{
+			//TODO: comare oid and gilter
 			simple_oid_list_append(oids, atooid(PQgetvalue(res, i, 0)));
+			if(filter_cell){
+				filter_bind = (FilterBinding*) pg_malloc(sizeof(FilterBinding));
+				filter_bind->filter_ptr = filter_cell->val;
+				filter_bind->table_oid = atooid(PQgetvalue(res, i, 0));
+				simple_ptr_list_append(&filter_bindigs, filter_bind);
+			}
+		}
+
+		if(filter_cell){
+			filter_cell = filter_cell->next;
 		}
 
 		PQclear(res);
@@ -2523,8 +2554,7 @@ getTableData(DumpOptions *dopt, TableInfo *tblinfo, int numTables, char relkind)
 	{
 		if (tblinfo[i].dobj.dump & DUMP_COMPONENT_DATA &&
 			(!relkind || tblinfo[i].relkind == relkind)){
-			makeTableDataInfo(dopt, &(tblinfo[i]), getTableDataCondition(tblinfo[i].dobj.name));
-
+			makeTableDataInfo(dopt, &(tblinfo[i]), getTableDataCondition(tblinfo[i].dobj.catId.oid));
 		}
 	}
 }
@@ -2606,31 +2636,29 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo,  char* filter)
 
 
 
-char* getTableDataCondition(char* table_name){
+char* getTableDataCondition(Oid table_oid){
 	char *condition;
 	const char *preambula = "where "; 
 	char *filter = NULL;
-	SimpleStringListCell* table_pattern = table_include_patterns.head;
-	SimpleStringListCell* filter_pattern = filter_table_list.head;
-
+	SimplePtrListCell* filter_bind = filter_bindigs.head;
 	
-	if (filter_pattern != NULL){
-		if (table_pattern == NULL){
+	if (filter_table_list.head){
+		if (!table_include_patterns.head){
 			filter = filter_table_list.head->val;
 		}else{
-			for(; table_pattern != NULL; table_pattern = table_pattern->next){
-				if(strcmp(table_pattern->val, table_name) == 0){
-					filter = filter_pattern->val;
-					break;
-				}
-				filter_pattern = filter_pattern->next;
-				if(filter_pattern == NULL){
+			for(; filter_bind != NULL; filter_bind = filter_bind->next){
+
+
+				if( table_oid == ((FilterBinding*)filter_bind->ptr)->table_oid){
+
+
+
+					filter = ((FilterBinding*)filter_bind->ptr)->filter_ptr;
 					break;
 				}
 			}
 		}
 	}
-	
 	
 	if (filter == NULL || strcmp(filter,"") == 0){
 		if( main_filter_where_condition == NULL){
