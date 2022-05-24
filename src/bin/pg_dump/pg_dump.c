@@ -735,7 +735,7 @@ main(int argc, char **argv)
 
 	mask_columns_cell = mask_corresponding_columns.head;
 
-	do
+	while (mask_columns_cell != NULL)
 	{
 		table_name_buffer = strtok(mask_columns_cell->val, ".");
 		column_name_buffer = strtok(NULL, ".");
@@ -750,7 +750,7 @@ main(int argc, char **argv)
 			strcpy(mask_columns_cell->val, column_name_buffer);
 		}
 		mask_columns_cell = mask_columns_cell->next;
-	}while(mask_columns_cell != NULL);
+	}
 
 
 	if (dopt.dataOnly && dopt.schemaOnly)
@@ -2064,10 +2064,10 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 								current_func_cell = current_func_cell->next;
 								current_table_cell = current_table_cell->next;
 							}
-							/*current table name is stored in classname for some reason*/
+							/*current table name is stored in tbinfo->dobj.name*/
 							current_column_cell->touched = false;
 							if (!strcmp(current_table_cell->val, "") || 
-								!strcmp(current_table_cell->val, classname))
+								!strcmp(current_table_cell->val, tbinfo->dobj.name))
 							{
 								temp_string = strdup(copy_from);
 								strcat(temp_string, ".");
