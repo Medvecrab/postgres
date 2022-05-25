@@ -160,6 +160,7 @@ static int	nseclabels = 0;
 static char *main_filter_where_condition = NULL; 
 
 
+
 /*
  * The default number of rows per INSERT when
  * --inserts is specified without --rows-per-insert
@@ -424,7 +425,8 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
-		{"where", required_argument, NULL, 15},		
+		{"where", required_argument, NULL, 15},
+		{"file-filter", required_argument, NULL, 16},	
 		{NULL, 0, NULL, 0}
 	};
 
@@ -635,28 +637,11 @@ main(int argc, char **argv)
 				break;
 			
 			case 15:
-
-				if(table_include_patterns.head == NULL){
-					main_filter_where_condition = optarg;
-				}else{
-					
-					SimpleStringListCell* filter_pattern = filter_table_list.head;
-
-
-					for(SimpleStringListCell* table_pattern = table_include_patterns.head;
-						table_pattern->next != NULL; table_pattern = table_pattern->next){
-						if(filter_pattern == NULL){
-							simple_string_list_append(&filter_table_list,"");
-						}else{
-							filter_pattern = filter_pattern->next;
-						}
-					}
-
-					
-					simple_string_list_append(&filter_table_list,optarg);
-				}
+				addFilterString(optarg);
 				break;
-
+			case 16:
+				parseFileToFilters(optarg, &dopt);
+				break;
 			default:
 				/* getopt_long already emitted a complaint */
 				pg_log_error_hint("Try \"%s --help\" for more information.", progname);
@@ -1533,7 +1518,6 @@ expand_table_name_patterns(Archive *fout,
 
 		for (i = 0; i < PQntuples(res); i++)
 		{
-			//TODO: comare oid and gilter
 			simple_oid_list_append(oids, atooid(PQgetvalue(res, i, 0)));
 			if(filter_cell){
 				filter_bind = (FilterBinding*) pg_malloc(sizeof(FilterBinding));
@@ -18181,3 +18165,74 @@ appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
 	if (!res)
 		pg_log_warning("could not parse %s array", "reloptions");
 }
+
+bool parseFileToFilters(char* filename, DumpOptions *dopt){
+
+	FILE	   *fd;
+	//TODO: add size constant
+	char        filter_buffer[500];
+	char        *table_name;
+	char        *filter;
+
+	canonicalize_path(filename);
+
+
+	fd = fopen(filename, PG_BINARY_R);
+
+	if (!fd)
+	{
+		pg_log_error("%s: %m", filename);
+		return EXIT_FAILURE;
+	}
+	while (fgets(filter_buffer,500,fd))
+	{
+		table_name = strtok(filter_buffer, " \n");
+		if(table_name){
+			if(strcmp(table_name,"where") == 0){
+				
+				filter = strtok(NULL, "\n");
+				main_filter_where_condition = pg_strdup(filter);
+			}else{
+				
+				
+				simple_string_list_append(&table_include_patterns, table_name);
+				dopt->include_everything = false;
+
+				filter = strtok(NULL, " ");
+				if(filter && strcmp(filter,"where") == 0){
+					filter = strtok(NULL, "\n");
+					addFilterString(filter);
+				}
+			}
+		}
+	}
+
+
+	fclose(fd);
+	return true; 
+};
+
+void addFilterString(char* filter){
+
+	if(table_include_patterns.head == NULL){
+		main_filter_where_condition = pg_strdup(filter);
+	}else{
+		
+		SimpleStringListCell* filter_pattern = filter_table_list.head;
+
+
+		for(SimpleStringListCell* table_pattern = table_include_patterns.head;
+			table_pattern->next != NULL; table_pattern = table_pattern->next){
+			if(filter_pattern == NULL){
+				simple_string_list_append(&filter_table_list,"");
+			}else{
+				filter_pattern = filter_pattern->next;
+			}
+		}
+
+		
+		simple_string_list_append(&filter_table_list,filter);
+	}
+
+};
+
