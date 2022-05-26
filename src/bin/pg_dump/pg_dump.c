@@ -360,6 +360,9 @@ main(int argc, char **argv)
 
 	char* table_name_buffer; /* needed for masking */
 	char* column_name_buffer;
+	char* func_name_buffer;
+
+	FILE *mask_func_filepath;
 	
 	ArchiveFormat archiveFormat = archUnknown;
 	ArchiveMode archiveMode;
@@ -433,7 +436,7 @@ main(int argc, char **argv)
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
 		{"mask-columns", required_argument, NULL, 12},
-		{"mask", required_argument, NULL, 13},
+		{"mask-function", required_argument, NULL, 13},
 
 		{NULL, 0, NULL, 0}
 	};
@@ -645,25 +648,15 @@ main(int argc, char **argv)
 				break;
 
 			case 12:			/* columns for masking */
-				/*TODO: check if changing optarg is good or bad */ 
-				/*works for columns of all chosen tables*/
-				/*mask_column_name = strtok(optarg, " ,");
-				while (mask_column_name != NULL) 
-					{
-						//pg_fatal("mask-columns");
-						simple_string_list_append(&mask_columns_list, mask_column_name);
-						mask_column_name = strtok(NULL, " ,");
-					}*/
 				simple_string_list_append(&mask_columns_list, optarg);
 				break;
 
-			case 13:			/* function for mask - can be SQL function from .sql file,
+			case 13:			/* function for masking - can be SQL function from .sql file,
 								   declared in CLI or declared in DB*/
 				simple_string_list_append(&mask_func_list, optarg);
 				break;
 			default:
 				/* getopt_long already emitted a complaint */
-				pg_fatal("mask-columns");
 				pg_log_error_hint("Try \"%s --help\" for more information.", progname);
 				exit_nicely(1);
 		}
@@ -752,6 +745,73 @@ main(int argc, char **argv)
 		mask_columns_cell = mask_columns_cell->next;
 	}
 
+
+	/*
+	* now check if --mask-function is a name of function or a pathfile
+	* has to be after setting up connection
+	*/
+
+	mask_func_cell = mask_corresponding_func.head;
+
+	while (mask_func_cell != NULL)
+	{
+		func_name_buffer = pg_strdup(mask_func_cell->val);
+		canonicalize_path(func_name_buffer);
+		mask_func_filepath = fopen(func_name_buffer, "r");
+		if (mask_func_filepath != NULL) /* then it is a file with function*/
+		{
+			char* mask_func_buffer = (char*)malloc(1);
+			char cur_char;
+			char querry_buffer[200]; //only needed until function name
+			char* tok_buffer = querry_buffer;
+			int querry_size = 0;
+			bool found_function_name = false, not_found_keyword = true;
+			while((cur_char = fgetc(mask_func_filepath)) != EOF) 
+			{
+				querry_size++;
+				mask_func_buffer = pg_realloc(mask_func_buffer, querry_size + 1);
+				mask_func_buffer[querry_size - 1] = cur_char;
+				mask_func_buffer[querry_size] = '\0';
+				if (!found_function_name)
+				{
+					querry_buffer[querry_size - 1] = cur_char;
+					querry_buffer[querry_size] = '\0';
+				}
+				if (!found_function_name && cur_char == ' ')
+				{
+					if(!not_found_keyword)
+					{		
+						func_name_buffer = pg_strdup(strtok(tok_buffer, " \n"));
+						found_function_name = true;	
+						querry_buffer[querry_size - 1] = ' ';
+					}
+					else
+					{
+						func_name_buffer = strtok(tok_buffer, " \n");
+						tok_buffer = NULL;
+						querry_buffer[querry_size - 1] = ' ';
+						/*better make func_name_buffer lowercase*/
+						/*if any of conditions equals 0 - we found keyword*/
+						not_found_keyword = strcmp(func_name_buffer, "function ") 
+									&& strcmp(func_name_buffer, "FUNCTION ");
+					}
+				}
+			}
+
+			/*Archive *fout1;
+			ConnectDatabase(fout1, &dopt.cparams, false);
+			setup_connection(fout1, dumpencoding, dumpsnapshot, use_role);
+			PQexec(((ArchiveHandle *)fout1)->connection, mask_func_buffer);
+			CloseArchive(fout1);*/
+			/*PGconn *connection = makeEmptyPGconn();
+			fillPGconn(connection, &dopt.cparams);
+			PQexec(connection, mask_func_buffer);
+			PQfinish(connection);*/
+
+			strcpy(mask_func_cell->val, func_name_buffer);
+		}
+		mask_func_cell = mask_func_cell->next;
+	}
 
 	if (dopt.dataOnly && dopt.schemaOnly)
 		pg_fatal("options -s/--schema-only and -a/--data-only cannot be used together");
@@ -2046,9 +2106,9 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 			if (mask_corresponding_columns.head != NULL)
 			{
 				/*get name of schema with function*/
-				char* copy_from = strtok(strdup(fmtQualifiedDumpable(tbinfo)), ".");
+				char* copy_from = strtok(pg_strdup(fmtQualifiedDumpable(tbinfo)), ".");
 				/*taking columns that should be masked */
-				char* copy_column_list = strdup(column_list);
+				char* copy_column_list = pg_strdup(column_list);
 				char* current_column_name = strtok(copy_column_list, " ,()");
 				while (current_column_name != NULL) 
 					{
