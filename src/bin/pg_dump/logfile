@@ -4188,3 +4188,474 @@
 2022-05-26 23:10:43.430 +07 [15711] LOG:  checkpoint starting: end-of-recovery immediate wait
 2022-05-26 23:10:43.543 +07 [15711] LOG:  checkpoint complete: wrote 38 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.011 s, sync=0.089 s, total=0.116 s; sync files=26, longest=0.040 s, average=0.004 s; distance=181 kB, estimate=181 kB
 2022-05-26 23:10:43.550 +07 [15710] LOG:  database system is ready to accept connections
+2022-05-26 23:15:43.615 +07 [15711] LOG:  checkpoint starting: time
+2022-05-26 23:15:46.837 +07 [15711] LOG:  checkpoint complete: wrote 30 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.147 s, sync=0.059 s, total=3.223 s; sync files=19, longest=0.042 s, average=0.004 s; distance=175 kB, estimate=180 kB
+2022-05-26 23:20:19.280 +07 [16222] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-26 23:20:19.282 +07 [16222] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-26 23:20:19.282 +07 [16222] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-26 23:20:19.322 +07 [16222] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-26 23:20:19.332 +07 [16225] LOG:  database system was interrupted; last known up at 2022-05-26 23:15:46 +07
+2022-05-26 23:20:20.069 +07 [16225] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-26 23:20:20.101 +07 [16225] LOG:  redo starts at 0/2F7F8C0
+2022-05-26 23:20:20.101 +07 [16225] LOG:  invalid record length at 0/2F7F9A8: wanted 24, got 0
+2022-05-26 23:20:20.101 +07 [16225] LOG:  redo done at 0/2F7F970 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-26 23:20:20.111 +07 [16223] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-26 23:20:20.216 +07 [16223] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.055 s, total=0.110 s; sync files=2, longest=0.031 s, average=0.028 s; distance=0 kB, estimate=0 kB
+2022-05-26 23:20:20.221 +07 [16222] LOG:  database system is ready to accept connections
+2022-05-26 23:20:20.667 +07 [16250] ERROR:  cannot execute CREATE FUNCTION in a read-only transaction
+2022-05-26 23:20:20.667 +07 [16250] STATEMENT:  CREATE OR REPLACE FUNCTION func_id (IN elem integer, OUT res integer) RETURNS integer AS $BODY$
+				BEGIN  				
+					res := -2;
+					RETURN;
+				END
+				$BODY$ LANGUAGE plpgsql
+2022-05-26 23:20:20.667 +07 [16250] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2022-05-26 23:20:20.667 +07 [16250] STATEMENT:  RESET search_path
+2022-05-26 23:25:20.315 +07 [16223] LOG:  checkpoint starting: time
+2022-05-26 23:25:24.072 +07 [16223] LOG:  checkpoint complete: wrote 30 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.092 s, sync=0.615 s, total=3.757 s; sync files=19, longest=0.574 s, average=0.033 s; distance=168 kB, estimate=168 kB
+2022-05-26 23:29:29.056 +07 [16614] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-26 23:29:29.057 +07 [16614] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-26 23:29:29.057 +07 [16614] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-26 23:29:29.122 +07 [16614] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-26 23:29:29.132 +07 [16617] LOG:  database system was interrupted; last known up at 2022-05-26 23:25:24 +07
+2022-05-26 23:29:30.003 +07 [16617] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-26 23:29:30.019 +07 [16617] LOG:  redo starts at 0/2FA9D18
+2022-05-26 23:29:30.020 +07 [16617] LOG:  invalid record length at 0/2FA9E00: wanted 24, got 0
+2022-05-26 23:29:30.020 +07 [16617] LOG:  redo done at 0/2FA9DC8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-26 23:29:30.030 +07 [16615] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-26 23:29:30.081 +07 [16615] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.028 s, total=0.054 s; sync files=2, longest=0.027 s, average=0.014 s; distance=0 kB, estimate=0 kB
+2022-05-26 23:29:30.089 +07 [16614] LOG:  database system is ready to accept connections
+2022-05-26 23:29:30.613 +07 [16642] ERROR:  cannot execute CREATE FUNCTION in a read-only transaction
+2022-05-26 23:29:30.613 +07 [16642] STATEMENT:  CREATE OR REPLACE FUNCTION func_id (IN elem integer, OUT res integer) RETURNS integer AS $BODY$
+				BEGIN  				
+					res := -2;
+					RETURN;
+				END
+				$BODY$ LANGUAGE plpgsql
+2022-05-26 23:29:30.614 +07 [16642] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2022-05-26 23:29:30.614 +07 [16642] STATEMENT:  RESET search_path
+2022-05-26 23:34:30.185 +07 [16615] LOG:  checkpoint starting: time
+2022-05-26 23:34:33.586 +07 [16615] LOG:  checkpoint complete: wrote 28 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.796 s, sync=0.063 s, total=3.402 s; sync files=19, longest=0.049 s, average=0.004 s; distance=166 kB, estimate=166 kB
+2022-05-26 23:42:09.885 +07 [17471] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-26 23:42:09.886 +07 [17471] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-26 23:42:09.886 +07 [17471] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-26 23:42:09.892 +07 [17471] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-26 23:42:09.900 +07 [17474] LOG:  database system was interrupted; last known up at 2022-05-26 23:34:33 +07
+2022-05-26 23:42:10.480 +07 [17474] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-26 23:42:10.486 +07 [17474] LOG:  redo starts at 0/2FD38A0
+2022-05-26 23:42:10.486 +07 [17474] LOG:  invalid record length at 0/2FD3988: wanted 24, got 0
+2022-05-26 23:42:10.486 +07 [17474] LOG:  redo done at 0/2FD3950 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-26 23:42:10.495 +07 [17472] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-26 23:42:10.581 +07 [17472] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.029 s, total=0.090 s; sync files=2, longest=0.028 s, average=0.015 s; distance=0 kB, estimate=0 kB
+2022-05-26 23:42:10.587 +07 [17471] LOG:  database system is ready to accept connections
+2022-05-27 08:41:42.601 +07 [17472] LOG:  checkpoint starting: time
+2022-05-27 08:41:46.449 +07 [17472] LOG:  checkpoint complete: wrote 28 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.341 s, sync=0.084 s, total=3.849 s; sync files=19, longest=0.058 s, average=0.005 s; distance=172 kB, estimate=172 kB
+2022-05-27 08:55:41.335 +07 [17952] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 08:55:41.336 +07 [17952] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 08:55:41.336 +07 [17952] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 08:55:41.344 +07 [17952] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 08:55:41.356 +07 [17955] LOG:  database system was interrupted; last known up at 2022-05-27 08:41:46 +07
+2022-05-27 08:55:42.010 +07 [17955] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 08:55:42.016 +07 [17955] LOG:  redo starts at 0/2FFEC50
+2022-05-27 08:55:42.017 +07 [17955] LOG:  invalid record length at 0/2FFED38: wanted 24, got 0
+2022-05-27 08:55:42.017 +07 [17955] LOG:  redo done at 0/2FFED00 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 08:55:42.061 +07 [17953] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 08:55:42.107 +07 [17953] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.025 s, total=0.050 s; sync files=2, longest=0.024 s, average=0.013 s; distance=0 kB, estimate=0 kB
+2022-05-27 08:55:42.112 +07 [17952] LOG:  database system is ready to accept connections
+2022-05-27 08:56:49.954 +07 [18092] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 08:56:49.955 +07 [18092] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 08:56:49.956 +07 [18092] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 08:56:49.988 +07 [18092] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 08:56:50.000 +07 [18095] LOG:  database system was interrupted; last known up at 2022-05-27 08:55:42 +07
+2022-05-27 08:56:50.771 +07 [18095] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 08:56:50.777 +07 [18095] LOG:  redo starts at 0/2FFEDB0
+2022-05-27 08:56:50.785 +07 [18095] LOG:  invalid record length at 0/3029BA8: wanted 24, got 0
+2022-05-27 08:56:50.785 +07 [18095] LOG:  redo done at 0/3029B70 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 08:56:50.797 +07 [18093] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 08:56:50.924 +07 [18093] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.009 s, sync=0.100 s, total=0.130 s; sync files=24, longest=0.057 s, average=0.005 s; distance=171 kB, estimate=171 kB
+2022-05-27 08:56:50.930 +07 [18092] LOG:  database system is ready to accept connections
+2022-05-27 08:57:06.234 +07 [18197] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 08:57:06.236 +07 [18197] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 08:57:06.236 +07 [18197] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 08:57:06.245 +07 [18197] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 08:57:06.285 +07 [18200] LOG:  database system was interrupted; last known up at 2022-05-27 08:56:50 +07
+2022-05-27 08:57:07.068 +07 [18200] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 08:57:07.074 +07 [18200] LOG:  redo starts at 0/3029C20
+2022-05-27 08:57:07.082 +07 [18200] LOG:  invalid record length at 0/3057388: wanted 24, got 0
+2022-05-27 08:57:07.082 +07 [18200] LOG:  redo done at 0/3057350 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 08:57:07.094 +07 [18198] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 08:57:07.181 +07 [18198] LOG:  checkpoint complete: wrote 34 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.011 s, sync=0.064 s, total=0.091 s; sync files=24, longest=0.043 s, average=0.003 s; distance=181 kB, estimate=181 kB
+2022-05-27 08:57:07.189 +07 [18197] LOG:  database system is ready to accept connections
+2022-05-27 08:57:24.038 +07 [18307] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 08:57:24.041 +07 [18307] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 08:57:24.041 +07 [18307] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 08:57:24.086 +07 [18307] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 08:57:24.117 +07 [18310] LOG:  database system was interrupted; last known up at 2022-05-27 08:57:07 +07
+2022-05-27 08:57:25.076 +07 [18310] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 08:57:25.082 +07 [18310] LOG:  redo starts at 0/3057400
+2022-05-27 08:57:25.089 +07 [18310] LOG:  invalid record length at 0/308B948: wanted 24, got 0
+2022-05-27 08:57:25.090 +07 [18310] LOG:  redo done at 0/308B910 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 08:57:25.100 +07 [18308] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 08:57:25.220 +07 [18308] LOG:  checkpoint complete: wrote 44 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.011 s, sync=0.096 s, total=0.123 s; sync files=27, longest=0.043 s, average=0.004 s; distance=209 kB, estimate=209 kB
+2022-05-27 08:57:25.227 +07 [18307] LOG:  database system is ready to accept connections
+2022-05-27 09:01:28.529 +07 [18527] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 09:01:28.530 +07 [18527] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 09:01:28.531 +07 [18527] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 09:01:28.538 +07 [18527] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 09:01:28.549 +07 [18530] LOG:  database system was interrupted; last known up at 2022-05-27 08:57:25 +07
+2022-05-27 09:01:29.165 +07 [18530] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 09:01:29.171 +07 [18530] LOG:  redo starts at 0/308B9C0
+2022-05-27 09:01:29.179 +07 [18530] LOG:  invalid record length at 0/30BA8A8: wanted 24, got 0
+2022-05-27 09:01:29.179 +07 [18530] LOG:  redo done at 0/30BA870 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 09:01:29.191 +07 [18528] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 09:01:29.269 +07 [18528] LOG:  checkpoint complete: wrote 37 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.012 s, sync=0.053 s, total=0.081 s; sync files=26, longest=0.027 s, average=0.003 s; distance=187 kB, estimate=187 kB
+2022-05-27 09:01:29.276 +07 [18527] LOG:  database system is ready to accept connections
+2022-05-27 09:02:11.422 +07 [18628] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 09:02:11.424 +07 [18628] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 09:02:11.424 +07 [18628] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 09:02:11.430 +07 [18628] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 09:02:11.443 +07 [18631] LOG:  database system was interrupted; last known up at 2022-05-27 09:01:29 +07
+2022-05-27 09:02:12.094 +07 [18631] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 09:02:12.110 +07 [18631] LOG:  redo starts at 0/30BA920
+2022-05-27 09:02:12.117 +07 [18631] LOG:  invalid record length at 0/30E7108: wanted 24, got 0
+2022-05-27 09:02:12.117 +07 [18631] LOG:  redo done at 0/30E70D0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 09:02:12.129 +07 [18629] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 09:02:12.529 +07 [18629] LOG:  checkpoint complete: wrote 37 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.226 s, sync=0.140 s, total=0.404 s; sync files=25, longest=0.057 s, average=0.006 s; distance=178 kB, estimate=178 kB
+2022-05-27 09:02:12.536 +07 [18628] LOG:  database system is ready to accept connections
+2022-05-27 09:03:03.610 +07 [18760] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 09:03:03.611 +07 [18760] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 09:03:03.611 +07 [18760] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 09:03:03.618 +07 [18760] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 09:03:03.629 +07 [18763] LOG:  database system was interrupted; last known up at 2022-05-27 09:02:12 +07
+2022-05-27 09:03:04.708 +07 [18763] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 09:03:04.715 +07 [18763] LOG:  redo starts at 0/30E7180
+2022-05-27 09:03:04.730 +07 [18763] LOG:  invalid record length at 0/3114AF0: wanted 24, got 0
+2022-05-27 09:03:04.730 +07 [18763] LOG:  redo done at 0/3114AB8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 09:03:04.742 +07 [18761] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 09:03:04.853 +07 [18761] LOG:  checkpoint complete: wrote 34 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.012 s, sync=0.069 s, total=0.114 s; sync files=23, longest=0.029 s, average=0.003 s; distance=182 kB, estimate=182 kB
+2022-05-27 09:03:04.859 +07 [18760] LOG:  database system is ready to accept connections
+2022-05-27 09:03:25.087 +07 [18839] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 09:03:25.088 +07 [18839] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 09:03:25.088 +07 [18839] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 09:03:25.097 +07 [18839] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 09:03:25.110 +07 [18842] LOG:  database system was interrupted; last known up at 2022-05-27 09:03:04 +07
+2022-05-27 09:03:25.947 +07 [18842] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 09:03:25.954 +07 [18842] LOG:  redo starts at 0/3114B68
+2022-05-27 09:03:25.962 +07 [18842] LOG:  invalid record length at 0/31458D0: wanted 24, got 0
+2022-05-27 09:03:25.962 +07 [18842] LOG:  redo done at 0/3145898 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 09:03:25.975 +07 [18840] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 09:03:26.038 +07 [18840] LOG:  checkpoint complete: wrote 37 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.013 s, sync=0.037 s, total=0.069 s; sync files=24, longest=0.010 s, average=0.002 s; distance=195 kB, estimate=195 kB
+2022-05-27 09:03:26.046 +07 [18839] LOG:  database system is ready to accept connections
+2022-05-27 09:08:25.140 +07 [18840] LOG:  checkpoint starting: time
+2022-05-27 09:08:28.411 +07 [18840] LOG:  checkpoint complete: wrote 30 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.194 s, sync=0.057 s, total=3.272 s; sync files=20, longest=0.041 s, average=0.003 s; distance=183 kB, estimate=194 kB
+2022-05-27 09:55:56.347 +07 [21598] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 09:55:56.348 +07 [21598] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 09:55:56.348 +07 [21598] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 09:55:56.357 +07 [21598] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 09:55:56.366 +07 [21601] LOG:  database system was interrupted; last known up at 2022-05-27 09:08:28 +07
+2022-05-27 09:55:56.921 +07 [21601] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 09:55:56.927 +07 [21601] LOG:  redo starts at 0/3173528
+2022-05-27 09:55:56.927 +07 [21601] LOG:  invalid record length at 0/3173610: wanted 24, got 0
+2022-05-27 09:55:56.927 +07 [21601] LOG:  redo done at 0/31735D8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 09:55:56.935 +07 [21599] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 09:55:56.977 +07 [21599] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.023 s, total=0.045 s; sync files=2, longest=0.022 s, average=0.012 s; distance=0 kB, estimate=0 kB
+2022-05-27 09:55:56.983 +07 [21598] LOG:  database system is ready to accept connections
+2022-05-27 10:00:57.075 +07 [21599] LOG:  checkpoint starting: time
+2022-05-27 10:01:00.513 +07 [21599] LOG:  checkpoint complete: wrote 33 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.329 s, sync=0.083 s, total=3.439 s; sync files=20, longest=0.061 s, average=0.005 s; distance=183 kB, estimate=183 kB
+2022-05-27 10:30:36.654 +07 [22052] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 10:30:36.656 +07 [22052] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 10:30:36.656 +07 [22052] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 10:30:36.664 +07 [22052] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 10:30:36.677 +07 [22055] LOG:  database system was interrupted; last known up at 2022-05-27 10:01:00 +07
+2022-05-27 10:30:37.536 +07 [22055] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 10:30:37.542 +07 [22055] LOG:  redo starts at 0/31A1268
+2022-05-27 10:30:37.543 +07 [22055] LOG:  invalid record length at 0/31A1350: wanted 24, got 0
+2022-05-27 10:30:37.543 +07 [22055] LOG:  redo done at 0/31A1318 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 10:30:37.554 +07 [22053] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 10:30:37.606 +07 [22053] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.027 s, total=0.058 s; sync files=2, longest=0.025 s, average=0.014 s; distance=0 kB, estimate=0 kB
+2022-05-27 10:30:37.618 +07 [22052] LOG:  database system is ready to accept connections
+2022-05-27 10:30:38.691 +07 [22081] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 10:30:38.691 +07 [22081] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 10:30:38.691 +07 [22081] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 17:12:32.942 +07 [22053] LOG:  checkpoint starting: time
+2022-05-27 17:12:36.054 +07 [22053] LOG:  checkpoint complete: wrote 30 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.020 s, sync=0.073 s, total=3.113 s; sync files=20, longest=0.060 s, average=0.004 s; distance=177 kB, estimate=177 kB
+2022-05-27 17:31:36.961 +07 [22447] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 17:31:36.962 +07 [22447] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 17:31:36.962 +07 [22447] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 17:31:36.994 +07 [22447] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 17:31:37.005 +07 [22450] LOG:  database system was interrupted; last known up at 2022-05-27 17:12:36 +07
+2022-05-27 17:31:37.984 +07 [22450] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 17:31:37.990 +07 [22450] LOG:  redo starts at 0/31CDA10
+2022-05-27 17:31:37.991 +07 [22450] LOG:  invalid record length at 0/31CDAF8: wanted 24, got 0
+2022-05-27 17:31:37.991 +07 [22450] LOG:  redo done at 0/31CDAC0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 17:31:38.001 +07 [22448] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 17:31:38.056 +07 [22448] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.030 s, total=0.059 s; sync files=2, longest=0.028 s, average=0.015 s; distance=0 kB, estimate=0 kB
+2022-05-27 17:31:38.066 +07 [22447] LOG:  database system is ready to accept connections
+2022-05-27 17:31:38.570 +07 [22475] ERROR:  cannot execute CREATE FUNCTION in a read-only transaction
+2022-05-27 17:31:38.570 +07 [22475] STATEMENT:  CREATE OR REPLACE FUNCTION func_id_1 (IN elem integer, OUT res integer) RETURNS integer AS $BODY$
+				BEGIN  				
+					res := -2;
+					RETURN;
+				END
+				$BODY$ LANGUAGE plpgsql; COMMIT;
+2022-05-27 17:31:38.571 +07 [22475] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2022-05-27 17:31:38.571 +07 [22475] STATEMENT:  RESET search_path
+2022-05-27 17:36:37.068 +07 [22448] LOG:  checkpoint starting: time
+2022-05-27 17:36:40.211 +07 [22448] LOG:  checkpoint complete: wrote 28 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.036 s, sync=0.088 s, total=3.143 s; sync files=19, longest=0.072 s, average=0.005 s; distance=180 kB, estimate=180 kB
+2022-05-27 18:34:25.161 +07 [22888] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:34:25.163 +07 [22888] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:34:25.163 +07 [22888] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:34:25.171 +07 [22888] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:34:25.185 +07 [22891] LOG:  database system was interrupted; last known up at 2022-05-27 17:36:40 +07
+2022-05-27 18:34:26.171 +07 [22891] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:34:26.177 +07 [22891] LOG:  redo starts at 0/31FAB30
+2022-05-27 18:34:26.177 +07 [22891] LOG:  invalid record length at 0/31FAC18: wanted 24, got 0
+2022-05-27 18:34:26.177 +07 [22891] LOG:  redo done at 0/31FABE0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 18:34:26.187 +07 [22889] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:34:26.264 +07 [22889] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.051 s, total=0.081 s; sync files=2, longest=0.050 s, average=0.026 s; distance=0 kB, estimate=0 kB
+2022-05-27 18:34:26.273 +07 [22888] LOG:  database system is ready to accept connections
+2022-05-27 18:34:27.335 +07 [22917] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 18:34:27.335 +07 [22917] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 18:34:27.335 +07 [22917] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 18:35:13.935 +07 [23008] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:35:13.937 +07 [23008] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:35:13.937 +07 [23008] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:35:13.946 +07 [23008] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:35:13.961 +07 [23011] LOG:  database system was interrupted; last known up at 2022-05-27 18:34:26 +07
+2022-05-27 18:35:14.992 +07 [23011] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:35:14.999 +07 [23011] LOG:  redo starts at 0/31FAC90
+2022-05-27 18:35:15.011 +07 [23011] LOG:  invalid record length at 0/322AA98: wanted 24, got 0
+2022-05-27 18:35:15.011 +07 [23011] LOG:  redo done at 0/322AA60 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 18:35:15.047 +07 [23009] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:35:15.225 +07 [23009] LOG:  checkpoint complete: wrote 38 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.013 s, sync=0.119 s, total=0.183 s; sync files=25, longest=0.082 s, average=0.005 s; distance=191 kB, estimate=191 kB
+2022-05-27 18:35:15.233 +07 [23008] LOG:  database system is ready to accept connections
+2022-05-27 18:35:38.441 +07 [23160] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:35:38.442 +07 [23160] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:35:38.443 +07 [23160] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:35:38.450 +07 [23160] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:35:38.464 +07 [23163] LOG:  database system was interrupted; last known up at 2022-05-27 18:35:15 +07
+2022-05-27 18:35:39.481 +07 [23163] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:35:39.489 +07 [23163] LOG:  redo starts at 0/322AB10
+2022-05-27 18:35:39.499 +07 [23163] LOG:  invalid record length at 0/325A098: wanted 24, got 0
+2022-05-27 18:35:39.499 +07 [23163] LOG:  redo done at 0/325A060 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 18:35:39.524 +07 [23161] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:35:39.881 +07 [23161] LOG:  checkpoint complete: wrote 37 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.013 s, sync=0.291 s, total=0.362 s; sync files=24, longest=0.217 s, average=0.013 s; distance=189 kB, estimate=189 kB
+2022-05-27 18:35:39.890 +07 [23160] LOG:  database system is ready to accept connections
+2022-05-27 18:35:40.819 +07 [23189] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 18:35:40.819 +07 [23189] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 18:35:40.819 +07 [23189] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 18:36:42.838 +07 [23287] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:36:42.840 +07 [23287] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:36:42.840 +07 [23287] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:36:42.848 +07 [23287] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:36:42.861 +07 [23290] LOG:  database system was interrupted; last known up at 2022-05-27 18:35:39 +07
+2022-05-27 18:36:43.892 +07 [23290] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:36:43.899 +07 [23290] LOG:  redo starts at 0/325A110
+2022-05-27 18:36:43.908 +07 [23290] LOG:  invalid record length at 0/328B668: wanted 24, got 0
+2022-05-27 18:36:43.908 +07 [23290] LOG:  redo done at 0/328B630 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 18:36:43.920 +07 [23288] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:36:44.046 +07 [23288] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.013 s, sync=0.083 s, total=0.129 s; sync files=23, longest=0.038 s, average=0.004 s; distance=197 kB, estimate=197 kB
+2022-05-27 18:36:44.054 +07 [23287] LOG:  database system is ready to accept connections
+2022-05-27 18:36:44.959 +07 [23316] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 18:36:44.959 +07 [23316] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 18:36:44.959 +07 [23316] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 18:41:43.146 +07 [23288] LOG:  checkpoint starting: time
+2022-05-27 18:41:47.884 +07 [23288] LOG:  checkpoint complete: wrote 38 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.639 s, sync=0.078 s, total=4.738 s; sync files=20, longest=0.062 s, average=0.004 s; distance=199 kB, estimate=199 kB
+2022-05-27 18:49:30.919 +07 [23518] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:49:30.929 +07 [23518] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:49:30.929 +07 [23518] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:49:30.938 +07 [23518] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:49:30.953 +07 [23521] LOG:  database system was interrupted; last known up at 2022-05-27 18:41:47 +07
+2022-05-27 18:49:31.919 +07 [23521] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:49:31.968 +07 [23521] LOG:  redo starts at 0/32BD3A8
+2022-05-27 18:49:31.968 +07 [23521] LOG:  invalid record length at 0/32BD490: wanted 24, got 0
+2022-05-27 18:49:31.968 +07 [23521] LOG:  redo done at 0/32BD458 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 18:49:31.979 +07 [23519] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:49:32.057 +07 [23519] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.053 s, total=0.083 s; sync files=2, longest=0.051 s, average=0.027 s; distance=0 kB, estimate=0 kB
+2022-05-27 18:49:32.066 +07 [23518] LOG:  database system is ready to accept connections
+2022-05-27 18:49:33.172 +07 [23547] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 18:49:33.172 +07 [23547] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 18:49:33.172 +07 [23547] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 18:50:06.589 +07 [23587] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:50:06.590 +07 [23587] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:50:06.590 +07 [23587] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:50:06.597 +07 [23587] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:50:06.609 +07 [23590] LOG:  database system was interrupted; last known up at 2022-05-27 18:49:32 +07
+2022-05-27 18:50:07.619 +07 [23590] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:50:07.635 +07 [23590] LOG:  redo starts at 0/32BD508
+2022-05-27 18:50:07.645 +07 [23590] LOG:  invalid record length at 0/32EF2F8: wanted 24, got 0
+2022-05-27 18:50:07.645 +07 [23590] LOG:  redo done at 0/32EF2C0 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 18:50:07.685 +07 [23588] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:50:07.848 +07 [23588] LOG:  checkpoint complete: wrote 40 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.015 s, sync=0.116 s, total=0.167 s; sync files=26, longest=0.040 s, average=0.005 s; distance=199 kB, estimate=199 kB
+2022-05-27 18:50:07.858 +07 [23587] LOG:  database system is ready to accept connections
+2022-05-27 18:55:08.008 +07 [23588] LOG:  checkpoint starting: time
+2022-05-27 18:55:11.745 +07 [23588] LOG:  checkpoint complete: wrote 30 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.644 s, sync=0.072 s, total=3.738 s; sync files=19, longest=0.053 s, average=0.004 s; distance=178 kB, estimate=197 kB
+2022-05-27 18:55:56.501 +07 [23741] FATAL:  terminating connection due to unexpected postmaster exit
+2022-05-27 18:55:56.648 +07 [23784] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:55:56.650 +07 [23784] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:55:56.650 +07 [23784] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:55:56.660 +07 [23784] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:55:56.674 +07 [23787] LOG:  database system was interrupted; last known up at 2022-05-27 18:55:11 +07
+2022-05-27 18:55:57.680 +07 [23787] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:55:57.687 +07 [23787] LOG:  redo starts at 0/331BBA0
+2022-05-27 18:55:57.687 +07 [23787] LOG:  invalid record length at 0/331BC88: wanted 24, got 0
+2022-05-27 18:55:57.687 +07 [23787] LOG:  redo done at 0/331BC50 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 18:55:57.700 +07 [23785] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:55:57.781 +07 [23785] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.054 s, total=0.086 s; sync files=2, longest=0.053 s, average=0.027 s; distance=0 kB, estimate=0 kB
+2022-05-27 18:55:57.789 +07 [23784] LOG:  database system is ready to accept connections
+2022-05-27 18:56:25.768 +07 [23867] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:56:25.770 +07 [23867] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:56:25.770 +07 [23867] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:56:25.784 +07 [23867] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:56:25.840 +07 [23870] LOG:  database system was interrupted; last known up at 2022-05-27 18:55:57 +07
+2022-05-27 18:56:26.909 +07 [23870] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:56:26.917 +07 [23870] LOG:  redo starts at 0/331BD00
+2022-05-27 18:56:26.928 +07 [23870] LOG:  invalid record length at 0/3348208: wanted 24, got 0
+2022-05-27 18:56:26.928 +07 [23870] LOG:  redo done at 0/33481D0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 18:56:27.045 +07 [23868] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:56:27.231 +07 [23868] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.014 s, sync=0.133 s, total=0.191 s; sync files=24, longest=0.088 s, average=0.006 s; distance=177 kB, estimate=177 kB
+2022-05-27 18:56:27.239 +07 [23867] LOG:  database system is ready to accept connections
+2022-05-27 18:56:28.254 +07 [23896] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 18:56:28.254 +07 [23896] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 18:56:28.254 +07 [23896] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 18:57:19.852 +07 [23990] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:57:19.854 +07 [23990] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:57:19.854 +07 [23990] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:57:19.864 +07 [23990] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:57:19.876 +07 [23993] LOG:  database system was interrupted; last known up at 2022-05-27 18:56:27 +07
+2022-05-27 18:57:20.808 +07 [23993] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:57:21.366 +07 [23993] LOG:  redo starts at 0/3348280
+2022-05-27 18:57:21.376 +07 [23993] LOG:  invalid record length at 0/3374750: wanted 24, got 0
+2022-05-27 18:57:21.377 +07 [23993] LOG:  redo done at 0/3374718 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 18:57:21.392 +07 [23991] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:57:21.795 +07 [23991] LOG:  checkpoint complete: wrote 37 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.269 s, sync=0.104 s, total=0.407 s; sync files=25, longest=0.056 s, average=0.005 s; distance=177 kB, estimate=177 kB
+2022-05-27 18:57:21.804 +07 [23990] LOG:  database system is ready to accept connections
+2022-05-27 18:57:23.105 +07 [24019] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 18:57:23.105 +07 [24019] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 18:57:23.105 +07 [24019] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 18:57:43.162 +07 [24128] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:57:43.164 +07 [24128] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:57:43.164 +07 [24128] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:57:43.222 +07 [24128] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:57:43.238 +07 [24131] LOG:  database system was interrupted; last known up at 2022-05-27 18:57:21 +07
+2022-05-27 18:57:44.293 +07 [24131] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:57:44.301 +07 [24131] LOG:  redo starts at 0/33747C8
+2022-05-27 18:57:44.312 +07 [24131] LOG:  invalid record length at 0/339FE80: wanted 24, got 0
+2022-05-27 18:57:44.312 +07 [24131] LOG:  redo done at 0/339FE48 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 18:57:44.329 +07 [24129] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:57:44.530 +07 [24129] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.016 s, sync=0.145 s, total=0.206 s; sync files=23, longest=0.045 s, average=0.007 s; distance=173 kB, estimate=173 kB
+2022-05-27 18:57:44.544 +07 [24128] LOG:  database system is ready to accept connections
+2022-05-27 18:57:45.502 +07 [24158] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 18:57:45.502 +07 [24158] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 18:57:45.502 +07 [24158] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 18:59:40.412 +07 [24313] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 18:59:40.414 +07 [24313] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 18:59:40.414 +07 [24313] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 18:59:40.423 +07 [24313] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 18:59:40.437 +07 [24316] LOG:  database system was interrupted; last known up at 2022-05-27 18:57:44 +07
+2022-05-27 18:59:41.434 +07 [24316] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 18:59:41.442 +07 [24316] LOG:  redo starts at 0/339FEF8
+2022-05-27 18:59:41.452 +07 [24316] LOG:  invalid record length at 0/33CB578: wanted 24, got 0
+2022-05-27 18:59:41.452 +07 [24316] LOG:  redo done at 0/33CB540 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 18:59:41.493 +07 [24314] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 18:59:41.594 +07 [24314] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.014 s, sync=0.069 s, total=0.104 s; sync files=23, longest=0.034 s, average=0.003 s; distance=173 kB, estimate=173 kB
+2022-05-27 18:59:41.605 +07 [24313] LOG:  database system is ready to accept connections
+2022-05-27 18:59:42.558 +07 [24342] ERROR:  function public.func_id_1(integer) does not exist at character 59
+2022-05-27 18:59:42.558 +07 [24342] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-05-27 18:59:42.558 +07 [24342] STATEMENT:  COPY (SELECT public.func_name(a), b, public.func_name(c), public.func_id_1(id) FROM public.t2 ) TO stdout;
+2022-05-27 19:01:20.739 +07 [24461] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 19:01:20.741 +07 [24461] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 19:01:20.741 +07 [24461] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 19:01:20.753 +07 [24461] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 19:01:20.767 +07 [24464] LOG:  database system was interrupted; last known up at 2022-05-27 18:59:41 +07
+2022-05-27 19:01:21.855 +07 [24464] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 19:01:21.862 +07 [24464] LOG:  redo starts at 0/33CB5F0
+2022-05-27 19:01:21.872 +07 [24464] LOG:  invalid record length at 0/33F61A0: wanted 24, got 0
+2022-05-27 19:01:21.872 +07 [24464] LOG:  redo done at 0/33F6168 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 19:01:21.942 +07 [24462] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 19:01:22.073 +07 [24462] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.015 s, sync=0.098 s, total=0.158 s; sync files=25, longest=0.041 s, average=0.004 s; distance=171 kB, estimate=171 kB
+2022-05-27 19:01:22.083 +07 [24461] LOG:  database system is ready to accept connections
+2022-05-27 19:04:12.556 +07 [24521] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 19:04:12.562 +07 [24521] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 19:04:12.562 +07 [24521] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 19:04:12.609 +07 [24521] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 19:04:12.623 +07 [24524] LOG:  database system was interrupted; last known up at 2022-05-27 19:01:22 +07
+2022-05-27 19:04:13.642 +07 [24524] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 19:04:13.657 +07 [24524] LOG:  redo starts at 0/33F6218
+2022-05-27 19:04:13.669 +07 [24524] LOG:  invalid record length at 0/3427398: wanted 24, got 0
+2022-05-27 19:04:13.669 +07 [24524] LOG:  redo done at 0/3427360 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 19:04:13.681 +07 [24522] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 19:04:14.153 +07 [24522] LOG:  checkpoint complete: wrote 38 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.296 s, sync=0.142 s, total=0.475 s; sync files=29, longest=0.049 s, average=0.005 s; distance=196 kB, estimate=196 kB
+2022-05-27 19:04:14.164 +07 [24521] LOG:  database system is ready to accept connections
+2022-05-27 19:04:25.779 +07 [24557] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 19:04:25.781 +07 [24557] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 19:04:25.781 +07 [24557] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 19:04:25.792 +07 [24557] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 19:04:25.808 +07 [24560] LOG:  database system was interrupted; last known up at 2022-05-27 19:04:14 +07
+2022-05-27 19:04:26.864 +07 [24560] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 19:04:26.916 +07 [24560] LOG:  redo starts at 0/3427410
+2022-05-27 19:04:26.925 +07 [24560] LOG:  invalid record length at 0/345A498: wanted 24, got 0
+2022-05-27 19:04:26.926 +07 [24560] LOG:  redo done at 0/345A430 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 19:04:26.939 +07 [24558] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 19:04:27.069 +07 [24558] LOG:  checkpoint complete: wrote 39 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.015 s, sync=0.099 s, total=0.134 s; sync files=29, longest=0.061 s, average=0.004 s; distance=204 kB, estimate=204 kB
+2022-05-27 19:04:27.077 +07 [24557] LOG:  database system is ready to accept connections
+2022-05-27 19:06:06.745 +07 [24654] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 19:06:06.746 +07 [24654] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 19:06:06.747 +07 [24654] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 19:06:06.785 +07 [24654] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 19:06:06.797 +07 [24657] LOG:  database system was interrupted; last known up at 2022-05-27 19:04:27 +07
+2022-05-27 19:06:07.961 +07 [24657] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 19:06:07.967 +07 [24657] LOG:  redo starts at 0/345A510
+2022-05-27 19:06:07.978 +07 [24657] LOG:  invalid record length at 0/348F938: wanted 24, got 0
+2022-05-27 19:06:07.978 +07 [24657] LOG:  redo done at 0/348F900 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 19:06:07.993 +07 [24655] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 19:06:08.115 +07 [24655] LOG:  checkpoint complete: wrote 42 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.030 s, sync=0.063 s, total=0.128 s; sync files=26, longest=0.030 s, average=0.003 s; distance=213 kB, estimate=213 kB
+2022-05-27 19:06:08.123 +07 [24654] LOG:  database system is ready to accept connections
+2022-05-27 19:09:33.325 +07 [24979] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 19:09:33.326 +07 [24979] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 19:09:33.327 +07 [24979] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 19:09:33.344 +07 [24979] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 19:09:33.365 +07 [24982] LOG:  database system was interrupted; last known up at 2022-05-27 19:06:08 +07
+2022-05-27 19:09:34.462 +07 [24982] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 19:09:34.471 +07 [24982] LOG:  redo starts at 0/348F9B0
+2022-05-27 19:09:34.480 +07 [24982] LOG:  invalid record length at 0/34BE328: wanted 24, got 0
+2022-05-27 19:09:34.481 +07 [24982] LOG:  redo done at 0/34BE2F0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 19:09:34.555 +07 [24980] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 19:09:34.721 +07 [24980] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.039 s, sync=0.109 s, total=0.206 s; sync files=25, longest=0.075 s, average=0.005 s; distance=186 kB, estimate=186 kB
+2022-05-27 19:09:34.730 +07 [24979] LOG:  database system is ready to accept connections
+2022-05-27 19:11:23.308 +07 [25139] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 19:11:23.310 +07 [25139] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 19:11:23.310 +07 [25139] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 19:11:23.319 +07 [25139] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 19:11:23.336 +07 [25142] LOG:  database system was interrupted; last known up at 2022-05-27 19:09:34 +07
+2022-05-27 19:11:24.295 +07 [25142] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 19:11:24.302 +07 [25142] LOG:  redo starts at 0/34BE3A0
+2022-05-27 19:11:24.313 +07 [25142] LOG:  invalid record length at 0/34EE318: wanted 24, got 0
+2022-05-27 19:11:24.313 +07 [25142] LOG:  redo done at 0/34EE2E0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 19:11:24.327 +07 [25140] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 19:11:24.449 +07 [25140] LOG:  checkpoint complete: wrote 40 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.015 s, sync=0.091 s, total=0.126 s; sync files=25, longest=0.060 s, average=0.004 s; distance=191 kB, estimate=191 kB
+2022-05-27 19:11:24.458 +07 [25139] LOG:  database system is ready to accept connections
+2022-05-27 19:11:35.567 +07 [25177] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 19:11:35.578 +07 [25177] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 19:11:35.578 +07 [25177] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 19:11:35.593 +07 [25177] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 19:11:35.609 +07 [25180] LOG:  database system was interrupted; last known up at 2022-05-27 19:11:24 +07
+2022-05-27 19:11:36.990 +07 [25180] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 19:11:36.999 +07 [25180] LOG:  redo starts at 0/34EE390
+2022-05-27 19:11:37.011 +07 [25180] LOG:  invalid record length at 0/351B138: wanted 24, got 0
+2022-05-27 19:11:37.011 +07 [25180] LOG:  redo done at 0/351B0D0 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+2022-05-27 19:11:37.025 +07 [25178] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 19:11:37.130 +07 [25178] LOG:  checkpoint complete: wrote 37 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.013 s, sync=0.077 s, total=0.109 s; sync files=26, longest=0.028 s, average=0.003 s; distance=179 kB, estimate=179 kB
+2022-05-27 19:11:37.139 +07 [25177] LOG:  database system is ready to accept connections
+2022-05-27 19:15:08.783 +07 [25320] LOG:  starting PostgreSQL 15devel on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2022-05-27 19:15:08.785 +07 [25320] LOG:  listening on IPv6 address "::1", port 5432
+2022-05-27 19:15:08.785 +07 [25320] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-05-27 19:15:08.796 +07 [25320] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-05-27 19:15:08.813 +07 [25323] LOG:  database system was interrupted; last known up at 2022-05-27 19:11:37 +07
+2022-05-27 19:15:09.802 +07 [25323] LOG:  database system was not properly shut down; automatic recovery in progress
+2022-05-27 19:15:09.809 +07 [25323] LOG:  redo starts at 0/351B1B0
+2022-05-27 19:15:09.819 +07 [25323] LOG:  invalid record length at 0/3546D40: wanted 24, got 0
+2022-05-27 19:15:09.819 +07 [25323] LOG:  redo done at 0/3546D08 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2022-05-27 19:15:09.858 +07 [25321] LOG:  checkpoint starting: end-of-recovery immediate wait
+2022-05-27 19:15:10.044 +07 [25321] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.015 s, sync=0.154 s, total=0.190 s; sync files=25, longest=0.090 s, average=0.007 s; distance=175 kB, estimate=175 kB
+2022-05-27 19:15:10.053 +07 [25320] LOG:  database system is ready to accept connections
