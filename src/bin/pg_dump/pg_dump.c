@@ -18236,8 +18236,12 @@ void addFilterString(char* filter){
 			}
 		}
 
-		
-		simple_string_list_append(&filter_table_list,filter);
+		if(filter_pattern){
+			pg_log_warning("table %s already have a filter, second and later filter will not be used",
+			 table_include_patterns.head->val);
+		}else{
+			simple_string_list_append(&filter_table_list,filter);
+		}
 	}
 
 };
