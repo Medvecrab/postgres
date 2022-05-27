@@ -1362,7 +1362,6 @@ expand_schema_name_patterns(Archive *fout,
 		for (i = 0; i < PQntuples(res); i++)
 		{
 			simple_oid_list_append(oids, atooid(PQgetvalue(res, i, 0)));
-			//TODO: combain table_name and mask
 		}
 
 		PQclear(res);
@@ -2114,7 +2113,6 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 static int
 dumpTableData_insert(Archive *fout, const void *dcontext)
 {
-	//TODO struct of
 	TableDataInfo *tdinfo = (TableDataInfo *) dcontext;
 	TableInfo  *tbinfo = tdinfo->tdtable;
 	DumpOptions *dopt = fout->dopt;
@@ -2610,7 +2608,6 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo,  char* filter)
 	tdinfo->dobj.name = tbinfo->dobj.name;
 	tdinfo->dobj.namespace = tbinfo->dobj.namespace;
 	tdinfo->tdtable = tbinfo;
-	//TODO: replace condition
 	tdinfo->filtercond = filter;
 	addObjectDependency(&tdinfo->dobj, tbinfo->dobj.dumpId);
 
@@ -17597,7 +17594,6 @@ processExtensionTables(Archive *fout, ExtensionInfo extinfo[],
 					if (configtbl->dataObj != NULL)
 					{
 						if (strlen(extconditionarray[j]) > 0)
-							//TODO: chect corectly work with replaced condition
 							configtbl->dataObj->filtercond = pg_strdup(extconditionarray[j]);
 					}
 				}
@@ -18175,7 +18171,6 @@ appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
 bool parseFileToFilters(char* filename, DumpOptions *dopt){
 
 	FILE	   *fd;
-	//TODO: add size constant
 	char        filter_buffer[500];
 	char        *table_name;
 	char        *filter;
