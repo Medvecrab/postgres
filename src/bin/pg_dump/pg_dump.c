@@ -357,11 +357,9 @@ main(int argc, char **argv)
 	int			compressLevel = -1;
 	int			plainText = 0;
 
-	SimpleStringListCell* mask_func_cell;
-
+	SimpleStringListCell* mask_func_cell; /* needed for masking */
 	SimpleStringListCell* mask_columns_cell;
-
-	char* table_name_buffer; /* needed for masking */
+	char* table_name_buffer;
 	char* column_name_buffer;
 	char* func_name_buffer;
 	char* conn_params = (char*)malloc(1);
@@ -446,9 +444,6 @@ main(int argc, char **argv)
 		{NULL, 0, NULL, 0}
 	};
 
-	/* for masking */
-	conn_params[0] = 0;
-
 	pg_logging_init(argv[0]);
 	pg_logging_set_level(PG_LOG_WARNING);
 	set_pglocale_pgservice(argv[0], PG_TEXTDOMAIN("pg_dump"));
@@ -504,9 +499,6 @@ main(int argc, char **argv)
 
 			case 'd':			/* database name */
 				dopt.cparams.dbname = pg_strdup(optarg);
-				strcat(conn_params, "dbname=");
-				strcat(conn_params, optarg);
-				strcat(conn_params, " ");
 				conn_params_flags[0] = true;
 				break;
 
@@ -529,9 +521,6 @@ main(int argc, char **argv)
 
 			case 'h':			/* server host */
 				dopt.cparams.pghost = pg_strdup(optarg);
-				strcat(conn_params, "host=");
-				strcat(conn_params, optarg);
-				strcat(conn_params, " ");
 				conn_params_flags[1] = true;
 				break;
 
@@ -557,9 +546,6 @@ main(int argc, char **argv)
 
 			case 'p':			/* server port */
 				dopt.cparams.pgport = pg_strdup(optarg);
-				strcat(conn_params, "port=");
-				strcat(conn_params, optarg);
-				strcat(conn_params, " ");
 				conn_params_flags[2] = true;
 				break;
 
@@ -586,9 +572,6 @@ main(int argc, char **argv)
 
 			case 'U':
 				dopt.cparams.username = pg_strdup(optarg);
-				strcat(conn_params, "user=");
-				strcat(conn_params, optarg);
-				strcat(conn_params, " ");
 				conn_params_flags[3] = true;
 				break;
 
@@ -693,9 +676,6 @@ main(int argc, char **argv)
 	if (optind < argc && dopt.cparams.dbname == NULL)
 	{
 		dopt.cparams.dbname = argv[optind++];
-		strcat(conn_params, "dbname=");
-		strcat(conn_params, argv[optind++]);
-		strcat(conn_params, " ");
 		conn_params_flags[0] = true;
 	}
 	/* Complain if any arguments remain */
@@ -774,7 +754,7 @@ main(int argc, char **argv)
 		mask_columns_cell = mask_columns_cell->next;
 	}
 
-			/*
+	/*
 	* now check if --mask-function is a name of function or a pathfile
 	*/
 
@@ -825,26 +805,39 @@ main(int argc, char **argv)
 				}
 			}
 
+			strcat(conn_params, "dbname=");
 			if(!conn_params_flags[0])
 			{
-				strcat(conn_params, "dbname=postgres ");
+				strcat(conn_params, "postgres");
 				conn_params_flags[0] = true;
 			}
+			else
+				strcat(conn_params, dopt.cparams.dbname);
+			strcat(conn_params, " host=");
 			if(!conn_params_flags[1])
 			{
-				strcat(conn_params, "host=localhost ");
+				strcat(conn_params, "localhost");
 				conn_params_flags[1] = true;
 			}
+			else
+				strcat(conn_params, dopt.cparams.pghost);
+			strcat(conn_params, " port=");
 			if(!conn_params_flags[2])
 			{
-				strcat(conn_params, "port=5432 ");
+				strcat(conn_params, "5432");
 				conn_params_flags[2] = true;
 			}
+			else
+				strcat(conn_params, dopt.cparams.pgport);
+			strcat(conn_params, " user=");
 			if(!conn_params_flags[3])
 			{
-				strcat(conn_params, "user=postgres ");
+				strcat(conn_params, "postgres");
 				conn_params_flags[3] = true;
 			}
+			else
+				strcat(conn_params, dopt.cparams.username);
+
 			connection = PQconnectdb(conn_params); 
 			PQexec(connection, mask_func_buffer);
 			PQfinish(connection);
@@ -923,7 +916,6 @@ main(int argc, char **argv)
 
 	/* Let the archiver know how noisy to be */
 	fout->verbose = g_verbose;
-
 
 	/*
 	 * We allow the server to be back to 9.2, and up to any minor release of
