@@ -146,7 +146,6 @@ foreach my $test (sort keys %tests)
 {
 	$node->command_ok(\@{ $tests{$test}->{dump} },"$test: pg_dump runs");
 
-    diag("Review $test results in $tempdir");
 	my $output_file = slurp_file("$tempdir/${test}.sql");
 
     ok($output_file =~ $tests{$test}->{regexp}, "$test: should be dumped");
