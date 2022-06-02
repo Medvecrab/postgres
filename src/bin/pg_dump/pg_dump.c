@@ -361,7 +361,7 @@ main(int argc, char **argv)
 	char* table_name_buffer;
 	char* func_name_buffer;
 	char* schema_name_buffer;
-	char* conn_params = (char*)malloc(1);
+	char* conn_params = (char*)malloc(256 * sizeof(char));
 	bool conn_params_flags[4] = {false, false, false, false};
 	PGconn *connection;
 	FILE *mask_func_filepath;
@@ -710,12 +710,12 @@ main(int argc, char **argv)
 	while (mask_columns_cell && mask_func_cell) 
 	{
 		char* func = mask_func_cell->val;
-		char* column = strtok(mask_columns_cell->val, " ,()");
+		char* column = strtok(mask_columns_cell->val, " ,\'\"");
 		while (column != NULL)
 		{
 			simple_string_list_append(&mask_corresponding_columns, column);
 			simple_string_list_append(&mask_corresponding_func, func);
-			column = strtok(NULL, " ,()");
+			column = strtok(NULL, " ,\'\"");
 		} 	
 		mask_columns_cell = mask_columns_cell->next;
 		mask_func_cell = mask_func_cell->next;
@@ -766,9 +766,9 @@ main(int argc, char **argv)
 		mask_func_filepath = fopen(func_name_buffer, "r");
 		if (mask_func_filepath != NULL) /* then it is a file with function*/
 		{
-			char* mask_func_buffer = (char*)malloc(1);
+			char* mask_func_buffer = (char*)pg_malloc(sizeof(char));
 			char cur_char;
-			char querry_buffer[200]; //only needed until function name
+			char querry_buffer[256]; /* only needed until function name */
 			char* tok_buffer = querry_buffer;
 			int querry_size = 0;
 			bool found_function_name = false, not_found_keyword = true;
@@ -804,51 +804,38 @@ main(int argc, char **argv)
 			}
 
 			/* establishing connection to execute CREATE FUNCTION script */
-			strcat(conn_params, "dbname=");
-			if(!conn_params_flags[0])
+			
+			strcpy(conn_params,"");
+
+			if(conn_params_flags[0])
 			{
-				strcat(conn_params, "postgres");
-				conn_params_flags[0] = true;
-			}
-			else
+				strcat(conn_params, "dbname=");
 				strcat(conn_params, dopt.cparams.dbname);
-			strcat(conn_params, " host=");
-			if(!conn_params_flags[1])
-			{
-				strcat(conn_params, "localhost");
-				conn_params_flags[1] = true;
 			}
-			else
+			if(conn_params_flags[1])
+			{
+				strcat(conn_params, " host=");
 				strcat(conn_params, dopt.cparams.pghost);
-			strcat(conn_params, " port=");
-			if(!conn_params_flags[2])
-			{
-				strcat(conn_params, "5432");
-				conn_params_flags[2] = true;
 			}
-			else
+			if(conn_params_flags[2])
+			{
+				strcat(conn_params, " port=");
 				strcat(conn_params, dopt.cparams.pgport);
-			strcat(conn_params, " user=");
-			if(!conn_params_flags[3])
-			{
-				strcat(conn_params, "postgres");
-				conn_params_flags[3] = true;
 			}
-			else
+			if(conn_params_flags[3])
+			{
+				strcat(conn_params, " user=");
 				strcat(conn_params, dopt.cparams.username);
+			}
 
 			connection = PQconnectdb(conn_params); 
 			PQexec(connection, mask_func_buffer);
 			PQfinish(connection);
-
-			simple_string_list_append(&mask_corresponding_schemas, "public");
-			strcpy(mask_func_cell->val, func_name_buffer);
-		}
-		else /* function form DB*/
-		{
-			schema_name_buffer = strtok(mask_func_cell->val, ".");
+			
+			schema_name_buffer = strtok(pg_strdup(func_name_buffer), ".");
 			func_name_buffer = strtok(NULL, ".");
-			if (func_name_buffer == NULL) /* found column without tablename */
+			
+			if (func_name_buffer == NULL) /* found function without schemaname */
 			{
 				simple_string_list_append(&mask_corresponding_schemas, "public");
 				strcpy(mask_func_cell->val, schema_name_buffer);
@@ -857,7 +844,25 @@ main(int argc, char **argv)
 			{
 				simple_string_list_append(&mask_corresponding_schemas, schema_name_buffer);
 				strcpy(mask_func_cell->val, func_name_buffer);
-			}		
+			}
+
+		}
+		else /* function form DB*/
+		{
+			schema_name_buffer = strtok(mask_func_cell->val, ".");
+			func_name_buffer = strtok(NULL, ".");
+			
+			if (func_name_buffer == NULL) /* found function without schemaname */
+			{
+				simple_string_list_append(&mask_corresponding_schemas, "public");
+				strcpy(mask_func_cell->val, schema_name_buffer);
+			}
+			else
+			{
+				simple_string_list_append(&mask_corresponding_schemas, schema_name_buffer);
+				strcpy(mask_func_cell->val, func_name_buffer);
+			}
+				
 		}
 		mask_func_cell = mask_func_cell->next;
 	}
@@ -2125,6 +2130,7 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	int			ret;
 	char	   *copybuf;
 	const char *column_list;
+	char* temp_string = (char*)malloc(256 * sizeof(char));
 
 	pg_log_info("dumping contents of table \"%s.%s\"",
 				tbinfo->dobj.namespace->dobj.name, classname);
@@ -2157,41 +2163,47 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 				char* current_column_name = strtok(copy_column_list, " ,()");
 				while (current_column_name != NULL) 
 					{
-						char* temp_string;
-						if (simple_string_list_member(&mask_corresponding_columns, current_column_name))
-						{
-							SimpleStringListCell* current_column_cell = mask_corresponding_columns.head;
-							SimpleStringListCell* current_table_cell = mask_corresponding_tables.head;
-							SimpleStringListCell* current_func_cell = mask_corresponding_func.head;
-							SimpleStringListCell* current_schema_cell = mask_corresponding_schemas.head;
-							while (!current_column_cell->touched)
+						SimpleStringListCell* current_column_cell = mask_corresponding_columns.head;
+						SimpleStringListCell* current_table_cell = mask_corresponding_tables.head;
+						SimpleStringListCell* current_func_cell = mask_corresponding_func.head;
+						SimpleStringListCell* current_schema_cell = mask_corresponding_schemas.head;
+						while (current_column_cell != NULL &&
+							  (strcmp(current_column_cell->val, current_column_name) ||
+							  (!strcmp(current_column_cell->val, current_column_name) &&
+								strcmp(current_table_cell->val, tbinfo->dobj.name))))
 							{
+								if (!strcmp(current_table_cell->val, "") && 
+									!strcmp(current_column_cell->val, current_column_name))
+									break;
 								current_column_cell = current_column_cell->next;
 								current_table_cell = current_table_cell->next;
 								current_func_cell = current_func_cell->next;
 								current_schema_cell = current_schema_cell->next;
-							}
+							}	
+						if (current_column_cell != NULL)
+						{
 							/*current table name is stored in tbinfo->dobj.name*/
-							current_column_cell->touched = false;
+
 							if (!strcmp(current_table_cell->val, "") || 
 								!strcmp(current_table_cell->val, tbinfo->dobj.name))
 							{
-								temp_string = strdup(current_schema_cell->val);
+								strcpy(temp_string, current_schema_cell->val);
 								strcat(temp_string, ".");
 								strcat(temp_string, current_func_cell->val);
 								strcat(temp_string, "(");
 								strcat(temp_string, current_column_name);
 								strcat(temp_string, ")");
+							
 							}
 							else
 							{
-								temp_string = strdup("");
+								strcpy(temp_string, "");
 								strcat(temp_string, current_column_name);
 							}
 						}
 						else
 						{
-							temp_string = strdup("");
+							strcpy(temp_string, "");
 							strcat(temp_string, current_column_name);
 						}
 						current_column_name = strtok(NULL, " ,()");
@@ -2207,7 +2219,9 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 			}
 		}
 		else
+		{
 			appendPQExpBufferStr(q, "* ");
+		}
 
 		appendPQExpBuffer(q, " FROM %s %s) TO stdout;",
 						  fmtQualifiedDumpable(tbinfo),
@@ -2335,7 +2349,7 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 				i;
 	int			rows_per_statement = dopt->dump_inserts;
 	int			rows_this_statement = 0;
-
+	char* temp_string = (char*)malloc(256 * sizeof(char));
 	/*for masking*/
 
 	SimpleStringList column_names = {NULL, NULL}; 
@@ -2364,7 +2378,7 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 			appendPQExpBufferStr(q, "NULL");
 			simple_string_list_append(&column_names, "NULL");
 		}
-		else //add masking here?
+		else
 		{
 			if (mask_corresponding_columns.head != NULL)
 			{
@@ -2372,50 +2386,55 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 				char* copy_column_list = pg_strdup(tbinfo->attnames[i]);
 				char* current_column_name = strtok(copy_column_list, " ,()");
 				while (current_column_name != NULL) 
-				{
-					char* temp_string;
-					if (simple_string_list_member(&mask_corresponding_columns, current_column_name))
 					{
 						SimpleStringListCell* current_column_cell = mask_corresponding_columns.head;
 						SimpleStringListCell* current_table_cell = mask_corresponding_tables.head;
 						SimpleStringListCell* current_func_cell = mask_corresponding_func.head;
 						SimpleStringListCell* current_schema_cell = mask_corresponding_schemas.head;
-						while (!current_column_cell->touched)
+						while (current_column_cell != NULL &&
+							  (strcmp(current_column_cell->val, current_column_name) ||
+							  (!strcmp(current_column_cell->val, current_column_name) &&
+								strcmp(current_table_cell->val, tbinfo->dobj.name))))
+							{
+								if (!strcmp(current_table_cell->val, "") && 
+									!strcmp(current_column_cell->val, current_column_name))
+									break;
+								current_column_cell = current_column_cell->next;
+								current_table_cell = current_table_cell->next;
+								current_func_cell = current_func_cell->next;
+								current_schema_cell = current_schema_cell->next;
+							}	
+						if (current_column_cell != NULL)
 						{
-							current_column_cell = current_column_cell->next;
-							current_table_cell = current_table_cell->next;
-							current_func_cell = current_func_cell->next;
-							current_schema_cell = current_schema_cell->next;
-						}
-						/*current table name is stored in tbinfo->dobj.name*/
-						current_column_cell->touched = false;
-						if (!strcmp(current_table_cell->val, "") || 
-							!strcmp(current_table_cell->val, tbinfo->dobj.name))
-						{
-							temp_string = strdup(current_schema_cell->val);
-							strcat(temp_string, ".");
-							strcat(temp_string, current_func_cell->val);
-							strcat(temp_string, "(");
-							strcat(temp_string, current_column_name);
-							strcat(temp_string, ")");
+							/*current table name is stored in tbinfo->dobj.name*/
+							if (!strcmp(current_table_cell->val, "") || 
+								!strcmp(current_table_cell->val, tbinfo->dobj.name))
+							{
+								strcpy(temp_string, current_schema_cell->val);
+								strcat(temp_string, ".");
+								strcat(temp_string, current_func_cell->val);
+								strcat(temp_string, "(");
+								strcat(temp_string, current_column_name);
+								strcat(temp_string, ")");
+							
+							}
+							else
+							{
+								strcpy(temp_string, "");
+								strcat(temp_string, current_column_name);
+							}
 						}
 						else
 						{
-							temp_string = strdup("");
+							strcpy(temp_string, "");
 							strcat(temp_string, current_column_name);
 						}
+						simple_string_list_append(&column_names, current_column_name);
+						current_column_name = strtok(NULL, " ,()");
+						if (current_column_name != NULL)
+								strcat(temp_string, ", ");
+						appendPQExpBufferStr(q, temp_string);
 					}
-					else
-					{
-						temp_string = strdup("");
-						strcat(temp_string, current_column_name);
-					}
-					simple_string_list_append(&column_names, current_column_name);
-					current_column_name = strtok(NULL, " ,()");
-					if (current_column_name != NULL)
-							strcat(temp_string, ", ");
-					appendPQExpBufferStr(q, temp_string);
-				}
 			}
 			else
 			{
@@ -2489,8 +2508,6 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 					{
 						if (field > 0)
 							appendPQExpBufferStr(insertStmt, ", ");
-						//appendPQExpBufferStr(insertStmt,
-						//					 fmtId(PQfname(res, field)));
 						appendPQExpBufferStr(insertStmt, current_column->val);
 						current_column = current_column->next;
 					}
