@@ -2614,7 +2614,7 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
 
 
 /*
- * dumpTableData -
+ * getTableDataCondition -
  *	  find the where condition by OID and return a clause based on it or default otherwise.
  *
  * Note: default filter is the global filter, if it exists, or null value.
