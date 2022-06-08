@@ -175,8 +175,6 @@ typedef struct _namespaceInfo
 	const char *rolname;		/* name of owner */
 } NamespaceInfo;
 
-
-
 typedef struct _extensionInfo
 {
 	DumpableObject dobj;

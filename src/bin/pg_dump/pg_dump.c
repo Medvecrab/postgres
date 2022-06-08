@@ -639,9 +639,11 @@ main(int argc, char **argv)
 			case 15:
 				addFilterString(optarg);
 				break;
+
 			case 16:
 				parseFileToFilters(optarg, &dopt);
 				break;
+
 			default:
 				/* getopt_long already emitted a complaint */
 				pg_log_error_hint("Try \"%s --help\" for more information.", progname);
@@ -780,13 +782,9 @@ main(int argc, char **argv)
 
 	pg_log_info("last built-in OID is %u", g_last_builtin_oid);
 
-
-
-
 	/* Expand schema selection patterns into OID lists */
 	if (schema_include_patterns.head != NULL)
 	{
-
 		expand_schema_name_patterns(fout, &schema_include_patterns,
 									&schema_include_oids,
 									strict_names);
@@ -1041,11 +1039,9 @@ help(const char *progname)
 	printf(_("  -s, --schema-only            dump only the schema, no data\n"));
 	printf(_("  -S, --superuser=NAME         superuser user name to use in plain-text format\n"));
 	printf(_("  -t, --table=PATTERN          dump the specified table(s) only\n"));
-
 	printf(_("  --where=WHEREDEFENITION      set WHERE condition to filter data rows for last specified table.\n"
 			 "                               if it send before table pattern, all data in base will be filtered\n"));
 	printf(_("  --filter-file=FILEPATH       dump only specified tables and rows scribled in file\n"));
-
 	printf(_("  -T, --exclude-table=PATTERN  do NOT dump the specified table(s)\n"));
 	printf(_("  -x, --no-privileges          do not dump privileges (grant/revoke)\n"));
 	printf(_("  --binary-upgrade             for use by upgrade utilities only\n"));
@@ -1090,7 +1086,6 @@ help(const char *progname)
 	printf(_("  -w, --no-password        never prompt for password\n"));
 	printf(_("  -W, --password           force password prompt (should happen automatically)\n"));
 	printf(_("  --role=ROLENAME          do SET ROLE before dump\n"));
-
 
 	printf(_("\nIf no database name is supplied, then the PGDATABASE environment\n"
 			 "variable value is used.\n\n"));
@@ -1340,7 +1335,6 @@ expand_schema_name_patterns(Archive *fout,
 		return;					/* nothing to do */
 
 	query = createPQExpBuffer();
-
 
 	/*
 	 * The loop below runs multiple SELECTs might sometimes result in
