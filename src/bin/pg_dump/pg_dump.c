@@ -157,10 +157,8 @@ static int	ncomments = 0;
 static SecLabelItem *seclabels = NULL;
 static int	nseclabels = 0;
 
-static char *main_filter_where_condition = NULL; 
-
-
-
+/* global filter for all data in database */
+static char *global_filter_where_condition = NULL;
 /*
  * The default number of rows per INSERT when
  * --inserts is specified without --rows-per-insert
@@ -282,7 +280,7 @@ static void addBoundaryDependencies(DumpableObject **dobjs, int numObjs,
 static void addConstrChildIdxDeps(DumpableObject *dobj, const IndxInfo *refidx);
 static void getDomainConstraints(Archive *fout, TypeInfo *tyinfo);
 static void getTableData(DumpOptions *dopt, TableInfo *tblinfo, int numTables, char relkind);
-static void makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo, char* ilter);
+static void makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo);
 static void buildMatViewRefreshDependencies(Archive *fout);
 static void getTableDataFKConstraints(void);
 static char *format_function_arguments(const FuncInfo *finfo, const char *funcargs,
@@ -330,7 +328,9 @@ static void appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
 static char *get_synchronized_snapshot(Archive *fout);
 static void setupDumpWorker(Archive *AHX);
 static TableInfo *getRootTableInfo(const TableInfo *tbinfo);
-
+static char* getTableDataCondition(Oid table_oid);
+static bool  parseFileToFilters(char* filename, DumpOptions *dopt);
+static void addFilterString(char* filter);
 
 int
 main(int argc, char **argv)
@@ -1048,7 +1048,6 @@ help(const char *progname)
 
 	printf(_("  -T, --exclude-table=PATTERN  do NOT dump the specified table(s)\n"));
 	printf(_("  -x, --no-privileges          do not dump privileges (grant/revoke)\n"));
-	printf(_("  --where=FILTER               dump the specified strings only\n"));
 	printf(_("  --binary-upgrade             for use by upgrade utilities only\n"));
 	printf(_("  --column-inserts             dump data as INSERT commands with column names\n"));
 	printf(_("  --disable-dollar-quoting     disable dollar quoting, use SQL standard quoting\n"));
@@ -2536,14 +2535,13 @@ refreshMatViewData(Archive *fout, const TableDataInfo *tdinfo)
 static void
 getTableData(DumpOptions *dopt, TableInfo *tblinfo, int numTables, char relkind)
 {
-	int	i;
+	int			i;
 
 	for (i = 0; i < numTables; i++)
 	{
 		if (tblinfo[i].dobj.dump & DUMP_COMPONENT_DATA &&
-			(!relkind || tblinfo[i].relkind == relkind)){
-			makeTableDataInfo(dopt, &(tblinfo[i]), getTableDataCondition(tblinfo[i].dobj.catId.oid));
-		}
+			(!relkind || tblinfo[i].relkind == relkind))
+			makeTableDataInfo(dopt, &(tblinfo[i]));
 	}
 }
 
@@ -2554,7 +2552,7 @@ getTableData(DumpOptions *dopt, TableInfo *tblinfo, int numTables, char relkind)
  * table data; the "dump" field in such objects isn't very interesting.
  */
 static void
-makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo,  char* filter)
+makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
 {
 	TableDataInfo *tdinfo;
 
@@ -2608,7 +2606,7 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo,  char* filter)
 	tdinfo->dobj.name = tbinfo->dobj.name;
 	tdinfo->dobj.namespace = tbinfo->dobj.namespace;
 	tdinfo->tdtable = tbinfo;
-	tdinfo->filtercond = filter;
+	tdinfo->filtercond = getTableDataCondition(tbinfo->dobj.catId.oid);
 	addObjectDependency(&tdinfo->dobj, tbinfo->dobj.dumpId);
 
 	/* A TableDataInfo contains data, of course */
@@ -2621,11 +2619,17 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo,  char* filter)
 }
 
 
-
-
-char* getTableDataCondition(Oid table_oid){
+/*
+ * dumpTableData -
+ *	  find the where condition by OID and return a clause based on it or default otherwise.
+ *
+ * Note: default filter is the global filter, if it exists, or null value.
+ * If found filter is empty return null value.
+ */
+static char*
+getTableDataCondition(Oid table_oid){
 	char *condition;
-	const char *preambula = "where "; 
+	const char *preambula = "where ";
 	char *filter = NULL;
 	SimplePtrListCell* filter_bind = filter_bindigs.head;
 	
@@ -2634,12 +2638,7 @@ char* getTableDataCondition(Oid table_oid){
 			filter = filter_table_list.head->val;
 		}else{
 			for(; filter_bind != NULL; filter_bind = filter_bind->next){
-
-
 				if( table_oid == ((FilterBinding*)filter_bind->ptr)->table_oid){
-
-
-
 					filter = ((FilterBinding*)filter_bind->ptr)->filter_ptr;
 					break;
 				}
@@ -2648,10 +2647,10 @@ char* getTableDataCondition(Oid table_oid){
 	}
 	
 	if (filter == NULL || strcmp(filter,"") == 0){
-		if( main_filter_where_condition == NULL){
+		if( global_filter_where_condition == NULL){
 			return filter;
 		}else{
-			filter = main_filter_where_condition;
+			filter = global_filter_where_condition;
 		}
 	}
 	
@@ -5130,7 +5129,7 @@ findNamespace(Oid nsoid)
  *	  read all extensions in the system catalogs and return them in the
  * ExtensionInfo* structure
  *
- * numExtensions is set to the number of extensions read in
+ *	numExtensions is set to the number of extensions read in
  */
 ExtensionInfo *
 getExtensions(Archive *fout, int *numExtensions)
@@ -17590,7 +17589,7 @@ processExtensionTables(Archive *fout, ExtensionInfo extinfo[],
 
 				if (dumpobj)
 				{
-					makeTableDataInfo(dopt, configtbl, NULL);
+					makeTableDataInfo(dopt, configtbl);
 					if (configtbl->dataObj != NULL)
 					{
 						if (strlen(extconditionarray[j]) > 0)
@@ -18168,37 +18167,38 @@ appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
 		pg_log_warning("could not parse %s array", "reloptions");
 }
 
-bool parseFileToFilters(char* filename, DumpOptions *dopt){
+/*
+ * parseFileToFilters -
+ *	  read file and convert its content into parametrs "-t" or "--where".
+ */
+static bool
+parseFileToFilters(char* filename, DumpOptions *dopt){
 
-	FILE	   *fd;
+	FILE	    *fd;
 	char        filter_buffer[500];
 	char        *table_name;
 	char        *filter;
 
 	canonicalize_path(filename);
-
-
 	fd = fopen(filename, PG_BINARY_R);
-
 	if (!fd)
 	{
-		pg_log_error("%s: %m", filename);
+		pg_log_error("file %s is not exist", filename);
 		return EXIT_FAILURE;
 	}
 	while (fgets(filter_buffer,500,fd))
 	{
 		table_name = strtok(filter_buffer, " \n");
 		if(table_name){
+			/*
+			 * If first word in string is "where", next filter will be global
+			 */
 			if(strcmp(table_name,"where") == 0){
-				
 				filter = strtok(NULL, "\n");
-				main_filter_where_condition = pg_strdup(filter);
+				global_filter_where_condition = pg_strdup(filter);
 			}else{
-				
-				
 				simple_string_list_append(&table_include_patterns, table_name);
 				dopt->include_everything = false;
-
 				filter = strtok(NULL, " ");
 				if(filter && strcmp(filter,"where") == 0){
 					filter = strtok(NULL, "\n");
@@ -18207,21 +18207,22 @@ bool parseFileToFilters(char* filename, DumpOptions *dopt){
 			}
 		}
 	}
-
-
 	fclose(fd);
-	return true; 
+	return EXIT_SUCCESS;
 };
 
-void addFilterString(char* filter){
-
+/*
+ * addFilterString -
+ *	  add condition string in local filter list or in gloabal filter.
+ * Note: if there are more table templates than filter conditions then empty
+ * filters will be added to eliminate the difference
+ */
+static void
+addFilterString(char* filter){
 	if(table_include_patterns.head == NULL){
-		main_filter_where_condition = pg_strdup(filter);
+		global_filter_where_condition = pg_strdup(filter);
 	}else{
-		
 		SimpleStringListCell* filter_pattern = filter_table_list.head;
-
-
 		for(SimpleStringListCell* table_pattern = table_include_patterns.head;
 			table_pattern->next != NULL; table_pattern = table_pattern->next){
 			if(filter_pattern == NULL){
@@ -18230,7 +18231,6 @@ void addFilterString(char* filter){
 				filter_pattern = filter_pattern->next;
 			}
 		}
-
 		if(filter_pattern){
 			pg_log_warning("table %s already have a filter, second and later filter will not be used",
 			 table_include_patterns.head->val);
@@ -18238,6 +18238,4 @@ void addFilterString(char* filter){
 			simple_string_list_append(&filter_table_list,filter);
 		}
 	}
-
 };
-

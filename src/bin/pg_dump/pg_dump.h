@@ -747,7 +747,4 @@ extern void getPublicationNamespaces(Archive *fout);
 extern void getPublicationTables(Archive *fout, TableInfo tblinfo[],
 								 int numTables);
 extern void getSubscriptions(Archive *fout);
-extern char* getTableDataCondition(Oid table_oid);
-extern bool  parseFileToFilters(char* filename, DumpOptions *dopt);
-extern void addFilterString(char* filter);
 #endif							/* PG_DUMP_H */
