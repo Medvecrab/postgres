@@ -2621,18 +2621,23 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
  * If found filter is empty return null value.
  */
 static char*
-getTableDataCondition(Oid table_oid){
+getTableDataCondition(Oid table_oid)
+{
 	char *condition;
 	const char *preambula = "where ";
 	char *filter = NULL;
 	SimplePtrListCell* filter_bind = filter_bindigs.head;
 	
-	if (filter_table_list.head){
-		if (!table_include_patterns.head){
+	if (filter_table_list.head)
+	{
+		if (!table_include_patterns.head)
+		{
 			filter = filter_table_list.head->val;
-		}else{
+		}else
+		{
 			for(; filter_bind != NULL; filter_bind = filter_bind->next){
-				if( table_oid == ((FilterBinding*)filter_bind->ptr)->table_oid){
+				if( table_oid == ((FilterBinding*)filter_bind->ptr)->table_oid)
+				{
 					filter = ((FilterBinding*)filter_bind->ptr)->filter_ptr;
 					break;
 				}
@@ -2640,10 +2645,13 @@ getTableDataCondition(Oid table_oid){
 		}
 	}
 	
-	if (filter == NULL || strcmp(filter,"") == 0){
-		if( global_filter_where_condition == NULL){
+	if (filter == NULL || strcmp(filter,"") == 0)
+	{
+		if( global_filter_where_condition == NULL)
+		{
 			return filter;
 		}else{
+
 			filter = global_filter_where_condition;
 		}
 	}
@@ -18166,8 +18174,8 @@ appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
  *	  read file and convert its content into parametrs "-t" or "--where".
  */
 static bool
-parseFileToFilters(char* filename, DumpOptions *dopt){
-
+parseFileToFilters(char* filename, DumpOptions *dopt)
+{
 	FILE	    *fd;
 	char        filter_buffer[500];
 	char        *table_name;
@@ -18183,18 +18191,22 @@ parseFileToFilters(char* filename, DumpOptions *dopt){
 	while (fgets(filter_buffer,500,fd))
 	{
 		table_name = strtok(filter_buffer, " \n");
-		if(table_name){
+		if(table_name)
+		{
 			/*
 			 * If first word in string is "where", next filter will be global
 			 */
-			if(strcmp(table_name,"where") == 0){
+			if(strcmp(table_name,"where") == 0)
+			{
 				filter = strtok(NULL, "\n");
 				global_filter_where_condition = pg_strdup(filter);
-			}else{
+			}else
+			{
 				simple_string_list_append(&table_include_patterns, table_name);
 				dopt->include_everything = false;
 				filter = strtok(NULL, " ");
-				if(filter && strcmp(filter,"where") == 0){
+				if(filter && strcmp(filter,"where") == 0)
+				{
 					filter = strtok(NULL, "\n");
 					addFilterString(filter);
 				}
@@ -18212,23 +18224,30 @@ parseFileToFilters(char* filename, DumpOptions *dopt){
  * filters will be added to eliminate the difference
  */
 static void
-addFilterString(char* filter){
-	if(table_include_patterns.head == NULL){
+addFilterString(char* filter)
+{
+	if(table_include_patterns.head == NULL)
+	{
 		global_filter_where_condition = pg_strdup(filter);
-	}else{
+	}else
+	{
 		SimpleStringListCell* filter_pattern = filter_table_list.head;
 		for(SimpleStringListCell* table_pattern = table_include_patterns.head;
 			table_pattern->next != NULL; table_pattern = table_pattern->next){
-			if(filter_pattern == NULL){
+			if(filter_pattern == NULL)
+			{
 				simple_string_list_append(&filter_table_list,"");
-			}else{
+			}else
+			{
 				filter_pattern = filter_pattern->next;
 			}
 		}
-		if(filter_pattern){
+		if(filter_pattern)
+		{
 			pg_log_warning("table %s already have a filter, second and later filter will not be used",
 			 table_include_patterns.head->val);
-		}else{
+		}else
+		{
 			simple_string_list_append(&filter_table_list,filter);
 		}
 	}
