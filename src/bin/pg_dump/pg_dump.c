@@ -97,6 +97,14 @@ typedef enum OidOptions
 	zeroAsNone = 4
 } OidOptions;
 
+typedef struct
+{
+	char* column; 	/* name of masked column */
+	char* table;	/* name of table where masked column is stored */
+	char* func;		/* name of masking function */
+	char* schema;	/* name of schema where masking function is stored */
+} MaskColumnInfo;
+
 /* global decls */
 static bool dosync = true;		/* Issue fsync() to make dump durable on disk. */
 
@@ -106,19 +114,12 @@ static Oid	g_last_builtin_oid; /* value of the last builtin oid */
 static int	strict_names = 0;
 
 /*
-* Lists of arguments for masking functionality and
-* for one-to-one correspondance of columns and functions to mask them.
-* mask_corresponding_columns contains both names like "col_name" AND "table_name.col_name".
-* If an element of mask_corresponding_tables is an empty string, then mask
-* columns with corresponding name in ALL tables (where it is found)
+* mask_column_info_list contains info about every to-be-masked column:
+* its name, a name its table (if nothing is specified - mask all columns with this name),
+* name of masking function and name of schema containing this function (public if not specified)
 */
 
-static SimpleStringList mask_columns_list = {NULL, NULL};
-static SimpleStringList mask_func_list = {NULL, NULL};
-static SimpleStringList mask_corresponding_columns = {NULL, NULL};
-static SimpleStringList mask_corresponding_tables = {NULL, NULL};
-static SimpleStringList mask_corresponding_func = {NULL, NULL};
-static SimpleStringList mask_corresponding_schemas = {NULL, NULL};
+static SimplePtrList mask_column_info_list = {NULL, NULL};
 
 /*
  * Object inclusion/exclusion lists
@@ -175,6 +176,8 @@ static int	nseclabels = 0;
 				   (obj)->dobj.name)
 
 static void help(const char *progname);
+static void addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, 
+							 FILE* mask_func_file, DumpOptions* dopt);
 static void setup_connection(Archive *AH,
 							 const char *dumpencoding, const char *dumpsnapshot,
 							 char *use_role);
@@ -199,6 +202,8 @@ static void prohibit_crossdb_refs(PGconn *conn, const char *dbname,
 
 static NamespaceInfo *findNamespace(Oid nsoid);
 static void dumpTableData(Archive *fout, const TableDataInfo *tdinfo);
+static void maskColumns(TableInfo *tbinfo, char* current_column_name,
+						PQExpBuffer* q, SimpleStringList* column_names);
 static void refreshMatViewData(Archive *fout, const TableDataInfo *tdinfo);
 static const char *getRoleName(const char *roleoid_str);
 static void collectRoleNames(Archive *fout);
@@ -334,6 +339,7 @@ static char *get_synchronized_snapshot(Archive *fout);
 static void setupDumpWorker(Archive *AH);
 static TableInfo *getRootTableInfo(const TableInfo *tbinfo);
 
+
 int
 main(int argc, char **argv)
 {
@@ -358,16 +364,16 @@ main(int argc, char **argv)
 	int			plainText = 0;
 
 	/* needed for masking */
+	SimpleStringList mask_columns_list = {NULL, NULL};
+	SimpleStringList mask_func_list = {NULL, NULL};
 	SimpleStringListCell *mask_func_cell;
 	SimpleStringListCell *mask_columns_cell;
+	SimplePtrListCell	 *mask_column_info_cell;
 	char		*column_name_buffer;
 	char		*table_name_buffer;
 	char		*func_name_buffer;
 	char		*schema_name_buffer;
-	char		*conn_params = (char*)malloc(256 * sizeof(char));
-	bool 		conn_params_flags[4] = {false, false, false, false};
-	PGconn 		*connection;
-	FILE 		*mask_func_filepath;
+	FILE 		*mask_func_file;
 
 	ArchiveFormat archiveFormat = archUnknown;
 	ArchiveMode archiveMode;
@@ -501,7 +507,6 @@ main(int argc, char **argv)
 
 			case 'd':			/* database name */
 				dopt.cparams.dbname = pg_strdup(optarg);
-				conn_params_flags[0] = true;
 				break;
 
 			case 'e':			/* include extension(s) */
@@ -523,7 +528,6 @@ main(int argc, char **argv)
 
 			case 'h':			/* server host */
 				dopt.cparams.pghost = pg_strdup(optarg);
-				conn_params_flags[1] = true;
 				break;
 
 			case 'j':			/* number of dump jobs */
@@ -548,7 +552,6 @@ main(int argc, char **argv)
 
 			case 'p':			/* server port */
 				dopt.cparams.pgport = pg_strdup(optarg);
-				conn_params_flags[2] = true;
 				break;
 
 			case 'R':
@@ -574,7 +577,6 @@ main(int argc, char **argv)
 
 			case 'U':
 				dopt.cparams.username = pg_strdup(optarg);
-				conn_params_flags[3] = true;
 				break;
 
 			case 'v':			/* verbose */
@@ -678,7 +680,6 @@ main(int argc, char **argv)
 	if (optind < argc && dopt.cparams.dbname == NULL)
 	{
 		dopt.cparams.dbname = argv[optind++];
-		conn_params_flags[0] = true;
 	}
 	/* Complain if any arguments remain */
 	if (optind < argc)
@@ -702,22 +703,27 @@ main(int argc, char **argv)
 		dopt.sequence_data = 1;
 
 	/*
-	* add all columns and funcions to map
-	* all elements in mask_func should be just function names by now
+	* Add all columns and funcions to list of MaskColumnInfo structures,
 	*/
 
 	mask_func_cell = mask_func_list.head;
-
 	mask_columns_cell = mask_columns_list.head;
 
 	while (mask_columns_cell && mask_func_cell)
 	{
 		char* func = mask_func_cell->val;
 		char* column = strtok(mask_columns_cell->val, " ,\'\"");
+		char* table = (char*) pg_malloc(256 * sizeof(char));
+		char* schema = (char*) pg_malloc(256 * sizeof(char));
 		while (column != NULL)
 		{
-			simple_string_list_append(&mask_corresponding_columns, column);
-			simple_string_list_append(&mask_corresponding_func, func);
+			MaskColumnInfo* new_mask_column = (MaskColumnInfo*) pg_malloc(sizeof(MaskColumnInfo));
+			new_mask_column->column = column;
+			new_mask_column->table = table;
+			new_mask_column->func = func;
+			new_mask_column->schema = schema;
+			simple_ptr_list_append(&mask_column_info_list, new_mask_column);
+			table = (char*) pg_malloc(256 * sizeof(char));
 			column = strtok(NULL, " ,\'\"");
 		}
 		mask_columns_cell = mask_columns_cell->next;
@@ -732,142 +738,63 @@ main(int argc, char **argv)
 		pg_fatal("amount of --mask-columns and --mask-function doesn't match");
 
 	/*
-	* now we extract tablenames from list of columns - done here so that strtok isn't
+	* Extract tablenames from list of columns - done here so that strtok isn't
 	* disturbed in previous cycle
 	*/
 
-	mask_columns_cell = mask_corresponding_columns.head;
+	mask_column_info_cell = mask_column_info_list.head;
 
-	while (mask_columns_cell != NULL)
+	while (mask_column_info_cell != NULL)
 	{
-		table_name_buffer = strtok(mask_columns_cell->val, ".");
+		MaskColumnInfo* cur_mask_column_info = (MaskColumnInfo*) mask_column_info_cell->ptr;
+		table_name_buffer = strtok(cur_mask_column_info->column, ".");
 		column_name_buffer = strtok(NULL, ".");
 		if (column_name_buffer == NULL) /* found column without tablename */
 		{
-			simple_string_list_append(&mask_corresponding_tables, "");
-			strcpy(mask_columns_cell->val, table_name_buffer);
+			strcpy(cur_mask_column_info->table, "");
+			strcpy(cur_mask_column_info->column, table_name_buffer);
 		}
 		else
 		{
-			simple_string_list_append(&mask_corresponding_tables, table_name_buffer);
-			strcpy(mask_columns_cell->val, column_name_buffer);
+			strcpy(cur_mask_column_info->table, table_name_buffer);
+			strcpy(cur_mask_column_info->column, column_name_buffer);
 		}
-		mask_columns_cell = mask_columns_cell->next;
+		mask_column_info_cell = mask_column_info_cell->next;
 	}
 
 	/*
-	* now check if --mask-function is a name of function or a filepath
+	* Check if --mask-function is a name of function or a filepath
 	* if filepath - open file, start connection, execute script, close connection
 	*/
 
-	mask_func_cell = mask_corresponding_func.head;
+	mask_column_info_cell = mask_column_info_list.head;
 
-	while (mask_func_cell != NULL)
+	while (mask_column_info_cell != NULL)
 	{
-		func_name_buffer = pg_strdup(mask_func_cell->val);
+		MaskColumnInfo* cur_mask_column_info = (MaskColumnInfo*) mask_column_info_cell->ptr;
+		func_name_buffer = pg_strdup(cur_mask_column_info->func);
 		canonicalize_path(func_name_buffer);
-		mask_func_filepath = fopen(func_name_buffer, "r");
-		if (mask_func_filepath != NULL) /* then it is a file with function*/
+		mask_func_file = fopen(func_name_buffer, "r");
+		if (mask_func_file != NULL) /* then it is a file with function*/
 		{
-			char* mask_func_buffer = (char*)pg_malloc(sizeof(char));
-			char cur_char;
-			char querry_buffer[256]; /* only needed until function name */
-			char* tok_buffer = querry_buffer;
-			int querry_size = 0;
-			bool found_function_name = false, not_found_keyword = true;
-			while ((cur_char = fgetc(mask_func_filepath)) != EOF)
-			{
-				querry_size++;
-				mask_func_buffer = pg_realloc(mask_func_buffer, querry_size + 1);
-				mask_func_buffer[querry_size - 1] = cur_char;
-				mask_func_buffer[querry_size] = '\0';
-				if (!found_function_name)
-				{
-					querry_buffer[querry_size - 1] = cur_char;
-					querry_buffer[querry_size] = '\0';
-				}
-				if (!found_function_name && cur_char == ' ')
-				{
-					if(!not_found_keyword)
-					{
-						func_name_buffer = pg_strdup(strtok(tok_buffer, " \n"));
-						found_function_name = true;
-						querry_buffer[querry_size - 1] = ' ';
-					}
-					else
-					{
-						func_name_buffer = strtok(tok_buffer, " \n");
-						tok_buffer = NULL;
-						querry_buffer[querry_size - 1] = ' ';
-						for (int i = 0; i < strlen(func_name_buffer); i++)
-							func_name_buffer[i] = tolower(func_name_buffer[i]);
-						not_found_keyword = strcmp(func_name_buffer, "function ");
-					}
-				}
-			}
-
-			/* establishing connection to execute CREATE FUNCTION script */
-
-			strcpy(conn_params,"");
-
-			if(conn_params_flags[0])
-			{
-				strcat(conn_params, "dbname=");
-				strcat(conn_params, dopt.cparams.dbname);
-			}
-			if(conn_params_flags[1])
-			{
-				strcat(conn_params, " host=");
-				strcat(conn_params, dopt.cparams.pghost);
-			}
-			if(conn_params_flags[2])
-			{
-				strcat(conn_params, " port=");
-				strcat(conn_params, dopt.cparams.pgport);
-			}
-			if(conn_params_flags[3])
-			{
-				strcat(conn_params, " user=");
-				strcat(conn_params, dopt.cparams.username);
-			}
-
-			connection = PQconnectdb(conn_params);
-			PQexec(connection, mask_func_buffer);
-			PQfinish(connection);
-
-			schema_name_buffer = strtok(pg_strdup(func_name_buffer), ".");
-			func_name_buffer = strtok(NULL, ".");
-
-			if (func_name_buffer == NULL) /* found function without schemaname */
-			{
-				simple_string_list_append(&mask_corresponding_schemas, "public");
-				strcpy(mask_func_cell->val, schema_name_buffer);
-			}
-			else
-			{
-				simple_string_list_append(&mask_corresponding_schemas, schema_name_buffer);
-				strcpy(mask_func_cell->val, func_name_buffer);
-			}
-			free(conn_params);
+			addFuncToDatabase(cur_mask_column_info, mask_func_file, &dopt);
 		}
 		else /* function stored in DB*/
 		{
-			schema_name_buffer = strtok(mask_func_cell->val, ".");
+			schema_name_buffer = strtok(cur_mask_column_info->func, ".");
 			func_name_buffer = strtok(NULL, ".");
-
 			if (func_name_buffer == NULL) /* found function without schemaname */
 			{
-				simple_string_list_append(&mask_corresponding_schemas, "public");
-				strcpy(mask_func_cell->val, schema_name_buffer);
+				strcpy(cur_mask_column_info->schema, "public");
+				strcpy(cur_mask_column_info->func, schema_name_buffer);
 			}
 			else
 			{
-				simple_string_list_append(&mask_corresponding_schemas, schema_name_buffer);
-				strcpy(mask_func_cell->val, func_name_buffer);
+				strcpy(cur_mask_column_info->schema, schema_name_buffer);
+				strcpy(cur_mask_column_info->func, func_name_buffer);
 			}
-
 		}
-		mask_func_cell = mask_func_cell->next;
+		mask_column_info_cell = mask_column_info_cell->next;
 	}
 
 	if (dopt.dataOnly && dopt.schemaOnly)
@@ -1277,6 +1204,67 @@ help(const char *progname)
 			 "variable value is used.\n\n"));
 	printf(_("Report bugs to <%s>.\n"), PACKAGE_BUGREPORT);
 	printf(_("%s home page: <%s>\n"), PACKAGE_NAME, PACKAGE_URL);
+}
+
+/*
+* addFuncToDatabase - parses file specified in command line, executes query from it
+* adding masking function to database
+*/
+
+static void
+addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, FILE* mask_func_file, DumpOptions* dopt)
+{
+	PGconn *connection;
+	char* conn_params = (char*) pg_malloc(256 * sizeof(char));
+	char* func_name_buffer = (char*) pg_malloc(512 * sizeof(char));
+	char* schema_name_buffer;
+	PQExpBufferData query_buffer;
+	char* temp_buffer;
+	fgets(func_name_buffer, 512, mask_func_file);
+	temp_buffer = strtok(func_name_buffer, " \t\n");
+	while (pg_strcasecmp(temp_buffer, "function"))
+	{
+		temp_buffer = strtok(NULL, " \t\n");
+	}
+	func_name_buffer = strtok(NULL, " \t\n"); /* There's function name (and possibly schema name) here */
+	rewind(mask_func_file);
+	initPQExpBuffer(&query_buffer);
+	temp_buffer = (char*) pg_malloc(512 * sizeof(char));
+	while(fgets(temp_buffer, 512, mask_func_file))
+	{
+		appendPQExpBuffer(&query_buffer, "%s ", temp_buffer);
+	}
+
+	/* Establishing connection to execute CREATE FUNCTION script */
+
+	strcpy(conn_params, "");
+	if(dopt->cparams.override_dbname)
+		conn_params = psprintf("%s dbname=%s", conn_params, dopt->cparams.override_dbname);
+	else
+		if(dopt->cparams.dbname)
+			conn_params = psprintf("%s dbname=%s", conn_params, dopt->cparams.dbname);
+	if(dopt->cparams.pghost)
+		conn_params = psprintf("%s host=%s", conn_params, dopt->cparams.pghost);
+	if(dopt->cparams.pgport)
+		conn_params = psprintf("%s port=%s", conn_params, dopt->cparams.pgport);
+	if(dopt->cparams.username)
+		conn_params = psprintf("%s user=%s", conn_params, dopt->cparams.username);
+	connection = PQconnectdb(conn_params);
+	PQexec(connection, query_buffer.data);
+	PQfinish(connection);
+	schema_name_buffer = strtok(pg_strdup(func_name_buffer), ".");
+	func_name_buffer = strtok(NULL, ".");
+	if (func_name_buffer == NULL) /* found function without schemaname */
+	{
+		strcpy(cur_mask_column_info->schema, "public");
+		strcpy(cur_mask_column_info->func, schema_name_buffer);
+	}
+	else
+	{
+		strcpy(cur_mask_column_info->schema, schema_name_buffer);
+		strcpy(cur_mask_column_info->func, func_name_buffer);
+	}
+	free(conn_params);
 }
 
 static void
@@ -2173,8 +2161,8 @@ static int
 dumpTableData_copy(Archive *fout, const void *dcontext)
 {
 	TableDataInfo *tdinfo = (TableDataInfo *) dcontext;
-	TableInfo	*tbinfo = tdinfo->tdtable;
-	const char	*classname = tbinfo->dobj.name;
+	TableInfo  *tbinfo = tdinfo->tdtable;
+	const char *classname = tbinfo->dobj.name;
 	PQExpBuffer q = createPQExpBuffer();
 
 	/*
@@ -2182,8 +2170,8 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	 * which uses it already.
 	 */
 	PQExpBuffer clistBuf = createPQExpBuffer();
-	PGconn		*conn = GetConnection(fout);
-	PGresult	*res;
+	PGconn	  *conn = GetConnection(fout);
+	PGresult  *res;
 	int			ret;
 	char		*copybuf;
 	const char	*column_list;
@@ -2207,67 +2195,18 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	 * For other cases a simple COPY suffices.
 	 */
 	if (tdinfo->filtercond || tbinfo->relkind == RELKIND_FOREIGN_TABLE
-		|| mask_corresponding_columns.head)
+		|| mask_column_info_list.head)
 	{
 		appendPQExpBufferStr(q, "COPY (SELECT ");
 		/* klugery to get rid of parens in column list */
 		if (strlen(column_list) > 2)
 		{
-			if (mask_corresponding_columns.head != NULL)
+			if (mask_column_info_list.head != NULL)
 			{
 				/*taking columns that should be masked */
-				char* copy_column_list = pg_strdup(column_list);
-				char* current_column_name = strtok(copy_column_list, " ,()");
-				while (current_column_name != NULL)
-					{
-						SimpleStringListCell* current_column_cell = mask_corresponding_columns.head;
-						SimpleStringListCell* current_table_cell = mask_corresponding_tables.head;
-						SimpleStringListCell* current_func_cell = mask_corresponding_func.head;
-						SimpleStringListCell* current_schema_cell = mask_corresponding_schemas.head;
-						while (current_column_cell != NULL &&
-							  (strcmp(current_column_cell->val, current_column_name) ||
-							  (!strcmp(current_column_cell->val, current_column_name) &&
-								strcmp(current_table_cell->val, tbinfo->dobj.name))))
-							{
-								if (!strcmp(current_table_cell->val, "") &&
-									!strcmp(current_column_cell->val, current_column_name))
-									break;
-								current_column_cell = current_column_cell->next;
-								current_table_cell = current_table_cell->next;
-								current_func_cell = current_func_cell->next;
-								current_schema_cell = current_schema_cell->next;
-							}
-						if (current_column_cell != NULL)
-						{
-							/*current table name is stored in tbinfo->dobj.name*/
-
-							if (!strcmp(current_table_cell->val, "") ||
-								!strcmp(current_table_cell->val, tbinfo->dobj.name))
-							{
-								strcpy(temp_string, current_schema_cell->val);
-								strcat(temp_string, ".");
-								strcat(temp_string, current_func_cell->val);
-								strcat(temp_string, "(");
-								strcat(temp_string, current_column_name);
-								strcat(temp_string, ")");
-
-							}
-							else
-							{
-								strcpy(temp_string, "");
-								strcat(temp_string, current_column_name);
-							}
-						}
-						else
-						{
-							strcpy(temp_string, "");
-							strcat(temp_string, current_column_name);
-						}
-						current_column_name = strtok(NULL, " ,()");
-						if (current_column_name != NULL)
-								strcat(temp_string, ", ");
-						appendPQExpBufferStr(q, temp_string);
-					}
+				/*char* copy_column_list = pg_strdup(column_list);
+				char* current_column_name = strtok(copy_column_list, " ,()");*/
+				maskColumns(tbinfo, pg_strdup(column_list), &q, NULL);
 			}
 			else
 			{
@@ -2399,17 +2338,16 @@ static int
 dumpTableData_insert(Archive *fout, const void *dcontext)
 {
 	TableDataInfo *tdinfo = (TableDataInfo *) dcontext;
-	TableInfo	*tbinfo = tdinfo->tdtable;
+	TableInfo  *tbinfo = tdinfo->tdtable;
 	DumpOptions *dopt = fout->dopt;
 	PQExpBuffer q = createPQExpBuffer();
 	PQExpBuffer insertStmt = NULL;
-	char		*attgenerated;
-	PGresult	*res;
+	char	  *attgenerated;
+	PGresult  *res;
 	int			nfields,
 				i;
 	int			rows_per_statement = dopt->dump_inserts;
 	int			rows_this_statement = 0;
-	char 		*temp_string = (char*)malloc(256 * sizeof(char));
 	/*for masking*/
 
 	SimpleStringList column_names = {NULL, NULL};
@@ -2440,61 +2378,12 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 		}
 		else
 		{
-			if (mask_corresponding_columns.head != NULL)
+			if (mask_column_info_list.head != NULL)
 			{
 				/*taking columns that should be masked */
-				char* copy_column_list = pg_strdup(tbinfo->attnames[i]);
-				char* current_column_name = strtok(copy_column_list, " ,()");
-				while (current_column_name != NULL)
-					{
-						SimpleStringListCell* current_column_cell = mask_corresponding_columns.head;
-						SimpleStringListCell* current_table_cell = mask_corresponding_tables.head;
-						SimpleStringListCell* current_func_cell = mask_corresponding_func.head;
-						SimpleStringListCell* current_schema_cell = mask_corresponding_schemas.head;
-						while (current_column_cell != NULL &&
-							  (strcmp(current_column_cell->val, current_column_name) ||
-							  (!strcmp(current_column_cell->val, current_column_name) &&
-								strcmp(current_table_cell->val, tbinfo->dobj.name))))
-							{
-								if (!strcmp(current_table_cell->val, "") &&
-									!strcmp(current_column_cell->val, current_column_name))
-									break;
-								current_column_cell = current_column_cell->next;
-								current_table_cell = current_table_cell->next;
-								current_func_cell = current_func_cell->next;
-								current_schema_cell = current_schema_cell->next;
-							}
-						if (current_column_cell != NULL)
-						{
-							/*current table name is stored in tbinfo->dobj.name*/
-							if (!strcmp(current_table_cell->val, "") ||
-								!strcmp(current_table_cell->val, tbinfo->dobj.name))
-							{
-								strcpy(temp_string, current_schema_cell->val);
-								strcat(temp_string, ".");
-								strcat(temp_string, current_func_cell->val);
-								strcat(temp_string, "(");
-								strcat(temp_string, current_column_name);
-								strcat(temp_string, ")");
-
-							}
-							else
-							{
-								strcpy(temp_string, "");
-								strcat(temp_string, current_column_name);
-							}
-						}
-						else
-						{
-							strcpy(temp_string, "");
-							strcat(temp_string, current_column_name);
-						}
-						simple_string_list_append(&column_names, current_column_name);
-						current_column_name = strtok(NULL, " ,()");
-						if (current_column_name != NULL)
-								strcat(temp_string, ", ");
-						appendPQExpBufferStr(q, temp_string);
-					}
+				/*char* copy_column_list = pg_strdup(tbinfo->attnames[i]);
+				char* current_column_name = strtok(copy_column_list, " ,()");*/
+				maskColumns(tbinfo, tbinfo->attnames[i], &q, &column_names);
 			}
 			else
 			{
@@ -2505,8 +2394,6 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 		attgenerated[nfields] = tbinfo->attgenerated[i];
 		nfields++;
 	}
-
-	free(temp_string);
 
 	/* Servers before 9.4 will complain about zero-column SELECT */
 	if (nfields == 0)
@@ -2722,6 +2609,58 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 	free(attgenerated);
 
 	return 1;
+}
+
+/*
+* maskColumns - modifies SELECT queries to mask columns that need masking
+* last argument is only for INSERT case, not used in COPY case.
+*/
+
+static void
+maskColumns(TableInfo *tbinfo, char* column_list, PQExpBuffer* q, SimpleStringList* column_names)
+{
+	char* copy_column_list = pg_strdup(column_list);
+	char* current_column_name = strtok(copy_column_list, " ,()");
+	char* masked_query = (char*)pg_malloc(sizeof(char));
+
+	while (current_column_name != NULL)
+	{
+		SimplePtrListCell* mask_column_info_cell = mask_column_info_list.head;
+		MaskColumnInfo* cur_mask_column_info = (MaskColumnInfo*) mask_column_info_cell->ptr;
+		while (mask_column_info_cell != NULL &&
+			  (strcmp(cur_mask_column_info->column, current_column_name) ||
+				strcmp(cur_mask_column_info->table, tbinfo->dobj.name)))
+			{
+				if (!strcmp(cur_mask_column_info->table, "") &&
+					!strcmp(cur_mask_column_info->column, current_column_name))
+					break;
+
+				mask_column_info_cell = mask_column_info_cell->next;
+				if (mask_column_info_cell)
+					cur_mask_column_info = (MaskColumnInfo*) mask_column_info_cell->ptr;
+			}
+
+		if (mask_column_info_cell != NULL)
+		{
+			/*current table name is stored in tbinfo->dobj.name*/
+			if (!strcmp(cur_mask_column_info->table, "") ||
+				!strcmp(cur_mask_column_info->table, tbinfo->dobj.name))
+				masked_query = psprintf("%s.%s(%s)", cur_mask_column_info->schema,
+										cur_mask_column_info->func, current_column_name);
+			else
+				masked_query = psprintf("%s", current_column_name);
+		}
+		else
+			masked_query = psprintf("%s", current_column_name);
+
+		if (column_names)
+			simple_string_list_append(column_names, current_column_name);
+		current_column_name = strtok(NULL, " ,()");
+		if (current_column_name != NULL)
+			masked_query = psprintf("%s, ", masked_query);
+		appendPQExpBufferStr(*q, masked_query);
+	}
+	free(masked_query);
 }
 
 /*
