@@ -228,11 +228,11 @@ foreach my $test (sort keys %tests)
 $node->command_fails_like(
 	['pg_dump', 'postgres', '-f', "$tempdir/test_mask_ids_file.sql",
 	 '-t', 't0', '--mask-columns', 'id', '--mask-function', "$tempdir/mask_drop_table.sql" ],
-	qr/\Qpg_dump: error: Dumping the contents of table "t0" failed: PQgetResult() failed.
-detail: Error message from server: ERROR:  cannot execute DROP TABLE in a read-only transaction
+	qr/\Qg_dump: error: Dumping the contents of table "t0" failed: PQgetResult() failed.
+pg_dump: detail: Error message from server: ERROR:  cannot execute DROP TABLE in a read-only transaction
 CONTEXT:  SQL statement "DROP TABLE t0"
 PL\/pgSQL function public.f_int(integer) line 3 at SQL statement
-detail: Command was: COPY (SELECT public.f_int(id), t FROM public.t0 ) TO stdout;\E/,
+pg_dump: detail: Command was: COPY (SELECT public.f_int(id), t FROM public.t0 ) TO stdout;\E/,
 	'trying to drop table during dump');
 
 #security test - it shouldn't be possible to execute GRANT during dump
@@ -243,10 +243,10 @@ $node->command_fails_like(
 	['pg_dump', 'postgres', '-f', "$tempdir/test_mask_ids_file.sql",
 	 '-t', 't0', '--mask-columns', 'id', '--mask-function', "$tempdir/mask_grant.sql" ],
 	qr/\Qpg_dump: error: Dumping the contents of table "t0" failed: PQgetResult() failed.
-detail: Error message from server: ERROR:  cannot execute GRANT in a read-only transaction
+pg_dump: detail: Error message from server: ERROR:  cannot execute GRANT in a read-only transaction
 CONTEXT:  SQL statement "GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO tester"
 PL\/pgSQL function public.f_int(integer) line 4 at SQL statement
-detail: Command was: COPY (SELECT public.f_int(id), t FROM public.t0 ) TO stdout;\E/,
+pg_dump: detail: Command was: COPY (SELECT public.f_int(id), t FROM public.t0 ) TO stdout;\E/,
 	'trying to drop table during dump');
 
 
