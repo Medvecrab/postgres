@@ -1171,6 +1171,11 @@ help(const char *progname)
 			 "                               servers matching PATTERN\n"));
 	printf(_("  --inserts                    dump data as INSERT commands, rather than COPY\n"));
 	printf(_("  --load-via-partition-root    load partitions via the root table\n"));
+	printf(_("  --mask-columns               names of columns that will be masked \n"
+			 "                               if table name is not specified, mask in all tables\n"));
+	printf(_("  --mask-function              name of function that will mask corresponding columns\n"
+			 "                               can specify schema in which function is stored\n"
+			 "								 can use filepath to file with function arguments\n"));
 	printf(_("  --no-comments                do not dump comments\n"));
 	printf(_("  --no-publications            do not dump publications\n"));
 	printf(_("  --no-security-labels         do not dump security label assignments\n"));
@@ -1211,29 +1216,39 @@ help(const char *progname)
 * adding masking function to database
 */
 
+//TODO - поменять структуру файла, и сделать составление запроса внутри кода
+//структура файла - func_name\n argument_type\n func_language\n function_body\n
+
 static void
 addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, FILE* mask_func_file, DumpOptions* dopt)
 {
 	PGconn *connection;
+	PQExpBufferData query;
 	char* conn_params = (char*) pg_malloc(256 * sizeof(char));
-	char* func_name_buffer = (char*) pg_malloc(512 * sizeof(char));
-	char* schema_name_buffer;
-	PQExpBufferData query_buffer;
-	char* temp_buffer;
-	fgets(func_name_buffer, 512, mask_func_file);
-	temp_buffer = strtok(func_name_buffer, " \t\n");
-	while (pg_strcasecmp(temp_buffer, "function"))
+	char* common_buff = (char*) pg_malloc(64 * sizeof(char));
+	char* func_name_buff = (char*) pg_malloc(64 * sizeof(char));
+	char* argument_type_buff = (char*) pg_malloc(64 * sizeof(char));
+	char* func_language_buff = (char*) pg_malloc(64 * sizeof(char));
+	char* func_body_buff = (char*) pg_malloc(512 * sizeof(char));
+	char* schema_name_buff = (char*) pg_malloc(64 * sizeof(char));
+
+	fgets(common_buff, 64, mask_func_file);
+	func_name_buff = strdup(strtok(common_buff, " ,\n\t"));
+	fgets(common_buff, 64, mask_func_file);
+	argument_type_buff = strdup(strtok(common_buff, " .,\n\t"));
+	fgets(common_buff, 64, mask_func_file);
+	func_language_buff = strdup(strtok(common_buff, " ,\n\t"));
+	free(common_buff);
+	common_buff = (char*) pg_malloc(512 * sizeof(char));
+	while(fgets(common_buff, 512, mask_func_file))
 	{
-		temp_buffer = strtok(NULL, " \t\n");
+		func_body_buff = psprintf("%s%s", func_body_buff, common_buff);
 	}
-	func_name_buffer = strtok(NULL, " \t\n"); /* There's function name (and possibly schema name) here */
-	rewind(mask_func_file);
-	initPQExpBuffer(&query_buffer);
-	temp_buffer = (char*) pg_malloc(512 * sizeof(char));
-	while(fgets(temp_buffer, 512, mask_func_file))
-	{
-		appendPQExpBuffer(&query_buffer, "%s ", temp_buffer);
-	}
+	
+	initPQExpBuffer(&query);
+	appendPQExpBuffer(&query, "CREATE OR REPLACE FUNCTION %s (IN elem %s, OUT res %s) RETURNS %s AS $BODY$ \nBEGIN\n%s\nRETURN;\nEND\n$BODY$ LANGUAGE %s;",
+	 						func_name_buff, argument_type_buff, argument_type_buff, argument_type_buff,
+							func_body_buff, func_language_buff);
 
 	/* Establishing connection to execute CREATE FUNCTION script */
 
@@ -1250,19 +1265,19 @@ addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, FILE* mask_func_file, Du
 	if(dopt->cparams.username)
 		conn_params = psprintf("%s user=%s", conn_params, dopt->cparams.username);
 	connection = PQconnectdb(conn_params);
-	PQexec(connection, query_buffer.data);
+	PQexec(connection, query.data);
 	PQfinish(connection);
-	schema_name_buffer = strtok(pg_strdup(func_name_buffer), ".");
-	func_name_buffer = strtok(NULL, ".");
-	if (func_name_buffer == NULL) /* found function without schemaname */
+	schema_name_buff = strtok(pg_strdup(func_name_buff), ".");
+	func_name_buff = strtok(NULL, ".");
+	if (func_name_buff == NULL) /* found function without schemaname */
 	{
 		strcpy(cur_mask_column_info->schema, "public");
-		strcpy(cur_mask_column_info->func, schema_name_buffer);
+		strcpy(cur_mask_column_info->func, schema_name_buff);
 	}
 	else
 	{
-		strcpy(cur_mask_column_info->schema, schema_name_buffer);
-		strcpy(cur_mask_column_info->func, func_name_buffer);
+		strcpy(cur_mask_column_info->schema, schema_name_buff);
+		strcpy(cur_mask_column_info->func, func_name_buff);
 	}
 	free(conn_params);
 }
