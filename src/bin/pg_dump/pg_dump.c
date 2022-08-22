@@ -1039,9 +1039,6 @@ help(const char *progname)
 	printf(_("  -s, --schema-only            dump only the schema, no data\n"));
 	printf(_("  -S, --superuser=NAME         superuser user name to use in plain-text format\n"));
 	printf(_("  -t, --table=PATTERN          dump the specified table(s) only\n"));
-	printf(_("  --where=WHEREDEFENITION      set WHERE condition to filter data rows for last specified table.\n"
-			 "                               if it send before table pattern, all data in base will be filtered\n"));
-	printf(_("  --filter-file=FILEPATH       dump only specified tables and rows scribled in file\n"));
 	printf(_("  -T, --exclude-table=PATTERN  do NOT dump the specified table(s)\n"));
 	printf(_("  -x, --no-privileges          do not dump privileges (grant/revoke)\n"));
 	printf(_("  --binary-upgrade             for use by upgrade utilities only\n"));
@@ -1052,6 +1049,7 @@ help(const char *progname)
 			 "                               access to)\n"));
 	printf(_("  --exclude-table-data=PATTERN do NOT dump data for the specified table(s)\n"));
 	printf(_("  --extra-float-digits=NUM     override default setting for extra_float_digits\n"));
+	printf(_("  --filter-file=FILEPATH       dump only specified tables and rows scribled in file\n"));
 	printf(_("  --if-exists                  use IF EXISTS when dropping objects\n"));
 	printf(_("  --include-foreign-data=PATTERN\n"
 			 "                               include data of foreign tables on foreign\n"
@@ -1077,6 +1075,8 @@ help(const char *progname)
 	printf(_("  --use-set-session-authorization\n"
 			 "                               use SET SESSION AUTHORIZATION commands instead of\n"
 			 "                               ALTER OWNER commands to set ownership\n"));
+	printf(_("  --where=WHEREDEFENITION      set WHERE condition to filter data rows for last specified table.\n"
+			 "                               if it sent before table pattern, all data in base will be filtered\n"));
 
 	printf(_("\nConnection options:\n"));
 	printf(_("  -d, --dbname=DBNAME      database to dump\n"));
@@ -2623,8 +2623,6 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
 static char*
 getTableDataCondition(Oid table_oid)
 {
-	char *condition;
-	const char *preambula = "where ";
 	char *filter = NULL;
 	SimplePtrListCell* filter_bind = filter_bindigs.head;
 	
@@ -2656,10 +2654,7 @@ getTableDataCondition(Oid table_oid)
 		}
 	}
 	
-	condition = pg_malloc(strlen(filter) + strlen(preambula));
-	strcpy(condition, preambula);
-	strcat(condition, filter);
-	return condition;
+	return psprintf("where %s", filter);
 }
 
 
@@ -18185,7 +18180,7 @@ parseFileToFilters(char* filename, DumpOptions *dopt)
 	fd = fopen(filename, PG_BINARY_R);
 	if (!fd)
 	{
-		pg_log_error("file %s is not exist", filename);
+		pg_log_error("file %s does not exist", filename);
 		return EXIT_FAILURE;
 	}
 	while (fgets(filter_buffer,500,fd))
@@ -18219,7 +18214,7 @@ parseFileToFilters(char* filename, DumpOptions *dopt)
 
 /*
  * addFilterString -
- *	  add condition string in local filter list or in gloabal filter.
+ *	  add condition string in local filter list or in global filter.
  * Note: if there are more table templates than filter conditions then empty
  * filters will be added to eliminate the difference
  */
@@ -18232,8 +18227,8 @@ addFilterString(char* filter)
 	}else
 	{
 		SimpleStringListCell* filter_pattern = filter_table_list.head;
-		for(SimpleStringListCell* table_pattern = table_include_patterns.head;
-			table_pattern->next != NULL; table_pattern = table_pattern->next){
+		SimpleStringListCell* table_pattern = table_include_patterns.head;
+		for(; table_pattern->next; table_pattern = table_pattern->next){
 			if(filter_pattern == NULL)
 			{
 				simple_string_list_append(&filter_table_list,"");
@@ -18244,8 +18239,7 @@ addFilterString(char* filter)
 		}
 		if(filter_pattern)
 		{
-			pg_log_warning("table %s already have a filter, second and later filter will not be used",
-			 table_include_patterns.head->val);
+			pg_log_warning("table %s already have a filter, second and later filter will not be used", table_pattern->val);
 		}else
 		{
 			simple_string_list_append(&filter_table_list,filter);
