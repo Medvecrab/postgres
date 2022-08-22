@@ -2170,12 +2170,12 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	 * which uses it already.
 	 */
 	PQExpBuffer clistBuf = createPQExpBuffer();
-	PGconn	  *conn = GetConnection(fout);
-	PGresult  *res;
+	PGconn	   *conn = GetConnection(fout);
+	PGresult   *res;
 	int			ret;
-	char		*copybuf;
-	const char	*column_list;
-	char		*temp_string = (char*)malloc(256 * sizeof(char));
+	char	   *copybuf;
+	const char *column_list;
+	char	   *temp_string = (char*)malloc(256 * sizeof(char));
 
 	pg_log_info("dumping contents of table \"%s.%s\"",
 				tbinfo->dobj.namespace->dobj.name, classname);
