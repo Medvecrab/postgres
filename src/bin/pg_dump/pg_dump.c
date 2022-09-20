@@ -99,9 +99,10 @@ typedef enum OidOptions
 
 typedef struct
 {
-	char* filter_ptr;	/* filter where condition */
-	Oid	table_oid;			/* table OID */
-}FilterBinding;
+	char			*table_pattern; /* name pattern of filtered table */
+	char			*filter_condition;	/* filter where condition */
+	SimpleOidList	 table_oids;	/* filtered tables OIDs */
+}WhereConditionData;
 
 
 /* global decls */
@@ -133,7 +134,6 @@ static SimpleStringList foreign_servers_include_patterns = {NULL, NULL};
 static SimpleOidList foreign_servers_include_oids = {NULL, NULL};
 
 static SimpleStringList extension_include_patterns = {NULL, NULL};
-static SimpleStringList filter_table_list = {NULL, NULL};
 
 static SimpleOidList extension_include_oids = {NULL, NULL};
 
@@ -331,7 +331,8 @@ static TableInfo *getRootTableInfo(const TableInfo *tbinfo);
 static char* getTableDataCondition(Oid table_oid);
 static bool  parseFileToFilters(char* filename, DumpOptions *dopt);
 static void addFilterString(char* filter);
-
+static void supplement_where_condition_data_with_oids(Archive *fount,
+													  bool strict_names);
 int
 main(int argc, char **argv)
 {
@@ -812,6 +813,11 @@ main(int argc, char **argv)
 	expand_table_name_patterns(fout, &tabledata_exclude_patterns,
 							   &tabledata_exclude_oids,
 							   false);
+
+	if(filter_bindigs.head != NULL)
+	{
+		supplement_where_condition_data_with_oids(fout,strict_names);
+	}
 
 	expand_foreign_server_name_patterns(fout, &foreign_servers_include_patterns,
 										&foreign_servers_include_oids);
@@ -1471,8 +1477,6 @@ expand_table_name_patterns(Archive *fout,
 	PQExpBuffer query;
 	PGresult   *res;
 	SimpleStringListCell *cell;
-	SimpleStringListCell *filter_cell;
-	FilterBinding *filter_bind;
 	int			i;
 
 	if (patterns->head == NULL)
@@ -1485,7 +1489,6 @@ expand_table_name_patterns(Archive *fout,
 	 * we don't care.
 	 */
 
-	filter_cell = filter_table_list.head;
 	for (cell = patterns->head; cell; cell = cell->next)
 	{
 		/*
@@ -1517,16 +1520,6 @@ expand_table_name_patterns(Archive *fout,
 		for (i = 0; i < PQntuples(res); i++)
 		{
 			simple_oid_list_append(oids, atooid(PQgetvalue(res, i, 0)));
-			if(filter_cell){
-				filter_bind = (FilterBinding*) pg_malloc(sizeof(FilterBinding));
-				filter_bind->filter_ptr = filter_cell->val;
-				filter_bind->table_oid = atooid(PQgetvalue(res, i, 0));
-				simple_ptr_list_append(&filter_bindigs, filter_bind);
-			}
-		}
-
-		if(filter_cell){
-			filter_cell = filter_cell->next;
 		}
 
 		PQclear(res);
@@ -2623,22 +2616,20 @@ makeTableDataInfo(DumpOptions *dopt, TableInfo *tbinfo)
 static char*
 getTableDataCondition(Oid table_oid)
 {
-	char *filter = NULL;
-	SimplePtrListCell* filter_bind = filter_bindigs.head;
-	
-	if (filter_table_list.head)
+	char		*filter = NULL;
+
+	for(SimplePtrListCell *filter_bind = filter_bindigs.head;
+		filter_bind != NULL;
+		filter_bind = filter_bind->next)
 	{
-		if (!table_include_patterns.head)
+		WhereConditionData *condition_data = (WhereConditionData*)filter_bind->ptr;
+		for(SimpleOidListCell *table_oid_cell = condition_data->table_oids.head;
+			table_oid_cell != NULL;
+			table_oid_cell = table_oid_cell->next)
 		{
-			filter = filter_table_list.head->val;
-		}else
-		{
-			for(; filter_bind != NULL; filter_bind = filter_bind->next){
-				if( table_oid == ((FilterBinding*)filter_bind->ptr)->table_oid)
-				{
-					filter = ((FilterBinding*)filter_bind->ptr)->filter_ptr;
-					break;
-				}
+			if(table_oid_cell->val == table_oid){
+				filter = condition_data->filter_condition;
+				break;
 			}
 		}
 	}
@@ -2653,7 +2644,6 @@ getTableDataCondition(Oid table_oid)
 			filter = global_filter_where_condition;
 		}
 	}
-	
 	return psprintf("where %s", filter);
 }
 
@@ -18169,7 +18159,7 @@ appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
  *	  read file and convert its content into parametrs "-t" or "--where".
  */
 static bool
-parseFileToFilters(char* filename, DumpOptions *dopt)
+parseFileToFilters(char *filename, DumpOptions *dopt)
 {
 	FILE	    *fd;
 	char        filter_buffer[500];
@@ -18210,39 +18200,55 @@ parseFileToFilters(char* filename, DumpOptions *dopt)
 	}
 	fclose(fd);
 	return EXIT_SUCCESS;
-};
+}
 
 /*
  * addFilterString -
  *	  add condition string in local filter list or in global filter.
- * Note: if there are more table templates than filter conditions then empty
- * filters will be added to eliminate the difference
+ * Note:
  */
+//TODO: complite correct documentation commentariy
 static void
 addFilterString(char* filter)
 {
-	if(table_include_patterns.head == NULL)
+	WhereConditionData	*condition_data;
+	char				*table_pattern;
+	char				*where_condition;
+
+	table_pattern = strtok(filter, "@");
+	where_condition = strtok(NULL, "@");
+	if(where_condition == NULL)
 	{
-		global_filter_where_condition = pg_strdup(filter);
-	}else
-	{
-		SimpleStringListCell* filter_pattern = filter_table_list.head;
-		SimpleStringListCell* table_pattern = table_include_patterns.head;
-		for(; table_pattern->next; table_pattern = table_pattern->next){
-			if(filter_pattern == NULL)
-			{
-				simple_string_list_append(&filter_table_list,"");
-			}else
-			{
-				filter_pattern = filter_pattern->next;
-			}
-		}
-		if(filter_pattern)
+		if(table_include_patterns.head == NULL)
 		{
-			pg_log_warning("table %s already have a filter, second and later filter will not be used", table_pattern->val);
+			global_filter_where_condition = pg_strdup(filter);
 		}else
 		{
-			simple_string_list_append(&filter_table_list,filter);
+			condition_data = pg_malloc(sizeof(WhereConditionData));
+			condition_data->filter_condition = filter;
+			condition_data->table_pattern = table_include_patterns.head->val;
+			simple_ptr_list_append(&filter_bindigs, condition_data);
 		}
+	}else{
+		condition_data = pg_malloc(sizeof(WhereConditionData));
+		condition_data->filter_condition = where_condition;
+		condition_data->table_pattern = table_pattern;
+		simple_ptr_list_append(&filter_bindigs, condition_data);
 	}
-};
+}
+
+static void
+supplement_where_condition_data_with_oids(Archive *fount, bool strict_names)
+{
+	for(SimplePtrListCell *filter_bind = filter_bindigs.head;
+		filter_bind;
+		filter_bind = filter_bind->next
+		)
+	{
+		SimpleStringList 	*patterns = pg_malloc(sizeof(SimpleStringList));
+		WhereConditionData 	*condition_data = (WhereConditionData*)filter_bind->ptr;
+
+		simple_string_list_append(patterns, condition_data->table_pattern);
+		expand_table_name_patterns(fount, patterns, &condition_data->table_oids ,strict_names);
+	}
+}
