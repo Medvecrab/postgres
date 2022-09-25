@@ -62,8 +62,6 @@ my %default_regexp = (
 );
 
 
-
-
 my %tests = (
     'gloabl filter' => {
 		regexp => $default_regexp{'double_filter'},
@@ -76,7 +74,8 @@ my %tests = (
             },
     'local filter' => {
 		regexp => $default_regexp{'only_one_filter'},
-        file => 't0 where a > 3',
+        file => "t0 \n"
+                ."t0 where a > 3",
 		dump => [
             'pg_dump',
             'postgres',
@@ -86,8 +85,7 @@ my %tests = (
             },
     'local filter with second no filter table' => {
 		regexp => $default_regexp{'one_filter'},
-        file =>  "t0 where a > 3 \n"
-                ."t1",
+        file =>  "t0 where a > 3 \n",
 		dump => [
             'pg_dump',
             'postgres',
@@ -99,8 +97,7 @@ my %tests = (
         },
     'local filter with first no filter table' => {
 		regexp => $default_regexp{'two_filter'},
-        file =>  "t0 \n"
-                ."t1 where a > 3",
+        file =>  "t1 where a > 3",
 		dump => [
             'pg_dump',
             'postgres',
@@ -108,6 +105,17 @@ my %tests = (
             '-t', 't0',
             '-t', 't1',
             '--where', 'a > 3',
+            ]
+        },
+    
+    'local filter with half name' => {
+		regexp => $default_regexp{'two_filter'},
+        file =>  "t1 where a > 3",
+		dump => [
+            'pg_dump',
+            'postgres',
+            '-f', "$tempdir/local filter with half name.sql",
+            '--where', 't1@a > 3',
             ]
         },
 
@@ -126,7 +134,6 @@ my %tests = (
     'gloabal with loacal filter' => {
 		regexp => $default_regexp{'revers_filter'},
         file =>  "where a > 3\n"
-                ."t0\n"
                 ."t1 where a < 3",
 		dump => [
             'pg_dump',
@@ -165,8 +172,6 @@ foreach my $test (sort keys %tests)
 
    	my $output_file_f = slurp_file("$tempdir/${test} with file.sql");
     ok($output_file_f =~ $tests{$test}->{regexp}, "$test with file: should be dumped");
-
-
 }
 
 done_testing();

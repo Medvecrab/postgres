@@ -328,11 +328,14 @@ static void appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
 static char *get_synchronized_snapshot(Archive *fout);
 static void setupDumpWorker(Archive *AHX);
 static TableInfo *getRootTableInfo(const TableInfo *tbinfo);
-static char* getTableDataCondition(Oid table_oid);
-static bool  parseFileToFilters(char* filename, DumpOptions *dopt);
+static char *getTableDataCondition(Oid table_oid);
+static bool parseFileToFilters(char* filename, DumpOptions *dopt);
 static void addFilterString(char* filter);
-static void supplement_where_condition_data_with_oids(Archive *fount,
+static void supplementWhereConditionDataWithOids(Archive *fount,
 													  bool strict_names);
+static void appendWhereConditionData(char *filter_contition,
+													   char *tabe_pattern);
+
 int
 main(int argc, char **argv)
 {
@@ -816,7 +819,7 @@ main(int argc, char **argv)
 
 	if(filter_bindigs.head != NULL)
 	{
-		supplement_where_condition_data_with_oids(fout,strict_names);
+		supplementWhereConditionDataWithOids(fout,strict_names);
 	}
 
 	expand_foreign_server_name_patterns(fout, &foreign_servers_include_patterns,
@@ -2623,14 +2626,9 @@ getTableDataCondition(Oid table_oid)
 		filter_bind = filter_bind->next)
 	{
 		WhereConditionData *condition_data = (WhereConditionData*)filter_bind->ptr;
-		for(SimpleOidListCell *table_oid_cell = condition_data->table_oids.head;
-			table_oid_cell != NULL;
-			table_oid_cell = table_oid_cell->next)
+		if(simple_oid_list_member(&condition_data->table_oids, table_oid))
 		{
-			if(table_oid_cell->val == table_oid){
-				filter = condition_data->filter_condition;
-				break;
-			}
+			filter = condition_data->filter_condition;
 		}
 	}
 	
@@ -18185,15 +18183,19 @@ parseFileToFilters(char *filename, DumpOptions *dopt)
 			{
 				filter = strtok(NULL, "\n");
 				global_filter_where_condition = pg_strdup(filter);
-			}else
+			}
+			else
 			{
-				simple_string_list_append(&table_include_patterns, table_name);
-				dopt->include_everything = false;
 				filter = strtok(NULL, " ");
 				if(filter && strcmp(filter,"where") == 0)
 				{
 					filter = strtok(NULL, "\n");
-					addFilterString(filter);
+					appendWhereConditionData(filter, table_name);
+				}
+				else
+				{
+					simple_string_list_append(&table_include_patterns, table_name);
+					dopt->include_everything = false;
 				}
 			}
 		}
@@ -18204,14 +18206,14 @@ parseFileToFilters(char *filename, DumpOptions *dopt)
 
 /*
  * addFilterString -
- *	  add condition string in local filter list or in global filter.
+ *	  Add condition string in local filter list or in global filter.	  
  * Note:
+ * 	  String has a format like "table_pattern@condition". If string withaut
+ *    divider '@', pattern will be linked for last added table.
  */
-//TODO: complite correct documentation commentariy
 static void
 addFilterString(char* filter)
 {
-	WhereConditionData	*condition_data;
 	char				*table_pattern;
 	char				*where_condition;
 
@@ -18222,23 +18224,37 @@ addFilterString(char* filter)
 		if(table_include_patterns.head == NULL)
 		{
 			global_filter_where_condition = pg_strdup(filter);
-		}else
-		{
-			condition_data = pg_malloc(sizeof(WhereConditionData));
-			condition_data->filter_condition = filter;
-			condition_data->table_pattern = table_include_patterns.head->val;
-			simple_ptr_list_append(&filter_bindigs, condition_data);
 		}
-	}else{
-		condition_data = pg_malloc(sizeof(WhereConditionData));
-		condition_data->filter_condition = where_condition;
-		condition_data->table_pattern = table_pattern;
-		simple_ptr_list_append(&filter_bindigs, condition_data);
+		else
+		{
+			appendWhereConditionData(filter, table_include_patterns.tail->val);
+		}
+	}
+	else
+	{
+		appendWhereConditionData(where_condition, table_pattern);
 	}
 }
 
+/*
+ * appendWhereConditionData -
+ *	  create and append data struct for filtering strings
+ */
 static void
-supplement_where_condition_data_with_oids(Archive *fount, bool strict_names)
+appendWhereConditionData(char *filter_contition, char *table_pattern)
+{
+	WhereConditionData	*condition_data = pg_malloc(sizeof(WhereConditionData));
+	condition_data->filter_condition = pg_strdup(filter_contition);
+	condition_data->table_pattern = pg_strdup(table_pattern);
+	simple_ptr_list_append(&filter_bindigs, condition_data);
+}
+
+/*
+ * supplementWhereConditionDataWithOids -
+ *	  find oids that are responded with table patterns of filtering condition 
+ */
+static void
+supplementWhereConditionDataWithOids(Archive *fount, bool strict_names)
 {
 	for(SimplePtrListCell *filter_bind = filter_bindigs.head;
 		filter_bind;
@@ -18247,7 +18263,6 @@ supplement_where_condition_data_with_oids(Archive *fount, bool strict_names)
 	{
 		SimpleStringList 	*patterns = pg_malloc(sizeof(SimpleStringList));
 		WhereConditionData 	*condition_data = (WhereConditionData*)filter_bind->ptr;
-
 		simple_string_list_append(patterns, condition_data->table_pattern);
 		expand_table_name_patterns(fount, patterns, &condition_data->table_oids ,strict_names);
 	}
