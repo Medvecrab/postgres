@@ -3,6 +3,3 @@
 /pg_restore
 
 /tmp_check/
-logfile
-*.sh
-*.sql

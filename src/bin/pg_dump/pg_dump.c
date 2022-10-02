@@ -678,9 +678,8 @@ main(int argc, char **argv)
 	 * already specified with -d / --dbname
 	 */
 	if (optind < argc && dopt.cparams.dbname == NULL)
-	{
 		dopt.cparams.dbname = argv[optind++];
-	}
+
 	/* Complain if any arguments remain */
 	if (optind < argc)
 	{
@@ -866,6 +865,7 @@ main(int argc, char **argv)
 
 	/* Let the archiver know how noisy to be */
 	fout->verbose = g_verbose;
+
 
 	/*
 	 * We allow the server to be back to 9.2, and up to any minor release of
@@ -1120,6 +1120,7 @@ main(int argc, char **argv)
 
 	exit_nicely(0);
 }
+
 
 static void
 help(const char *progname)
@@ -2201,7 +2202,6 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 	 * ordering of COPY will not be what we want in certain corner cases
 	 * involving ADD COLUMN and inheritance.)
 	 */
-
 	column_list = fmtCopyColumnList(tbinfo, clistBuf);
 
 	/*
@@ -2218,10 +2218,8 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 		{
 			if (mask_column_info_list.head != NULL)
 			{
-				/*taking columns that should be masked */
-				/*char* copy_column_list = pg_strdup(column_list);
-				char* current_column_name = strtok(copy_column_list, " ,()");*/
 				maskColumns(tbinfo, pg_strdup(column_list), &q, NULL);
+				appendPQExpBufferStr(q, " ");
 			}
 			else
 			{
@@ -2234,7 +2232,7 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 			appendPQExpBufferStr(q, "* ");
 		}
 
-		appendPQExpBuffer(q, " FROM %s %s) TO stdout;",
+		appendPQExpBuffer(q, "FROM %s %s) TO stdout;",
 						  fmtQualifiedDumpable(tbinfo),
 						  tdinfo->filtercond ? tdinfo->filtercond : "");
 	}
@@ -2357,8 +2355,8 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 	DumpOptions *dopt = fout->dopt;
 	PQExpBuffer q = createPQExpBuffer();
 	PQExpBuffer insertStmt = NULL;
-	char	  *attgenerated;
-	PGresult  *res;
+	char	   *attgenerated;
+	PGresult   *res;
 	int			nfields,
 				i;
 	int			rows_per_statement = dopt->dump_inserts;
