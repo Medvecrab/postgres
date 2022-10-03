@@ -1217,9 +1217,6 @@ help(const char *progname)
 * adding masking function to database
 */
 
-//TODO - поменять структуру файла, и сделать составление запроса внутри кода
-//структура файла - func_name\n argument_type\n func_language\n function_body\n
-
 static void
 addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, FILE* mask_func_file, DumpOptions* dopt)
 {
