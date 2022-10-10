@@ -344,7 +344,6 @@ main(int argc, char **argv)
 	int			numWorkers = 1;
 	int			compressLevel = -1;
 	int			plainText = 0;
-
 	ArchiveFormat archiveFormat = archUnknown;
 	ArchiveMode archiveMode;
 
@@ -2033,9 +2032,7 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 			}
 		}
 		else
-		{
 			appendPQExpBufferStr(q, "* ");
-		}
 
 		appendPQExpBuffer(q, "FROM %s %s) TO stdout;",
 						  fmtQualifiedDumpable(tbinfo),
@@ -2047,7 +2044,6 @@ dumpTableData_copy(Archive *fout, const void *dcontext)
 						  fmtQualifiedDumpable(tbinfo),
 						  column_list);
 	}
-
 	res = ExecuteSqlQuery(fout, q->data, PGRES_COPY_OUT);
 	PQclear(res);
 	destroyPQExpBuffer(clistBuf);
@@ -2210,7 +2206,6 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 		attgenerated[nfields] = tbinfo->attgenerated[i];
 		nfields++;
 	}
-
 	/* Servers before 9.4 will complain about zero-column SELECT */
 	if (nfields == 0)
 		appendPQExpBufferStr(q, "NULL");
