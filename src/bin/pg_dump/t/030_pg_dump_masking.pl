@@ -25,6 +25,9 @@ $node->safe_psql("postgres", "INSERT INTO t3 SELECT generate_series(1,3) AS id")
 
 $node->safe_psql("postgres", "CREATE SCHEMA test_schema");
 
+$node->safe_psql("postgres", "CREATE TABLE test_schema.t0(id int)");
+$node->safe_psql("postgres", "INSERT INTO test_schema.t0 SELECT generate_series(1,3) AS id");
+
 #masking functions
 
 my %functions = (
@@ -85,7 +88,11 @@ my %tests = (
 			(.|\n)*
 			\QCOPY public.t3 (id) FROM stdin;\E\n
 			(-1\s*\n){3}
-			\Q\.\E
+			\Q\.\E\n
+			(.|\n)*
+			\QCOPY test_schema.t0 (id) FROM stdin;\E\n
+			(-1\s*\n){3}
+			\Q\.\E\
 		/xm,
 		dump => [
             'pg_dump',
@@ -110,7 +117,11 @@ my %tests = (
 			(.|\n)*
 			\QCOPY public.t3 (id) FROM stdin;\E\n
 			1\s*\n2\s*\n3\s*\n
-			\Q\.\E
+			\Q\.\E\n
+			(.|\n)*
+			\QCOPY test_schema.t0 (id) FROM stdin;\E\n
+			(-1\s*\w*\n){3}
+			\Q\.\E\
         /xm,
 		dump => [
             'pg_dump',
@@ -135,7 +146,11 @@ my %tests = (
 			(.|\n)*
 			\QCOPY public.t3 (id) FROM stdin;\E\n
 			1\s*\n2\s*\n3\s*\n
-			\Q\.\E
+			\Q\.\E\n
+			(.|\n)*
+			\QCOPY test_schema.t0 (id) FROM stdin;\E\n
+			1\s*\n2\s*\n3\s*\n
+			\Q\.\E\
         /xm,
 		dump => [
 			'pg_dump',
@@ -164,7 +179,11 @@ my %tests = (
 			(.|\n)*
 			\QCOPY public.t3 (id) FROM stdin;\E\n
 			(-2\s*\n){3}
-			\Q\.\E
+			\Q\.\E\n
+			(.|\n)*
+			\QCOPY test_schema.t0 (id) FROM stdin;\E\n
+			(-2\s*\n){3}
+			\Q\.\E\
 		/xm,
 		dump => [
             'pg_dump',
@@ -198,6 +217,23 @@ my %tests = (
 			'-t', 't0',
 			'--column-insert',
             '--mask-columns', 'id',
+			'--mask-function', 'mask_int']
+            },
+	'test_mask_some_ids_with_schema' => {
+		regexp => qr/^
+            \QCOPY public.t0 (id, t) FROM stdin;\E\n
+			(-1\s*\w*\n){3}
+			\Q\.\E\n
+			(.|\n)*
+			\QCOPY test_schema.t0 (id) FROM stdin;\E\n
+			(-1\s*\n){3}
+			\Q\.\E\
+        /xm,
+		dump => [
+            'pg_dump',
+            'postgres',
+            '-f', "$tempdir/test_mask_some_ids_with_schema.sql",
+            '--mask-columns', '"t0.id, test_schema.t0.id"',
 			'--mask-function', 'mask_int']
             },
 );
