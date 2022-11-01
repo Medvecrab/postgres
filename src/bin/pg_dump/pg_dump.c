@@ -59,6 +59,7 @@
 #include "dumputils.h"
 #include "fe_utils/option_utils.h"
 #include "fe_utils/string_utils.h"
+#include "filter.h"
 #include "getopt_long.h"
 #include "libpq/libpq-fs.h"
 #include "parallel.h"
@@ -334,6 +335,7 @@ static void appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
 static char *get_synchronized_snapshot(Archive *fout);
 static void setupDumpWorker(Archive *AH);
 static TableInfo *getRootTableInfo(const TableInfo *tbinfo);
+static void read_dump_filters(const char *filename, DumpOptions *dopt);
 static char* getTableDataCondition(Oid table_oid);
 static bool  parseFileToFilters(char* filename, DumpOptions *dopt);
 static void addFilterString(char* filter);
@@ -408,6 +410,7 @@ main(int argc, char **argv)
 		{"enable-row-security", no_argument, &dopt.enable_row_security, 1},
 		{"exclude-table-data", required_argument, NULL, 4},
 		{"extra-float-digits", required_argument, NULL, 8},
+		{"filter", required_argument, NULL, 12},
 		{"if-exists", no_argument, &dopt.if_exists, 1},
 		{"inserts", no_argument, NULL, 9},
 		{"lock-wait-timeout", required_argument, NULL, 2},
@@ -431,8 +434,9 @@ main(int argc, char **argv)
 		{"on-conflict-do-nothing", no_argument, &dopt.do_nothing, 1},
 		{"rows-per-insert", required_argument, NULL, 10},
 		{"include-foreign-data", required_argument, NULL, 11},
-		{"mask-columns", required_argument, NULL, 12},
-		{"mask-function", required_argument, NULL, 13},
+		{"filter", required_argument, NULL, 12},
+		{"mask-columns", required_argument, NULL, 13},
+		{"mask-function", required_argument, NULL, 14},
 		{"where", required_argument, NULL, 15},
 		{"file-filter", required_argument, NULL, 16},	
 		{NULL, 0, NULL, 0}
@@ -644,11 +648,15 @@ main(int argc, char **argv)
 										  optarg);
 				break;
 
-			case 12:			/* columns for masking */
+			case 12:			/* object filters from file */
+				read_dump_filters(optarg, &dopt);
+				break;
+
+			case 13:			/* columns for masking */
 				simple_string_list_append(&mask_columns_list, optarg);
 				break;
 
-			case 13:			/* function for masking - can be SQL function from .sql file,
+			case 14:			/* function for masking - can be SQL function from .sql file,
 								   declared in CLI or declared in DB*/
 				simple_string_list_append(&mask_func_list, optarg);
 				break;
@@ -1068,6 +1076,8 @@ help(const char *progname)
 			 "                               access to)\n"));
 	printf(_("  --exclude-table-data=PATTERN do NOT dump data for the specified table(s)\n"));
 	printf(_("  --extra-float-digits=NUM     override default setting for extra_float_digits\n"));
+	printf(_("  --filter=FILENAME            dump objects and data based on the filter expressions\n"
+			 "                               in specified file\n"));
 	printf(_("  --filter-file=FILEPATH       dump only specified tables and rows scribled in file\n"));
 	printf(_("  --if-exists                  use IF EXISTS when dropping objects\n"));
 	printf(_("  --include-foreign-data=PATTERN\n"
@@ -18337,6 +18347,93 @@ appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
 	if (!res)
 		pg_log_warning("could not parse %s array", "reloptions");
 }
+
+/*
+ * read_dump_filters - retrieve object identifer patterns from file
+ *
+ * Parse the specified filter file for include and exclude patterns, and add
+ * them to the relevant lists.  If the filename is "-" then filters will be
+ * read from STDIN rather than a file.
+ */
+static void
+read_dump_filters(const char *filename, DumpOptions *dopt)
+{
+	FilterStateData fstate;
+	bool		is_include;
+	char	   *objname;
+	FilterObjectType objtype;
+
+	if (!filter_init(&fstate, filename))
+		exit_nicely(1);
+
+	while (filter_read_item(&fstate, &is_include, &objname, &objtype))
+	{
+		/* ignore comments and empty lines */
+		if (objtype == FILTER_OBJECT_TYPE_NONE)
+			continue;
+
+		if (objtype == FILTER_OBJECT_TYPE_DATA)
+		{
+			if (is_include)
+			{
+				log_invalid_filter_format(&fstate,
+										  "include filter is not allowed for this type of object");
+				break;
+			}
+			else
+				simple_string_list_append(&tabledata_exclude_patterns,
+										  objname);
+		}
+		else if (objtype == FILTER_OBJECT_TYPE_FOREIGN_DATA)
+		{
+			if (is_include)
+				simple_string_list_append(&foreign_servers_include_patterns,
+										  objname);
+			else
+			{
+				log_invalid_filter_format(&fstate,
+										  "exclude filter is not allowed for this type of object");
+				break;
+			}
+		}
+		else if (objtype == FILTER_OBJECT_TYPE_SCHEMA)
+		{
+			if (is_include)
+			{
+				simple_string_list_append(&schema_include_patterns,
+										  objname);
+				dopt->include_everything = false;
+			}
+			else
+				simple_string_list_append(&schema_exclude_patterns,
+										  objname);
+		}
+		else if (objtype == FILTER_OBJECT_TYPE_TABLE)
+		{
+			if (is_include)
+			{
+				simple_string_list_append(&table_include_patterns, objname);
+				dopt->include_everything = false;
+			}
+			else
+				simple_string_list_append(&table_exclude_patterns, objname);
+		}
+		else
+		{
+			log_unsupported_filter_object_type(&fstate, "pg_dump", objtype);
+			break;
+		}
+
+		if (objname)
+			free(objname);
+	}
+
+	filter_free(&fstate);
+
+	if (fstate.is_error)
+		exit_nicely(1);
+}
+
 
 /*
  * parseFileToFilters -
