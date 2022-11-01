@@ -6,6 +6,7 @@ GETTEXT_FILES    = $(FRONTEND_COMMON_GETTEXT_FILES) \
                    pg_backup_directory.c dumputils.c compress_io.c \
                    pg_dump.c common.c pg_dump_sort.c \
                    pg_restore.c pg_dumpall.c \
+                   masking.c masking.h \
                    parallel.c parallel.h pg_backup_utils.c pg_backup_utils.h \
                    ../../common/exec.c ../../common/fe_memutils.c \
                    ../../common/wait_error.c \

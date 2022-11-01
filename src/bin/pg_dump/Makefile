@@ -26,6 +26,7 @@ OBJS = \
 	$(WIN32RES) \
 	compress_io.o \
 	dumputils.o \
+	masking.o \
 	parallel.o \
 	pg_backup_archiver.o \
 	pg_backup_custom.o \

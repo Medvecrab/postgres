@@ -67,7 +67,7 @@
 #include "pg_dump.h"
 #include "storage/block.h"
 
-#include "masking.c"
+#include "masking.h"
 
 typedef struct
 {

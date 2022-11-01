@@ -20,7 +20,11 @@
  * adding masking function to database
  */
 
-static void formMaskingLists(DumpOptions* dopt)
+SimplePtrList mask_column_info_list = {NULL, NULL};
+SimpleStringList mask_columns_list = {NULL, NULL};
+SimpleStringList mask_func_list = {NULL, NULL};
+
+void formMaskingLists(DumpOptions* dopt)
 {
 	/* needed for masking */
 	SimpleStringListCell *mask_func_cell;
@@ -160,7 +164,7 @@ static void formMaskingLists(DumpOptions* dopt)
 	free(conn_params);
 }
 
-static void
+void
 addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, FILE* mask_func_file, PGconn *connection)
 {
 	/*
@@ -221,7 +225,7 @@ addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, FILE* mask_func_file, PG
 * last argument is only for INSERT case, not used in COPY case.
 */
 
-static void
+void
 maskColumns(TableInfo *tbinfo, char* column_list, PQExpBuffer* q, SimpleStringList* column_names)
 {
 	char* copy_column_list = pg_strdup(column_list);

@@ -13,7 +13,12 @@
  *-------------------------------------------------------------------------
  */
 
+#include "postgres_fe.h"
+
 #include "dumputils.h"
+#include "fe_utils/string_utils.h"
+#include "common/logging.h"
+#include "pg_dump.h"
 
 #ifndef MASKING_H
 #define MASKING_H
@@ -33,14 +38,14 @@ typedef struct
 * name of masking function and name of schema containing this function (public if not specified)
 */
 
-static SimplePtrList mask_column_info_list = {NULL, NULL};
-SimpleStringList mask_columns_list = {NULL, NULL};
-SimpleStringList mask_func_list = {NULL, NULL};
+extern SimplePtrList mask_column_info_list;
+extern SimpleStringList mask_columns_list;
+extern SimpleStringList mask_func_list;
 
-static void formMaskingLists(DumpOptions* dopt);
-static void addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, 
+void formMaskingLists(DumpOptions* dopt);
+void addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, 
 							 FILE* mask_func_file, PGconn *connection);
-static void maskColumns(TableInfo *tbinfo, char* current_column_name,
+void maskColumns(TableInfo *tbinfo, char* current_column_name,
 						PQExpBuffer* q, SimpleStringList* column_names);
 
 
