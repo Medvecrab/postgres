@@ -1942,7 +1942,7 @@ read_dumpall_filters(const char *filename, SimpleStringList *pattern)
 	if (!filter_init(&fstate, filename))
 		exit_nicely(1);
 
-	while (filter_read_item(&fstate, &is_include, &objname, &objtype))
+	while (filter_read_item(&fstate, &is_include, &objname, &objtype, NULL))
 	{
 		if (objtype == FILTER_OBJECT_TYPE_NONE)
 			continue;

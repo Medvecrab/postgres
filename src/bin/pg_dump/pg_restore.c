@@ -521,7 +521,7 @@ read_restore_filters(const char *filename, RestoreOptions *opts)
 	if (!filter_init(&fstate, filename))
 		exit_nicely(1);
 
-	while (filter_read_item(&fstate, &is_include, &objname, &objtype))
+	while (filter_read_item(&fstate, &is_include, &objname, &objtype, NULL))
 	{
 		/* ignore comments or empty lines */
 		if (objtype == FILTER_OBJECT_TYPE_NONE)

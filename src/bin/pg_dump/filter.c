@@ -154,6 +154,38 @@ log_unsupported_filter_object_type(FilterStateData *fstate,
 }
 
 /*
+ * filter_look_forward - look for the next word
+ *
+ * Just like filter_get_keyword, but doesn't actually change the original pointer
+ */
+
+static const char *
+filter_look_forward (const char **line, int *size)
+{
+	const char *ptr = *line;
+	const char *result = NULL;
+
+	/* Set returnlength preemptively in case no keyword is found */
+	*size = 0;
+
+	/* Skip initial whitespace */
+	while (isspace(*ptr))
+		ptr++;
+
+	if (isascii(*ptr) && isalpha(*ptr))
+	{
+		result = ptr++;
+
+		while (isascii(*ptr) && (isalpha(*ptr) || *ptr == '_'))
+			ptr++;
+
+		*size = ptr - result;
+	}
+
+	return result;
+}
+
+/*
  * filter_get_keyword - read the next filter keyword from buffer
  *
  * Search for keywords (limited to ascii alphabetic characters) in
@@ -319,7 +351,8 @@ bool
 filter_read_item(FilterStateData *fstate,
 				 bool *is_include,
 				 char **objname,
-				 FilterObjectType *objtype)
+				 FilterObjectType *objtype,
+				 OptionalFilterData *optdata)
 {
 	Assert(!fstate->is_error);
 
@@ -328,6 +361,7 @@ filter_read_item(FilterStateData *fstate,
 		char	   *str = fstate->linebuff.data;
 		const char *keyword;
 		int			size;
+		char	  **temp_name = (char**) pg_malloc(1);
 
 		fstate->lineno++;
 
@@ -399,6 +433,7 @@ filter_read_item(FilterStateData *fstate,
 			}
 
 			str = filter_get_pattern(fstate, str, objname);
+
 			if (!str)
 				return false;
 
@@ -433,6 +468,40 @@ filter_read_item(FilterStateData *fstate,
 				while (*str == '.');
 
 				*objname = qual_name->data;
+			}
+
+			/*
+			 * Look for additional keywords - just "mask" and/or where for now
+			 * If not found just continue as usual
+			 */
+			
+			while(optdata)
+			{
+				keyword = filter_look_forward((const char **) &str, &size);
+				if (is_keyword_str("where", keyword, size) && *objtype == FILTER_OBJECT_TYPE_TABLE)
+					{
+						keyword = filter_get_keyword ((const char **) &str, &size);
+						optdata->pattern = pg_strdup(*objname);
+						str = filter_get_pattern(fstate, str, temp_name);
+						optdata->filter_cond = pg_strdup(*temp_name);
+						if (!str)
+							return false;
+					}
+				else if (is_keyword_str("mask", keyword, size) && *objtype == FILTER_OBJECT_TYPE_TABLE)
+					{
+						keyword = filter_get_keyword ((const char **) &str, &size);
+						optdata->pattern = pg_strdup(*objname);
+						str = filter_get_pattern(fstate, str, temp_name);
+						simple_string_list_append(&(optdata->column_names), *temp_name);
+						str = filter_get_pattern(fstate, str, temp_name);
+						simple_string_list_append(&(optdata->function_names), *temp_name);
+						if (!str)
+							return false;
+					}
+				else break;
+				/* skip whitespaces */
+				while (isspace(*str))
+					str++;
 			}
 
 			/*

@@ -2247,8 +2247,6 @@ dumpTableData_insert(Archive *fout, const void *dcontext)
 			if (mask_column_info_list.head != NULL)
 			{
 				/*taking columns that should be masked */
-				/*char* copy_column_list = pg_strdup(tbinfo->attnames[i]);
-				char* current_column_name = strtok(copy_column_list, " ,()");*/
 				maskColumns(tbinfo, tbinfo->attnames[i], &q, &column_names);
 			}
 			else
@@ -18362,11 +18360,15 @@ read_dump_filters(const char *filename, DumpOptions *dopt)
 	bool		is_include;
 	char	   *objname;
 	FilterObjectType objtype;
+	OptionalFilterData optdata;
+
+	optdata.pattern = NULL;
+	optdata.filter_cond = NULL;
 
 	if (!filter_init(&fstate, filename))
 		exit_nicely(1);
 
-	while (filter_read_item(&fstate, &is_include, &objname, &objtype))
+	while (filter_read_item(&fstate, &is_include, &objname, &objtype, &optdata))
 	{
 		/* ignore comments and empty lines */
 		if (objtype == FILTER_OBJECT_TYPE_NONE)
@@ -18417,6 +18419,34 @@ read_dump_filters(const char *filename, DumpOptions *dopt)
 			}
 			else
 				simple_string_list_append(&table_exclude_patterns, objname);
+
+			if (optdata.pattern)
+			{
+				if (optdata.filter_cond)
+				{
+					addFilterString(psprintf("%s@%s", optdata.pattern, optdata.filter_cond));
+				}
+
+				if (optdata.column_names.head)
+				{
+					SimpleStringListCell *column_cell = optdata.column_names.head;
+					SimpleStringListCell *function_cell = optdata.function_names.head;
+					while (function_cell)
+					{
+						//почему-то есть лишний пустой column_cell, в котором лежит ничего, а соответствубещго function_cell нет
+						simple_string_list_append(&mask_columns_list, column_cell->val); 
+						simple_string_list_append(&mask_func_list, function_cell->val);
+						column_cell = column_cell->next;
+						function_cell = function_cell->next;
+					}
+				}
+				//optdata.pattern = NULL;
+				//optdata.filter_cond = NULL;
+				//TODO - как то чистить списки снизу
+				//simple_string_list_destroy(&(optdata.column_names));
+				//simple_string_list_destroy(&(optdata.function_names));
+			}
+
 		}
 		else
 		{

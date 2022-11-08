@@ -15,6 +15,7 @@
 #include "c.h"
 
 #include "lib/stringinfo.h"
+#include "fe_utils/simple_list.h"
 
 /*
  * State data for reading filter items from stream
@@ -27,6 +28,15 @@ typedef struct
 	StringInfoData linebuff;
 	bool		is_error;
 }			FilterStateData;
+
+typedef struct 
+{
+	char	   *pattern;
+	SimpleStringList column_names;
+	SimpleStringList function_names;
+	char	   *filter_cond;
+}			OptionalFilterData;
+
 
 /*
  * List of objects that can be specified in filter file
@@ -50,6 +60,7 @@ extern void filter_free(FilterStateData *fstate);
 extern void log_invalid_filter_format(FilterStateData *fstate, char *message);
 extern void log_unsupported_filter_object_type(FilterStateData *fstate,
 												const char *appname, FilterObjectType fot);
-extern bool filter_read_item(FilterStateData *fstate, bool *is_include, char **objname, FilterObjectType *objtype);
+extern bool filter_read_item(FilterStateData *fstate, bool *is_include, char **objname,
+												FilterObjectType *objtype, OptionalFilterData *optdata);
 
 #endif
