@@ -32,9 +32,9 @@ typedef struct
 typedef struct 
 {
 	char	   *pattern;
-	SimpleStringList column_names;
-	SimpleStringList function_names;
 	char	   *filter_cond;
+	SimpleStringList *column_names;
+	SimpleStringList *function_names;
 }			OptionalFilterData;
 
 

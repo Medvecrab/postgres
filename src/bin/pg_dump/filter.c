@@ -478,11 +478,18 @@ filter_read_item(FilterStateData *fstate,
 			while(optdata)
 			{
 				keyword = filter_look_forward((const char **) &str, &size);
-				if (is_keyword_str("where", keyword, size) && *objtype == FILTER_OBJECT_TYPE_TABLE)
+				if (is_keyword_str("filter", keyword, size) && *objtype == FILTER_OBJECT_TYPE_TABLE)
 					{
 						keyword = filter_get_keyword ((const char **) &str, &size);
 						optdata->pattern = pg_strdup(*objname);
 						str = filter_get_pattern(fstate, str, temp_name);
+						if (**temp_name == '\"') //тут ловлю сегфолт
+						{
+							*temp_name = *temp_name + 1;
+							//pg_fatal("%d", strlen(*temp_name));
+							*(*temp_name + strlen(*temp_name) - 1) = '\0';
+							
+						}
 						optdata->filter_cond = pg_strdup(*temp_name);
 						if (!str)
 							return false;
@@ -492,9 +499,9 @@ filter_read_item(FilterStateData *fstate,
 						keyword = filter_get_keyword ((const char **) &str, &size);
 						optdata->pattern = pg_strdup(*objname);
 						str = filter_get_pattern(fstate, str, temp_name);
-						simple_string_list_append(&(optdata->column_names), *temp_name);
+						simple_string_list_append(optdata->column_names, pg_strdup(*temp_name));
 						str = filter_get_pattern(fstate, str, temp_name);
-						simple_string_list_append(&(optdata->function_names), *temp_name);
+						simple_string_list_append(optdata->function_names, pg_strdup(*temp_name));
 						if (!str)
 							return false;
 					}

@@ -171,7 +171,6 @@ addFuncToDatabase(MaskColumnInfo* cur_mask_column_info, FILE* mask_func_file, PG
 	 * All buffers are the length of 64 because in PostgreSQL length of identifier
 	 * be it name of column, table, etc are 63 chars long, + 64th for \0 
 	 */
-
 	PQExpBufferData query;
 	char* common_buff = (char*) pg_malloc(64 * sizeof(char));
 	char* func_name_buff = (char*) pg_malloc(64 * sizeof(char));

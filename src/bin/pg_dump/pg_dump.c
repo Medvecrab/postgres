@@ -18361,9 +18361,10 @@ read_dump_filters(const char *filename, DumpOptions *dopt)
 	char	   *objname;
 	FilterObjectType objtype;
 	OptionalFilterData optdata;
-
 	optdata.pattern = NULL;
 	optdata.filter_cond = NULL;
+	optdata.column_names = (SimpleStringList*) pg_malloc0 (sizeof(SimpleStringList));
+	optdata.function_names = (SimpleStringList*) pg_malloc0 (sizeof(SimpleStringList));
 
 	if (!filter_init(&fstate, filename))
 		exit_nicely(1);
@@ -18424,27 +18425,28 @@ read_dump_filters(const char *filename, DumpOptions *dopt)
 			{
 				if (optdata.filter_cond)
 				{
-					addFilterString(psprintf("%s@%s", optdata.pattern, optdata.filter_cond));
+					addFilterString(optdata.filter_cond);
 				}
 
-				if (optdata.column_names.head)
+				if (optdata.column_names->head)
 				{
-					SimpleStringListCell *column_cell = optdata.column_names.head;
-					SimpleStringListCell *function_cell = optdata.function_names.head;
-					while (function_cell)
+					SimpleStringListCell *column_cell = optdata.column_names->head;
+					SimpleStringListCell *function_cell = optdata.function_names->head;
+					while (column_cell)
 					{
-						//почему-то есть лишний пустой column_cell, в котором лежит ничего, а соответствубещго function_cell нет
+						SimpleStringListCell *temp;
 						simple_string_list_append(&mask_columns_list, column_cell->val); 
 						simple_string_list_append(&mask_func_list, function_cell->val);
+						temp = column_cell;
 						column_cell = column_cell->next;
+						temp->next = NULL;
+						temp = function_cell;
 						function_cell = function_cell->next;
+						temp->next = NULL;
 					}
 				}
-				//optdata.pattern = NULL;
-				//optdata.filter_cond = NULL;
-				//TODO - как то чистить списки снизу
-				//simple_string_list_destroy(&(optdata.column_names));
-				//simple_string_list_destroy(&(optdata.function_names));
+				optdata.pattern = NULL;
+				optdata.filter_cond = NULL;
 			}
 
 		}
