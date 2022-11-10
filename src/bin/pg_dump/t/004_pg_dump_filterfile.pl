@@ -6,7 +6,7 @@ use warnings;
 
 use PostgreSQL::Test::Cluster;
 use PostgreSQL::Test::Utils;
-use Test::More tests => 69;
+use Test::More tests => 73;
 
 my $tempdir = PostgreSQL::Test::Utils::tempdir;;
 my $inputfile;
@@ -419,6 +419,50 @@ command_fails_like(
 	],
 	qr/no matching tables were found/,
 	"inclusion of non-existing objects with --strict names");
+
+#########################################
+# pg_dump tests with optional parameters
+
+###########################
+# Test filtering data with "where"
+open $inputfile, '>', "$tempdir/inputfile.txt"
+  or die "unable to open filterfile for writing";
+print $inputfile "include table table_one where \"a = \'*** TABLE ONE ***\'\"\n";
+close $inputfile;
+
+command_ok(
+	[
+		'pg_dump', '-p', $port, '-f', $plainfile,
+		"--filter=$tempdir/inputfile.txt", 'postgres'
+	],
+	"dump a single table with \"where\" statement that results in one row printed");
+
+$dump = slurp_file($plainfile);
+
+ok($dump =~ qr/^\*\*\* TABLE ONE \*\*\*\n\\\./m, "where condition applied");
+
+###########################
+# Test masking data with function from file
+open $inputfile, '>', "$tempdir/mask_text.sql"
+  or die "unable to open filterfile for writing";
+print $inputfile "mask_text\ntext\nplpgsql\nres := \'test text\';";
+close $inputfile;
+
+open $inputfile, '>', "$tempdir/inputfile.txt"
+  or die "unable to open filterfile for writing";
+print $inputfile "include table table_one mask table_one.a $tempdir/mask_text.sql";
+close $inputfile;
+
+command_ok(
+	[
+		'pg_dump', '-p', $port, '-f', $plainfile,
+		"--filter=$tempdir/inputfile.txt", 'postgres'
+	],
+	"dump a single table with masking");
+
+$dump = slurp_file($plainfile);
+
+ok($dump =~ qr/^test text\n\\\./m, "masking successful");
 
 #########################################
 # pg_dumpall tests

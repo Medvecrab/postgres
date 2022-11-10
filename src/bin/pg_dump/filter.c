@@ -471,22 +471,24 @@ filter_read_item(FilterStateData *fstate,
 			}
 
 			/*
-			 * Look for additional keywords - just "mask" and/or where for now
+			 * Look for additional keywords - just "mask" and/or "filter" for now
 			 * If not found just continue as usual
 			 */
 			
 			while(optdata)
 			{
 				keyword = filter_look_forward((const char **) &str, &size);
-				if (is_keyword_str("filter", keyword, size) && *objtype == FILTER_OBJECT_TYPE_TABLE)
+				if (is_keyword_str("where", keyword, size) && *objtype == FILTER_OBJECT_TYPE_TABLE)
 					{
 						keyword = filter_get_keyword ((const char **) &str, &size);
 						optdata->pattern = pg_strdup(*objname);
 						str = filter_get_pattern(fstate, str, temp_name);
-						if (**temp_name == '\"') //тут ловлю сегфолт
+						/*
+						 * Get rid of quotation marks
+						 */
+						if (**temp_name == '\"')
 						{
 							*temp_name = *temp_name + 1;
-							//pg_fatal("%d", strlen(*temp_name));
 							*(*temp_name + strlen(*temp_name) - 1) = '\0';
 							
 						}
